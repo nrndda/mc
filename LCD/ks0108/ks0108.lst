@@ -1,0 +1,3161 @@
+   1               		.file	"ks0108.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.global __do_copy_data
+   8               		.global __do_clear_bss
+  10               		.text
+  11               	.Ltext0:
+  89               	.global	ks0108ReadFontData
+  91               	ks0108ReadFontData:
+   1:ks0108.c      **** /*
+   2:ks0108.c      ****  * Copyright:      Fabian Maximilian Thiele  mailto:me@apetech.de
+   3:ks0108.c      ****  * Author:         Fabian Maximilian Thiele
+   4:ks0108.c      ****  * Remarks:        this Copyright must be included
+   5:ks0108.c      ****  * known Problems: none
+   6:ks0108.c      ****  * Version:        1.1
+   7:ks0108.c      ****  * Description:    Graphic Library for KS0108- (and compatible) based LCDs
+   8:ks0108.c      ****  * 
+   9:ks0108.c      ****  */
+  10:ks0108.c      **** 
+  11:ks0108.c      **** #include <inttypes.h>
+  12:ks0108.c      **** #include <avr/io.h>
+  13:ks0108.c      **** #include <avr/pgmspace.h>
+  14:ks0108.c      **** #include "ks0108.h"
+  15:ks0108.c      **** 
+  16:ks0108.c      **** lcdCoord			ks0108Coord;
+  17:ks0108.c      **** uint8_t				ks0108Inverted=0;
+  18:ks0108.c      **** ks0108FontCallback	ks0108FontRead;
+  19:ks0108.c      **** uint8_t				ks0108FontColor;
+  20:ks0108.c      **** const uint8_t*		ks0108Font;
+  21:ks0108.c      **** 
+  22:ks0108.c      **** void ks0108DrawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t color) {
+  23:ks0108.c      **** 	uint8_t length, i, y, yAlt, xTmp, yTmp;
+  24:ks0108.c      **** 	int16_t m;
+  25:ks0108.c      **** 	
+  26:ks0108.c      **** 	//
+  27:ks0108.c      **** 	// vertical line
+  28:ks0108.c      **** 	//
+  29:ks0108.c      **** 	if(x1 == x2) {
+  30:ks0108.c      **** 		// x1|y1 must be the upper point
+  31:ks0108.c      **** 		if(y1 > y2) {
+  32:ks0108.c      **** 			yTmp = y1;
+  33:ks0108.c      **** 			y1 = y2;
+  34:ks0108.c      **** 			y2 = yTmp;
+  35:ks0108.c      **** 		}
+  36:ks0108.c      **** 		ks0108DrawVertLine(x1, y1, y2-y1, color);
+  37:ks0108.c      **** 	
+  38:ks0108.c      **** 	//
+  39:ks0108.c      **** 	// horizontal line
+  40:ks0108.c      **** 	//
+  41:ks0108.c      **** 	} else if(y1 == y2) {	
+  42:ks0108.c      **** 		// x1|y1 must be the left point
+  43:ks0108.c      **** 		if(x1 > x2) {
+  44:ks0108.c      **** 			xTmp = x1;
+  45:ks0108.c      **** 			x1 = x2;
+  46:ks0108.c      **** 			x2 = xTmp;
+  47:ks0108.c      **** 		}
+  48:ks0108.c      **** 		ks0108DrawHoriLine(x1, y1, x2-x1, color);
+  49:ks0108.c      **** 	
+  50:ks0108.c      **** 	//
+  51:ks0108.c      **** 	// schiefe line :)
+  52:ks0108.c      **** 	//
+  53:ks0108.c      **** 	} else {
+  54:ks0108.c      **** 		// angle >= 45°
+  55:ks0108.c      **** 		if((y2-y1) >= (x2-x1) || (y1-y2) >= (x2-x1)) {
+  56:ks0108.c      **** 			// x1 must be smaller than x2
+  57:ks0108.c      **** 			if(x1 > x2) {
+  58:ks0108.c      **** 				xTmp = x1;
+  59:ks0108.c      **** 				yTmp = y1;
+  60:ks0108.c      **** 				x1 = x2;
+  61:ks0108.c      **** 				y1 = y2;
+  62:ks0108.c      **** 				x2 = xTmp;
+  63:ks0108.c      **** 				y2 = yTmp;
+  64:ks0108.c      **** 			}
+  65:ks0108.c      **** 		
+  66:ks0108.c      **** 			length = x2-x1;		// not really the length :)
+  67:ks0108.c      **** 			m = ((y2-y1)*200)/length;
+  68:ks0108.c      **** 			yAlt = y1;
+  69:ks0108.c      **** 			
+  70:ks0108.c      **** 			for(i=0; i<=length; i++) {
+  71:ks0108.c      **** 				y = ((m*i)/200)+y1;
+  72:ks0108.c      **** 				
+  73:ks0108.c      **** 				if((m*i)%200 >= 100)
+  74:ks0108.c      **** 					y++;
+  75:ks0108.c      **** 				else if((m*i)%200 <= -100)
+  76:ks0108.c      **** 					y--;
+  77:ks0108.c      **** 				
+  78:ks0108.c      **** 				ks0108DrawLine(x1+i, yAlt, x1+i, y, color);
+  79:ks0108.c      **** 				
+  80:ks0108.c      **** 				if(length <= (y2-y1) && y1 < y2)
+  81:ks0108.c      **** 					yAlt = y+1;
+  82:ks0108.c      **** 				else if(length <= (y1-y2) && y1 > y2)
+  83:ks0108.c      **** 					yAlt = y-1;
+  84:ks0108.c      **** 				else
+  85:ks0108.c      **** 					yAlt = y;
+  86:ks0108.c      **** 			}
+  87:ks0108.c      **** 		
+  88:ks0108.c      **** 		// angle < 45°
+  89:ks0108.c      **** 		} else {
+  90:ks0108.c      **** 			// y1 must be smaller than y2
+  91:ks0108.c      **** 			if(y1 > y2) {
+  92:ks0108.c      **** 				xTmp = x1;
+  93:ks0108.c      **** 				yTmp = y1;
+  94:ks0108.c      **** 				x1 = x2;
+  95:ks0108.c      **** 				y1 = y2;
+  96:ks0108.c      **** 				x2 = xTmp;
+  97:ks0108.c      **** 				y2 = yTmp;
+  98:ks0108.c      **** 			}
+  99:ks0108.c      **** 			
+ 100:ks0108.c      **** 			length = y2-y1;
+ 101:ks0108.c      **** 			m = ((x2-x1)*200)/length;
+ 102:ks0108.c      **** 			yAlt = x1;
+ 103:ks0108.c      **** 			
+ 104:ks0108.c      **** 			for(i=0; i<=length; i++) {
+ 105:ks0108.c      **** 				y = ((m*i)/200)+x1;
+ 106:ks0108.c      **** 				
+ 107:ks0108.c      **** 				if((m*i)%200 >= 100)
+ 108:ks0108.c      **** 					y++;
+ 109:ks0108.c      **** 				else if((m*i)%200 <= -100)
+ 110:ks0108.c      **** 					y--;
+ 111:ks0108.c      **** 				
+ 112:ks0108.c      **** 				ks0108DrawLine(yAlt, y1+i, y, y1+i, color);
+ 113:ks0108.c      **** 				if(length <= (x2-x1) && x1 < x2)
+ 114:ks0108.c      **** 					yAlt = y+1;
+ 115:ks0108.c      **** 				else if(length <= (x1-x2) && x1 > x2)
+ 116:ks0108.c      **** 					yAlt = y-1;
+ 117:ks0108.c      **** 				else
+ 118:ks0108.c      **** 					yAlt = y;
+ 119:ks0108.c      **** 			}
+ 120:ks0108.c      **** 		}
+ 121:ks0108.c      **** 	}
+ 122:ks0108.c      **** }
+ 123:ks0108.c      **** 
+ 124:ks0108.c      **** void ks0108DrawRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t color) {
+ 125:ks0108.c      **** 	ks0108DrawHoriLine(x, y, width, color);				// top
+ 126:ks0108.c      **** 	ks0108DrawHoriLine(x, y+height, width, color);		// bottom
+ 127:ks0108.c      **** 	ks0108DrawVertLine(x, y, height, color);			// left
+ 128:ks0108.c      **** 	ks0108DrawVertLine(x+width, y, height, color);		// right
+ 129:ks0108.c      **** }
+ 130:ks0108.c      **** 
+ 131:ks0108.c      **** void ks0108DrawRoundRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t radius, uint8
+ 132:ks0108.c      ****   	int16_t tSwitch, x1 = 0, y1 = radius;
+ 133:ks0108.c      ****   	tSwitch = 3 - 2 * radius;
+ 134:ks0108.c      **** 	
+ 135:ks0108.c      **** 	while (x1 <= y1) {
+ 136:ks0108.c      **** 	    ks0108SetDot(x+radius - x1, y+radius - y1, color);
+ 137:ks0108.c      **** 	    ks0108SetDot(x+radius - y1, y+radius - x1, color);
+ 138:ks0108.c      **** 
+ 139:ks0108.c      **** 	    ks0108SetDot(x+width-radius + x1, y+radius - y1, color);
+ 140:ks0108.c      **** 	    ks0108SetDot(x+width-radius + y1, y+radius - x1, color);
+ 141:ks0108.c      **** 	    
+ 142:ks0108.c      **** 	    ks0108SetDot(x+width-radius + x1, y+height-radius + y1, color);
+ 143:ks0108.c      **** 	    ks0108SetDot(x+width-radius + y1, y+height-radius + x1, color);
+ 144:ks0108.c      **** 
+ 145:ks0108.c      **** 	    ks0108SetDot(x+radius - x1, y+height-radius + y1, color);
+ 146:ks0108.c      **** 	    ks0108SetDot(x+radius - y1, y+height-radius + x1, color);
+ 147:ks0108.c      **** 
+ 148:ks0108.c      **** 	    if (tSwitch < 0) {
+ 149:ks0108.c      **** 	    	tSwitch += (4 * x1 + 6);
+ 150:ks0108.c      **** 	    } else {
+ 151:ks0108.c      **** 	    	tSwitch += (4 * (x1 - y1) + 10);
+ 152:ks0108.c      **** 	    	y1--;
+ 153:ks0108.c      **** 	    }
+ 154:ks0108.c      **** 	    x1++;
+ 155:ks0108.c      **** 	}
+ 156:ks0108.c      **** 	  	
+ 157:ks0108.c      **** 	ks0108DrawHoriLine(x+radius, y, width-(2*radius), color);			// top
+ 158:ks0108.c      **** 	ks0108DrawHoriLine(x+radius, y+height, width-(2*radius), color);	// bottom
+ 159:ks0108.c      **** 	ks0108DrawVertLine(x, y+radius, height-(2*radius), color);			// left
+ 160:ks0108.c      **** 	ks0108DrawVertLine(x+width, y+radius, height-(2*radius), color);	// right
+ 161:ks0108.c      **** }
+ 162:ks0108.c      **** 
+ 163:ks0108.c      **** /*
+ 164:ks0108.c      ****  * Hardware-Functions 
+ 165:ks0108.c      ****  */
+ 166:ks0108.c      **** void ks0108FillRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t color) {
+ 167:ks0108.c      **** 	uint8_t mask, pageOffset, h, i, data;
+ 168:ks0108.c      **** 	height++;
+ 169:ks0108.c      **** 	
+ 170:ks0108.c      **** 	pageOffset = y%8;
+ 171:ks0108.c      **** 	y -= pageOffset;
+ 172:ks0108.c      **** 	mask = 0xFF;
+ 173:ks0108.c      **** 	if(height < 8-pageOffset) {
+ 174:ks0108.c      **** 		mask >>= (8-height);
+ 175:ks0108.c      **** 		h = height;
+ 176:ks0108.c      **** 	} else {
+ 177:ks0108.c      **** 		h = 8-pageOffset;
+ 178:ks0108.c      **** 	}
+ 179:ks0108.c      **** 	mask <<= pageOffset;
+ 180:ks0108.c      **** 	
+ 181:ks0108.c      **** 	ks0108GotoXY(x, y);
+ 182:ks0108.c      **** 	for(i=0; i<=width; i++) {
+ 183:ks0108.c      **** 		data = ks0108ReadData();
+ 184:ks0108.c      **** 		
+ 185:ks0108.c      **** 		if(color == BLACK) {
+ 186:ks0108.c      **** 			data |= mask;
+ 187:ks0108.c      **** 		} else {
+ 188:ks0108.c      **** 			data &= ~mask;
+ 189:ks0108.c      **** 		}
+ 190:ks0108.c      **** 
+ 191:ks0108.c      **** 		ks0108WriteData(data);
+ 192:ks0108.c      **** 	}
+ 193:ks0108.c      **** 	
+ 194:ks0108.c      **** 	while(h+8 <= height) {
+ 195:ks0108.c      **** 		h += 8;
+ 196:ks0108.c      **** 		y += 8;
+ 197:ks0108.c      **** 		ks0108GotoXY(x, y);
+ 198:ks0108.c      **** 		
+ 199:ks0108.c      **** 		for(i=0; i<=width; i++) {
+ 200:ks0108.c      **** 			ks0108WriteData(color);
+ 201:ks0108.c      **** 		}
+ 202:ks0108.c      **** 	}
+ 203:ks0108.c      **** 	
+ 204:ks0108.c      **** 	if(h < height) {
+ 205:ks0108.c      **** 		mask = ~(0xFF << (height-h));
+ 206:ks0108.c      **** 		ks0108GotoXY(x, y+8);
+ 207:ks0108.c      **** 		
+ 208:ks0108.c      **** 		for(i=0; i<=width; i++) {
+ 209:ks0108.c      **** 			data = ks0108ReadData();
+ 210:ks0108.c      **** 		
+ 211:ks0108.c      **** 			if(color == BLACK) {
+ 212:ks0108.c      **** 				data |= mask;
+ 213:ks0108.c      **** 			} else {
+ 214:ks0108.c      **** 				data &= ~mask;
+ 215:ks0108.c      **** 			}
+ 216:ks0108.c      **** 	
+ 217:ks0108.c      **** 			ks0108WriteData(data);
+ 218:ks0108.c      **** 		}
+ 219:ks0108.c      **** 	}
+ 220:ks0108.c      **** }
+ 221:ks0108.c      **** 
+ 222:ks0108.c      **** void ks0108InvertRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height) {
+ 223:ks0108.c      **** 	uint8_t mask, pageOffset, h, i, data, tmpData;
+ 224:ks0108.c      **** 	height++;
+ 225:ks0108.c      **** 	
+ 226:ks0108.c      **** 	pageOffset = y%8;
+ 227:ks0108.c      **** 	y -= pageOffset;
+ 228:ks0108.c      **** 	mask = 0xFF;
+ 229:ks0108.c      **** 	if(height < 8-pageOffset) {
+ 230:ks0108.c      **** 		mask >>= (8-height);
+ 231:ks0108.c      **** 		h = height;
+ 232:ks0108.c      **** 	} else {
+ 233:ks0108.c      **** 		h = 8-pageOffset;
+ 234:ks0108.c      **** 	}
+ 235:ks0108.c      **** 	mask <<= pageOffset;
+ 236:ks0108.c      **** 	
+ 237:ks0108.c      **** 	ks0108GotoXY(x, y);
+ 238:ks0108.c      **** 	for(i=0; i<=width; i++) {
+ 239:ks0108.c      **** 		data = ks0108ReadData();
+ 240:ks0108.c      **** 		tmpData = ~data;
+ 241:ks0108.c      **** 		data = (tmpData & mask) | (data & ~mask);
+ 242:ks0108.c      **** 		ks0108WriteData(data);
+ 243:ks0108.c      **** 	}
+ 244:ks0108.c      **** 	
+ 245:ks0108.c      **** 	while(h+8 <= height) {
+ 246:ks0108.c      **** 		h += 8;
+ 247:ks0108.c      **** 		y += 8;
+ 248:ks0108.c      **** 		ks0108GotoXY(x, y);
+ 249:ks0108.c      **** 		
+ 250:ks0108.c      **** 		for(i=0; i<=width; i++) {
+ 251:ks0108.c      **** 			data = ks0108ReadData();
+ 252:ks0108.c      **** 			ks0108WriteData(~data);
+ 253:ks0108.c      **** 		}
+ 254:ks0108.c      **** 	}
+ 255:ks0108.c      **** 	
+ 256:ks0108.c      **** 	if(h < height) {
+ 257:ks0108.c      **** 		mask = ~(0xFF << (height-h));
+ 258:ks0108.c      **** 		ks0108GotoXY(x, y+8);
+ 259:ks0108.c      **** 		
+ 260:ks0108.c      **** 		for(i=0; i<=width; i++) {
+ 261:ks0108.c      **** 			data = ks0108ReadData();
+ 262:ks0108.c      **** 			tmpData = ~data;
+ 263:ks0108.c      **** 			data = (tmpData & mask) | (data & ~mask);
+ 264:ks0108.c      **** 			ks0108WriteData(data);
+ 265:ks0108.c      **** 		}
+ 266:ks0108.c      **** 	}
+ 267:ks0108.c      **** }
+ 268:ks0108.c      **** 
+ 269:ks0108.c      **** void ks0108SetInverted(uint8_t invert) {
+ 270:ks0108.c      **** 	if(ks0108Inverted != invert) {
+ 271:ks0108.c      **** 		ks0108InvertRect(0,0,127,63);
+ 272:ks0108.c      **** 		ks0108Inverted = invert;
+ 273:ks0108.c      **** 	}
+ 274:ks0108.c      **** }
+ 275:ks0108.c      **** 
+ 276:ks0108.c      **** void ks0108SetDot(uint8_t x, uint8_t y, uint8_t color) {
+ 277:ks0108.c      **** 	uint8_t data;
+ 278:ks0108.c      **** 	
+ 279:ks0108.c      **** 	ks0108GotoXY(x, y-y%8);					// read data from display memory
+ 280:ks0108.c      **** 	data = ks0108ReadData();
+ 281:ks0108.c      **** 	
+ 282:ks0108.c      **** 	if(color == BLACK) {
+ 283:ks0108.c      **** 		data |= 0x01 << (y%8);				// set dot
+ 284:ks0108.c      **** 	} else {
+ 285:ks0108.c      **** 		data &= ~(0x01 << (y%8));			// clear dot
+ 286:ks0108.c      **** 	}
+ 287:ks0108.c      **** 	
+ 288:ks0108.c      **** 	ks0108WriteData(data);					// write data back to display
+ 289:ks0108.c      **** }
+ 290:ks0108.c      **** 
+ 291:ks0108.c      **** //
+ 292:ks0108.c      **** // Font Functions
+ 293:ks0108.c      **** //
+ 294:ks0108.c      **** 
+ 295:ks0108.c      **** uint8_t ks0108ReadFontData(const uint8_t* ptr) {
+  93               	.LM0:
+  94               	.LFBB1:
+  95               	/* prologue: function */
+  96               	/* frame size = 0 */
+  97               	.LBB30:
+ 296:ks0108.c      **** 	return pgm_read_byte(ptr);
+  99               	.LM1:
+ 100 0000 FC01      		movw r30,r24
+ 101               	/* #APP */
+ 102               	 ;  296 "ks0108.c" 1
+ 103 0002 8491      		lpm r24, Z
+ 104               		
+ 105               	 ;  0 "" 2
+ 106               	/* epilogue start */
+ 107               	/* #NOAPP */
+ 108               	.LBE30:
+ 297:ks0108.c      **** }
+ 110               	.LM2:
+ 111 0004 0895      		ret
+ 116               	.Lscope1:
+ 121               	.global	ks0108SelectFont
+ 123               	ks0108SelectFont:
+ 298:ks0108.c      **** 
+ 299:ks0108.c      **** void ks0108SelectFont(const char* font, ks0108FontCallback callback, uint8_t color) {
+ 125               	.LM3:
+ 126               	.LFBB2:
+ 127               	/* prologue: function */
+ 128               	/* frame size = 0 */
+ 300:ks0108.c      **** 	ks0108Font = font;
+ 130               	.LM4:
+ 131 0006 9093 0000 		sts (ks0108Font)+1,r25
+ 132 000a 8093 0000 		sts ks0108Font,r24
+ 301:ks0108.c      **** 	ks0108FontRead = callback;
+ 134               	.LM5:
+ 135 000e 7093 0000 		sts (ks0108FontRead)+1,r23
+ 136 0012 6093 0000 		sts ks0108FontRead,r22
+ 302:ks0108.c      **** 	ks0108FontColor = color;
+ 138               	.LM6:
+ 139 0016 4093 0000 		sts ks0108FontColor,r20
+ 140               	/* epilogue start */
+ 303:ks0108.c      **** }
+ 142               	.LM7:
+ 143 001a 0895      		ret
+ 145               	.Lscope2:
+ 148               	.global	ks0108CharWidth
+ 150               	ks0108CharWidth:
+ 304:ks0108.c      **** 
+ 305:ks0108.c      **** int ks0108PutChar(char c) {
+ 306:ks0108.c      **** 	uint8_t width = 0;
+ 307:ks0108.c      **** 	uint8_t height = ks0108FontRead(ks0108Font+FONT_HEIGHT);
+ 308:ks0108.c      **** 	uint8_t bytes = (height+7)/8;
+ 309:ks0108.c      **** 	
+ 310:ks0108.c      **** 	uint8_t firstChar = ks0108FontRead(ks0108Font+FONT_FIRST_CHAR);
+ 311:ks0108.c      **** 	uint8_t charCount = ks0108FontRead(ks0108Font+FONT_CHAR_COUNT);
+ 312:ks0108.c      **** 	
+ 313:ks0108.c      **** 	uint16_t index = 0;
+ 314:ks0108.c      **** 	uint8_t x = ks0108Coord.x, y = ks0108Coord.y;
+ 315:ks0108.c      **** 	
+ 316:ks0108.c      **** 	if(c < firstChar || c >= (firstChar+charCount)) {
+ 317:ks0108.c      **** 		return 1;
+ 318:ks0108.c      **** 	}
+ 319:ks0108.c      **** 	c-= firstChar;
+ 320:ks0108.c      **** 	
+ 321:ks0108.c      **** 	// read width data, to get the index
+ 322:ks0108.c      **** 	for(uint8_t i=0; i<c; i++) {
+ 323:ks0108.c      **** 		index += ks0108FontRead(ks0108Font+FONT_WIDTH_TABLE+i);
+ 324:ks0108.c      **** 	}
+ 325:ks0108.c      **** 	index = index*bytes+charCount+FONT_WIDTH_TABLE;
+ 326:ks0108.c      **** 	width = ks0108FontRead(ks0108Font+FONT_WIDTH_TABLE+c);
+ 327:ks0108.c      **** 	
+ 328:ks0108.c      **** 	// last but not least, draw the character
+ 329:ks0108.c      **** 	for(uint8_t i=0; i<bytes; i++) {
+ 330:ks0108.c      **** 		uint8_t page = i*width;
+ 331:ks0108.c      **** 		for(uint8_t j=0; j<width; j++) {
+ 332:ks0108.c      **** 			uint8_t data = ks0108FontRead(ks0108Font+index+page+j);
+ 333:ks0108.c      **** 			
+ 334:ks0108.c      **** 			if(height < (i+1)*8) {
+ 335:ks0108.c      **** 				data >>= (i+1)*8-height;
+ 336:ks0108.c      **** 			}
+ 337:ks0108.c      **** 			
+ 338:ks0108.c      **** 			if(ks0108FontColor == BLACK) {
+ 339:ks0108.c      **** 				ks0108WriteData(data);
+ 340:ks0108.c      **** 			} else {
+ 341:ks0108.c      **** 				ks0108WriteData(~data);
+ 342:ks0108.c      **** 			}
+ 343:ks0108.c      **** 		}
+ 344:ks0108.c      **** 		// 1px gap between chars
+ 345:ks0108.c      **** 		if(ks0108FontColor == BLACK) {
+ 346:ks0108.c      **** 			ks0108WriteData(0x00);
+ 347:ks0108.c      **** 		} else {
+ 348:ks0108.c      **** 			ks0108WriteData(0xFF);
+ 349:ks0108.c      **** 		}
+ 350:ks0108.c      **** 		ks0108GotoXY(x, ks0108Coord.y+8);
+ 351:ks0108.c      **** 	}
+ 352:ks0108.c      **** 	ks0108GotoXY(x+width+1, y);
+ 353:ks0108.c      **** 	
+ 354:ks0108.c      **** 	return 0;
+ 355:ks0108.c      **** }
+ 356:ks0108.c      **** 
+ 357:ks0108.c      **** void ks0108Puts(char* str) {
+ 358:ks0108.c      **** 	int x = ks0108Coord.x;
+ 359:ks0108.c      **** 	while(*str != 0) {
+ 360:ks0108.c      **** 		if(*str == '\n') {
+ 361:ks0108.c      **** 			ks0108GotoXY(x, ks0108Coord.y+ks0108FontRead(ks0108Font+FONT_HEIGHT));
+ 362:ks0108.c      **** 		} else {
+ 363:ks0108.c      **** 			ks0108PutChar(*str);
+ 364:ks0108.c      **** 		}
+ 365:ks0108.c      **** 		str++;
+ 366:ks0108.c      **** 	}
+ 367:ks0108.c      **** }
+ 368:ks0108.c      **** 
+ 369:ks0108.c      **** void ks0108Puts_P(PGM_P str) {
+ 370:ks0108.c      **** 	int x = ks0108Coord.x;
+ 371:ks0108.c      **** 	while(pgm_read_byte(str) != 0) {
+ 372:ks0108.c      **** 		if(pgm_read_byte(str) == '\n') {
+ 373:ks0108.c      **** 			ks0108GotoXY(x, ks0108Coord.y+ks0108FontRead(ks0108Font+FONT_HEIGHT));
+ 374:ks0108.c      **** 		} else {
+ 375:ks0108.c      **** 			ks0108PutChar(pgm_read_byte(str));
+ 376:ks0108.c      **** 		}
+ 377:ks0108.c      **** 		str++;
+ 378:ks0108.c      **** 	}
+ 379:ks0108.c      **** }
+ 380:ks0108.c      **** 
+ 381:ks0108.c      **** uint8_t ks0108CharWidth(char c) {
+ 152               	.LM8:
+ 153               	.LFBB3:
+ 154 001c 0F93      		push r16
+ 155 001e 1F93      		push r17
+ 156               	/* prologue: function */
+ 157               	/* frame size = 0 */
+ 158 0020 082F      		mov r16,r24
+ 382:ks0108.c      **** 	uint8_t width = 0;
+ 383:ks0108.c      **** 	uint8_t firstChar = ks0108FontRead(ks0108Font+FONT_FIRST_CHAR);
+ 160               	.LM9:
+ 161 0022 8091 0000 		lds r24,ks0108Font
+ 162 0026 9091 0000 		lds r25,(ks0108Font)+1
+ 163 002a E091 0000 		lds r30,ks0108FontRead
+ 164 002e F091 0000 		lds r31,(ks0108FontRead)+1
+ 165 0032 0496      		adiw r24,4
+ 166 0034 0995      		icall
+ 167 0036 182F      		mov r17,r24
+ 384:ks0108.c      **** 	uint8_t charCount = ks0108FontRead(ks0108Font+FONT_CHAR_COUNT);
+ 169               	.LM10:
+ 170 0038 8091 0000 		lds r24,ks0108Font
+ 171 003c 9091 0000 		lds r25,(ks0108Font)+1
+ 172 0040 E091 0000 		lds r30,ks0108FontRead
+ 173 0044 F091 0000 		lds r31,(ks0108FontRead)+1
+ 174 0048 0596      		adiw r24,5
+ 175 004a 0995      		icall
+ 385:ks0108.c      **** 	
+ 386:ks0108.c      **** 	// read width data
+ 387:ks0108.c      **** 	if(c >= firstChar && c < (firstChar+charCount)) {
+ 177               	.LM11:
+ 178 004c 0117      		cp r16,r17
+ 179 004e 00F0      		brlo .L6
+ 180 0050 402F      		mov r20,r16
+ 181 0052 50E0      		ldi r21,lo8(0)
+ 182 0054 212F      		mov r18,r17
+ 183 0056 30E0      		ldi r19,lo8(0)
+ 184 0058 280F      		add r18,r24
+ 185 005a 311D      		adc r19,__zero_reg__
+ 186 005c 4217      		cp r20,r18
+ 187 005e 5307      		cpc r21,r19
+ 188 0060 04F4      		brge .L6
+ 388:ks0108.c      **** 		c -= firstChar;
+ 389:ks0108.c      **** 		width = ks0108FontRead(ks0108Font+FONT_WIDTH_TABLE+c)+1;
+ 190               	.LM12:
+ 191 0062 011B      		sub r16,r17
+ 192 0064 10E0      		ldi r17,lo8(0)
+ 193 0066 0A5F      		subi r16,lo8(-(6))
+ 194 0068 1F4F      		sbci r17,hi8(-(6))
+ 195 006a 8091 0000 		lds r24,ks0108Font
+ 196 006e 9091 0000 		lds r25,(ks0108Font)+1
+ 197 0072 E091 0000 		lds r30,ks0108FontRead
+ 198 0076 F091 0000 		lds r31,(ks0108FontRead)+1
+ 199 007a 800F      		add r24,r16
+ 200 007c 911F      		adc r25,r17
+ 201 007e 0995      		icall
+ 202 0080 8F5F      		subi r24,lo8(-(1))
+ 203 0082 00C0      		rjmp .L7
+ 204               	.L6:
+ 205 0084 80E0      		ldi r24,lo8(0)
+ 206               	.L7:
+ 207               	/* epilogue start */
+ 390:ks0108.c      **** 	}
+ 391:ks0108.c      **** 	
+ 392:ks0108.c      **** 	return width;
+ 393:ks0108.c      **** }
+ 209               	.LM13:
+ 210 0086 1F91      		pop r17
+ 211 0088 0F91      		pop r16
+ 212 008a 0895      		ret
+ 219               	.Lscope3:
+ 222               	.global	ks0108StringWidth
+ 224               	ks0108StringWidth:
+ 394:ks0108.c      **** 
+ 395:ks0108.c      **** uint16_t ks0108StringWidth(char* str) {
+ 226               	.LM14:
+ 227               	.LFBB4:
+ 228 008c EF92      		push r14
+ 229 008e FF92      		push r15
+ 230 0090 0F93      		push r16
+ 231 0092 1F93      		push r17
+ 232 0094 CF93      		push r28
+ 233 0096 DF93      		push r29
+ 234               	/* prologue: function */
+ 235               	/* frame size = 0 */
+ 236 0098 8C01      		movw r16,r24
+ 238               	.LM15:
+ 239 009a C0E0      		ldi r28,lo8(0)
+ 240 009c D0E0      		ldi r29,hi8(0)
+ 396:ks0108.c      **** 	uint16_t width = 0;
+ 397:ks0108.c      **** 	
+ 398:ks0108.c      **** 	while(*str != 0) {
+ 242               	.LM16:
+ 243 009e 00C0      		rjmp .L11
+ 244               	.L12:
+ 399:ks0108.c      **** 		width += ks0108CharWidth(*str++);
+ 246               	.LM17:
+ 247 00a0 0F5F      		subi r16,lo8(-(1))
+ 248 00a2 1F4F      		sbci r17,hi8(-(1))
+ 249 00a4 0E94 0000 		call ks0108CharWidth
+ 250 00a8 C80F      		add r28,r24
+ 251 00aa D11D      		adc r29,__zero_reg__
+ 252               	.L11:
+ 398:ks0108.c      **** 	while(*str != 0) {
+ 254               	.LM18:
+ 255 00ac F801      		movw r30,r16
+ 256 00ae 8081      		ld r24,Z
+ 257 00b0 8823      		tst r24
+ 258 00b2 01F4      		brne .L12
+ 400:ks0108.c      **** 	}
+ 401:ks0108.c      **** 	
+ 402:ks0108.c      **** 	return width;
+ 403:ks0108.c      **** }
+ 260               	.LM19:
+ 261 00b4 CE01      		movw r24,r28
+ 262               	/* epilogue start */
+ 263 00b6 DF91      		pop r29
+ 264 00b8 CF91      		pop r28
+ 265 00ba 1F91      		pop r17
+ 266 00bc 0F91      		pop r16
+ 267 00be FF90      		pop r15
+ 268 00c0 EF90      		pop r14
+ 269 00c2 0895      		ret
+ 274               	.Lscope4:
+ 277               	.global	ks0108StringWidth_P
+ 279               	ks0108StringWidth_P:
+ 404:ks0108.c      **** 
+ 405:ks0108.c      **** uint16_t ks0108StringWidth_P(PGM_P str) {
+ 281               	.LM20:
+ 282               	.LFBB5:
+ 283 00c4 EF92      		push r14
+ 284 00c6 FF92      		push r15
+ 285 00c8 0F93      		push r16
+ 286 00ca 1F93      		push r17
+ 287 00cc CF93      		push r28
+ 288 00ce DF93      		push r29
+ 289               	/* prologue: function */
+ 290               	/* frame size = 0 */
+ 291 00d0 8C01      		movw r16,r24
+ 293               	.LM21:
+ 294 00d2 C0E0      		ldi r28,lo8(0)
+ 295 00d4 D0E0      		ldi r29,hi8(0)
+ 406:ks0108.c      **** 	uint16_t width = 0;
+ 407:ks0108.c      **** 	
+ 408:ks0108.c      **** 	while(pgm_read_byte(str) != 0) {
+ 297               	.LM22:
+ 298 00d6 00C0      		rjmp .L15
+ 299               	.L16:
+ 300               	.LBB31:
+ 409:ks0108.c      **** 		width += ks0108CharWidth(pgm_read_byte(str++));
+ 302               	.LM23:
+ 303 00d8 0F5F      		subi r16,lo8(-(1))
+ 304 00da 1F4F      		sbci r17,hi8(-(1))
+ 305 00dc F901      		movw r30,r18
+ 306               	/* #APP */
+ 307               	 ;  409 "ks0108.c" 1
+ 308 00de 8491      		lpm r24, Z
+ 309               		
+ 310               	 ;  0 "" 2
+ 311               	/* #NOAPP */
+ 312               	.LBE31:
+ 313 00e0 0E94 0000 		call ks0108CharWidth
+ 314 00e4 C80F      		add r28,r24
+ 315 00e6 D11D      		adc r29,__zero_reg__
+ 316               	.L15:
+ 317 00e8 9801      		movw r18,r16
+ 318               	.LBB32:
+ 408:ks0108.c      **** 	while(pgm_read_byte(str) != 0) {
+ 320               	.LM24:
+ 321 00ea F801      		movw r30,r16
+ 322               	/* #APP */
+ 323               	 ;  408 "ks0108.c" 1
+ 324 00ec 9491      		lpm r25, Z
+ 325               		
+ 326               	 ;  0 "" 2
+ 327               	/* #NOAPP */
+ 328               	.LBE32:
+ 329 00ee 9923      		tst r25
+ 330 00f0 01F4      		brne .L16
+ 410:ks0108.c      **** 	}
+ 411:ks0108.c      **** 	
+ 412:ks0108.c      **** 	return width;
+ 413:ks0108.c      **** }
+ 332               	.LM25:
+ 333 00f2 CE01      		movw r24,r28
+ 334               	/* epilogue start */
+ 335 00f4 DF91      		pop r29
+ 336 00f6 CF91      		pop r28
+ 337 00f8 1F91      		pop r17
+ 338 00fa 0F91      		pop r16
+ 339 00fc FF90      		pop r15
+ 340 00fe EF90      		pop r14
+ 341 0100 0895      		ret
+ 353               	.Lscope5:
+ 357               	.global	ks0108WriteCommand
+ 359               	ks0108WriteCommand:
+ 414:ks0108.c      **** 
+ 415:ks0108.c      **** void ks0108GotoXY(uint8_t x, uint8_t y) {
+ 416:ks0108.c      **** 	uint8_t chip = CHIP1, cmd;
+ 417:ks0108.c      **** 	
+ 418:ks0108.c      **** 	if(x > 127) x = 0;								// ensure that coordinates are legal
+ 419:ks0108.c      **** 	if(y > 63)  y = 0;
+ 420:ks0108.c      **** 	
+ 421:ks0108.c      **** 	ks0108Coord.x = x;								// save new coordinates
+ 422:ks0108.c      **** 	ks0108Coord.y = y;
+ 423:ks0108.c      **** 	ks0108Coord.page = y/8;
+ 424:ks0108.c      **** 	
+ 425:ks0108.c      **** 	if(x >= 64) {									// select the right chip
+ 426:ks0108.c      **** 		x -= 64;
+ 427:ks0108.c      **** 		chip = CHIP2;
+ 428:ks0108.c      **** 	}
+ 429:ks0108.c      **** 	cmd = LCD_SET_ADD | x;
+ 430:ks0108.c      **** 	ks0108WriteCommand(cmd, chip);					// set x address on active chip
+ 431:ks0108.c      **** 	
+ 432:ks0108.c      **** 	cmd = LCD_SET_PAGE | ks0108Coord.page;			// set y address on both chips
+ 433:ks0108.c      **** 	ks0108WriteCommand(cmd, CHIP1);
+ 434:ks0108.c      **** 	ks0108WriteCommand(cmd, CHIP2);
+ 435:ks0108.c      **** }
+ 436:ks0108.c      **** 
+ 437:ks0108.c      **** void ks0108Init(uint8_t invert) {
+ 438:ks0108.c      **** 	ks0108Coord.x = 0;
+ 439:ks0108.c      **** 	ks0108Coord.y = 0;
+ 440:ks0108.c      **** 	ks0108Coord.page = 0;
+ 441:ks0108.c      **** 	
+ 442:ks0108.c      **** 	ks0108Inverted = invert;
+ 443:ks0108.c      **** 	
+ 444:ks0108.c      **** 	LCD_CMD_DIR = 0xFF;								// command port is output
+ 445:ks0108.c      **** 	ks0108WriteCommand(LCD_ON, CHIP1);				// power on
+ 446:ks0108.c      **** 	ks0108WriteCommand(LCD_ON, CHIP2);
+ 447:ks0108.c      **** 	
+ 448:ks0108.c      **** 	ks0108WriteCommand(LCD_DISP_START, CHIP1);		// display start line = 0
+ 449:ks0108.c      **** 	ks0108WriteCommand(LCD_DISP_START, CHIP2);
+ 450:ks0108.c      **** 	ks0108ClearScreen();							// display clear
+ 451:ks0108.c      **** 	ks0108GotoXY(0,0);
+ 452:ks0108.c      **** }
+ 453:ks0108.c      **** 
+ 454:ks0108.c      **** inline void ks0108Enable(void) {
+ 455:ks0108.c      **** 	LCD_CMD_PORT |= 0x01 << EN;						// EN high level width: min. 450ns
+ 456:ks0108.c      **** 	asm volatile("nop\n\t"
+ 457:ks0108.c      **** 				 "nop\n\t"
+ 458:ks0108.c      **** 				 "nop\n\t"
+ 459:ks0108.c      **** 				 ::);
+ 460:ks0108.c      **** 	LCD_CMD_PORT &= ~(0x01 << EN);
+ 461:ks0108.c      **** 	for(volatile uint8_t i=0; i<8; i++);			// a little delay loop (faster than reading the busy flag)
+ 462:ks0108.c      **** }
+ 463:ks0108.c      **** 
+ 464:ks0108.c      **** uint8_t ks0108DoReadData(uint8_t first) {
+ 465:ks0108.c      **** 	uint8_t data;
+ 466:ks0108.c      **** 	volatile uint8_t i;
+ 467:ks0108.c      **** 	
+ 468:ks0108.c      **** 	LCD_DATA_OUT = 0x00;
+ 469:ks0108.c      **** 	LCD_DATA_DIR = 0x00;							// data port is input
+ 470:ks0108.c      **** 	
+ 471:ks0108.c      **** 	if(ks0108Coord.x < 64) {
+ 472:ks0108.c      **** 		LCD_CMD_PORT &= ~(0x01 << CSEL2);			// deselect chip 2
+ 473:ks0108.c      **** 		LCD_CMD_PORT |= 0x01 << CSEL1;				// select chip 1
+ 474:ks0108.c      **** 	} else if(ks0108Coord.x >= 64) {
+ 475:ks0108.c      **** 		LCD_CMD_PORT &= ~(0x01 << CSEL1);			// deselect chip 1
+ 476:ks0108.c      **** 		LCD_CMD_PORT |= 0x01 << CSEL2;				// select chip 2
+ 477:ks0108.c      **** 	}
+ 478:ks0108.c      **** 	if(ks0108Coord.x == 64 && first) {				// chip2 X-address = 0
+ 479:ks0108.c      **** 		ks0108WriteCommand(LCD_SET_ADD, CHIP2); 	// wuff wuff
+ 480:ks0108.c      **** 	}
+ 481:ks0108.c      **** 	
+ 482:ks0108.c      **** 	LCD_CMD_PORT |= 0x01 << D_I;					// D/I = 1
+ 483:ks0108.c      **** 	LCD_CMD_PORT |= 0x01 << R_W;					// R/W = 1
+ 484:ks0108.c      **** 	
+ 485:ks0108.c      **** 	LCD_CMD_PORT |= 0x01 << EN;						// EN high level width: min. 450ns
+ 486:ks0108.c      **** 	asm volatile("nop\n\t"
+ 487:ks0108.c      **** 				 "nop\n\t"
+ 488:ks0108.c      **** 				 "nop\n\t"
+ 489:ks0108.c      **** 				 ::);
+ 490:ks0108.c      **** 	
+ 491:ks0108.c      **** 	data = LCD_DATA_IN;								// read Data			 
+ 492:ks0108.c      **** 	
+ 493:ks0108.c      **** 	LCD_CMD_PORT &= ~(0x01 << EN);
+ 494:ks0108.c      **** 	for(i=0; i<8; i++);								// a little delay loop (faster than reading the busy flag)
+ 495:ks0108.c      **** 	
+ 496:ks0108.c      **** 	LCD_DATA_DIR = 0xFF;
+ 497:ks0108.c      **** 	
+ 498:ks0108.c      **** 	ks0108GotoXY(ks0108Coord.x, ks0108Coord.y);
+ 499:ks0108.c      **** 	
+ 500:ks0108.c      **** 	if(ks0108Inverted)
+ 501:ks0108.c      **** 		data = ~data;
+ 502:ks0108.c      **** 	return data;
+ 503:ks0108.c      **** }
+ 504:ks0108.c      **** 
+ 505:ks0108.c      **** inline uint8_t ks0108ReadData(void) {
+ 506:ks0108.c      **** 	ks0108DoReadData(1);							// dummy read
+ 507:ks0108.c      **** 	return ks0108DoReadData(0);						// "real" read
+ 508:ks0108.c      **** }
+ 509:ks0108.c      **** 
+ 510:ks0108.c      **** void ks0108WriteCommand(uint8_t cmd, uint8_t chip) {
+ 361               	.LM26:
+ 362               	.LFBB6:
+ 363 0102 DF93      		push r29
+ 364 0104 CF93      		push r28
+ 365 0106 0F92      		push __tmp_reg__
+ 366 0108 CDB7      		in r28,__SP_L__
+ 367 010a DEB7      		in r29,__SP_H__
+ 368               	/* prologue: function */
+ 369               	/* frame size = 1 */
+ 511:ks0108.c      **** 	if(chip == CHIP1) {
+ 371               	.LM27:
+ 372 010c 6623      		tst r22
+ 373 010e 01F4      		brne .L19
+ 512:ks0108.c      **** 		LCD_CMD_PORT &= ~(0x01 << CSEL2);			// deselect chip 2
+ 375               	.LM28:
+ 376 0110 AC98      		cbi 53-0x20,4
+ 513:ks0108.c      **** 		LCD_CMD_PORT |= 0x01 << CSEL1;				// select chip 1
+ 378               	.LM29:
+ 379 0112 AB9A      		sbi 53-0x20,3
+ 380 0114 00C0      		rjmp .L20
+ 381               	.L19:
+ 514:ks0108.c      **** 	} else if(chip == CHIP2) {
+ 383               	.LM30:
+ 384 0116 6130      		cpi r22,lo8(1)
+ 385 0118 01F4      		brne .L20
+ 515:ks0108.c      **** 		LCD_CMD_PORT &= ~(0x01 << CSEL1);			// deselect chip 1
+ 387               	.LM31:
+ 388 011a AB98      		cbi 53-0x20,3
+ 516:ks0108.c      **** 		LCD_CMD_PORT |= 0x01 << CSEL2;				// select chip 2
+ 390               	.LM32:
+ 391 011c AC9A      		sbi 53-0x20,4
+ 392               	.L20:
+ 517:ks0108.c      **** 	}
+ 518:ks0108.c      **** 	
+ 519:ks0108.c      **** 	LCD_CMD_PORT &= ~(0x01 << D_I);					// D/I = 0
+ 394               	.LM33:
+ 395 011e A898      		cbi 53-0x20,0
+ 520:ks0108.c      **** 	LCD_CMD_PORT &= ~(0x01 << R_W);					// R/W = 0
+ 397               	.LM34:
+ 398 0120 A998      		cbi 53-0x20,1
+ 521:ks0108.c      **** 	LCD_DATA_DIR = 0xFF;							// data port is output
+ 400               	.LM35:
+ 401 0122 9FEF      		ldi r25,lo8(-1)
+ 402 0124 94BB      		out 52-0x20,r25
+ 522:ks0108.c      **** 	LCD_DATA_OUT = cmd;								// write command
+ 404               	.LM36:
+ 405 0126 85BB      		out 53-0x20,r24
+ 406               	.LBB33:
+ 407               	.LBB34:
+ 455:ks0108.c      **** 	LCD_CMD_PORT |= 0x01 << EN;						// EN high level width: min. 450ns
+ 409               	.LM37:
+ 410 0128 AA9A      		sbi 53-0x20,2
+ 456:ks0108.c      **** 	asm volatile("nop\n\t"
+ 412               	.LM38:
+ 413               	/* #APP */
+ 414               	 ;  456 "ks0108.c" 1
+ 415 012a 0000      		nop
+ 416 012c 0000      		nop
+ 417 012e 0000      		nop
+ 418               		
+ 419               	 ;  0 "" 2
+ 460:ks0108.c      **** 	LCD_CMD_PORT &= ~(0x01 << EN);
+ 421               	.LM39:
+ 422               	/* #NOAPP */
+ 423 0130 AA98      		cbi 53-0x20,2
+ 424               	.LBB35:
+ 461:ks0108.c      **** 	for(volatile uint8_t i=0; i<8; i++);			// a little delay loop (faster than reading the busy flag)
+ 426               	.LM40:
+ 427 0132 1982      		std Y+1,__zero_reg__
+ 428 0134 00C0      		rjmp .L21
+ 429               	.L22:
+ 430 0136 8981      		ldd r24,Y+1
+ 431 0138 8F5F      		subi r24,lo8(-(1))
+ 432 013a 8983      		std Y+1,r24
+ 433               	.L21:
+ 434 013c 8981      		ldd r24,Y+1
+ 435 013e 8830      		cpi r24,lo8(8)
+ 436 0140 00F0      		brlo .L22
+ 437               	.LBE35:
+ 438               	.LBE34:
+ 439               	.LBE33:
+ 523:ks0108.c      **** 	ks0108Enable();									// enable
+ 524:ks0108.c      **** 	LCD_DATA_OUT = 0x00;
+ 441               	.LM41:
+ 442 0142 15BA      		out 53-0x20,__zero_reg__
+ 443               	/* epilogue start */
+ 525:ks0108.c      **** }
+ 445               	.LM42:
+ 446 0144 0F90      		pop __tmp_reg__
+ 447 0146 CF91      		pop r28
+ 448 0148 DF91      		pop r29
+ 449 014a 0895      		ret
+ 454               	.Lscope6:
+ 458               	.global	ks0108GotoXY
+ 460               	ks0108GotoXY:
+ 415:ks0108.c      **** void ks0108GotoXY(uint8_t x, uint8_t y) {
+ 462               	.LM43:
+ 463               	.LFBB7:
+ 464 014c 1F93      		push r17
+ 465               	/* prologue: function */
+ 466               	/* frame size = 0 */
+ 418:ks0108.c      **** 	if(x > 127) x = 0;								// ensure that coordinates are legal
+ 468               	.LM44:
+ 469 014e 87FD      		sbrc r24,7
+ 470 0150 80E0      		ldi r24,lo8(0)
+ 471               	.L25:
+ 419:ks0108.c      **** 	if(y > 63)  y = 0;
+ 473               	.LM45:
+ 474 0152 6034      		cpi r22,lo8(64)
+ 475 0154 00F0      		brlo .L26
+ 476 0156 60E0      		ldi r22,lo8(0)
+ 477               	.L26:
+ 421:ks0108.c      **** 	ks0108Coord.x = x;								// save new coordinates
+ 479               	.LM46:
+ 480 0158 8093 0000 		sts ks0108Coord,r24
+ 422:ks0108.c      **** 	ks0108Coord.y = y;
+ 482               	.LM47:
+ 483 015c 6093 0000 		sts ks0108Coord+1,r22
+ 423:ks0108.c      **** 	ks0108Coord.page = y/8;
+ 485               	.LM48:
+ 486 0160 6695      		lsr r22
+ 487 0162 6695      		lsr r22
+ 488 0164 6695      		lsr r22
+ 489 0166 6093 0000 		sts ks0108Coord+2,r22
+ 425:ks0108.c      **** 	if(x >= 64) {									// select the right chip
+ 491               	.LM49:
+ 492 016a 8034      		cpi r24,lo8(64)
+ 493 016c 00F4      		brsh .L27
+ 494 016e 60E0      		ldi r22,lo8(0)
+ 495 0170 00C0      		rjmp .L28
+ 496               	.L27:
+ 426:ks0108.c      **** 		x -= 64;
+ 498               	.LM50:
+ 499 0172 8054      		subi r24,lo8(-(-64))
+ 500 0174 61E0      		ldi r22,lo8(1)
+ 501               	.L28:
+ 430:ks0108.c      **** 	ks0108WriteCommand(cmd, chip);					// set x address on active chip
+ 503               	.LM51:
+ 504 0176 8064      		ori r24,lo8(64)
+ 505 0178 0E94 0000 		call ks0108WriteCommand
+ 432:ks0108.c      **** 	cmd = LCD_SET_PAGE | ks0108Coord.page;			// set y address on both chips
+ 507               	.LM52:
+ 508 017c 1091 0000 		lds r17,ks0108Coord+2
+ 509 0180 186B      		ori r17,lo8(-72)
+ 433:ks0108.c      **** 	ks0108WriteCommand(cmd, CHIP1);
+ 511               	.LM53:
+ 512 0182 812F      		mov r24,r17
+ 513 0184 60E0      		ldi r22,lo8(0)
+ 514 0186 0E94 0000 		call ks0108WriteCommand
+ 434:ks0108.c      **** 	ks0108WriteCommand(cmd, CHIP2);
+ 516               	.LM54:
+ 517 018a 812F      		mov r24,r17
+ 518 018c 61E0      		ldi r22,lo8(1)
+ 519 018e 0E94 0000 		call ks0108WriteCommand
+ 520               	/* epilogue start */
+ 435:ks0108.c      **** }
+ 522               	.LM55:
+ 523 0192 1F91      		pop r17
+ 524 0194 0895      		ret
+ 529               	.Lscope7:
+ 532               	.global	ks0108DoReadData
+ 534               	ks0108DoReadData:
+ 464:ks0108.c      **** uint8_t ks0108DoReadData(uint8_t first) {
+ 536               	.LM56:
+ 537               	.LFBB8:
+ 538 0196 1F93      		push r17
+ 539 0198 DF93      		push r29
+ 540 019a CF93      		push r28
+ 541 019c 0F92      		push __tmp_reg__
+ 542 019e CDB7      		in r28,__SP_L__
+ 543 01a0 DEB7      		in r29,__SP_H__
+ 544               	/* prologue: function */
+ 545               	/* frame size = 1 */
+ 468:ks0108.c      **** 	LCD_DATA_OUT = 0x00;
+ 547               	.LM57:
+ 548 01a2 15BA      		out 53-0x20,__zero_reg__
+ 469:ks0108.c      **** 	LCD_DATA_DIR = 0x00;							// data port is input
+ 550               	.LM58:
+ 551 01a4 14BA      		out 52-0x20,__zero_reg__
+ 471:ks0108.c      **** 	if(ks0108Coord.x < 64) {
+ 553               	.LM59:
+ 554 01a6 9091 0000 		lds r25,ks0108Coord
+ 555 01aa 9034      		cpi r25,lo8(64)
+ 556 01ac 00F4      		brsh .L31
+ 472:ks0108.c      **** 		LCD_CMD_PORT &= ~(0x01 << CSEL2);			// deselect chip 2
+ 558               	.LM60:
+ 559 01ae AC98      		cbi 53-0x20,4
+ 473:ks0108.c      **** 		LCD_CMD_PORT |= 0x01 << CSEL1;				// select chip 1
+ 561               	.LM61:
+ 562 01b0 AB9A      		sbi 53-0x20,3
+ 563 01b2 00C0      		rjmp .L32
+ 564               	.L31:
+ 475:ks0108.c      **** 		LCD_CMD_PORT &= ~(0x01 << CSEL1);			// deselect chip 1
+ 566               	.LM62:
+ 567 01b4 AB98      		cbi 53-0x20,3
+ 476:ks0108.c      **** 		LCD_CMD_PORT |= 0x01 << CSEL2;				// select chip 2
+ 569               	.LM63:
+ 570 01b6 AC9A      		sbi 53-0x20,4
+ 478:ks0108.c      **** 	if(ks0108Coord.x == 64 && first) {				// chip2 X-address = 0
+ 572               	.LM64:
+ 573 01b8 9034      		cpi r25,lo8(64)
+ 574 01ba 01F4      		brne .L32
+ 575 01bc 8823      		tst r24
+ 576 01be 01F0      		breq .L32
+ 479:ks0108.c      **** 		ks0108WriteCommand(LCD_SET_ADD, CHIP2); 	// wuff wuff
+ 578               	.LM65:
+ 579 01c0 80E4      		ldi r24,lo8(64)
+ 580 01c2 61E0      		ldi r22,lo8(1)
+ 581 01c4 0E94 0000 		call ks0108WriteCommand
+ 582               	.L32:
+ 482:ks0108.c      **** 	LCD_CMD_PORT |= 0x01 << D_I;					// D/I = 1
+ 584               	.LM66:
+ 585 01c8 A89A      		sbi 53-0x20,0
+ 483:ks0108.c      **** 	LCD_CMD_PORT |= 0x01 << R_W;					// R/W = 1
+ 587               	.LM67:
+ 588 01ca A99A      		sbi 53-0x20,1
+ 485:ks0108.c      **** 	LCD_CMD_PORT |= 0x01 << EN;						// EN high level width: min. 450ns
+ 590               	.LM68:
+ 591 01cc AA9A      		sbi 53-0x20,2
+ 486:ks0108.c      **** 	asm volatile("nop\n\t"
+ 593               	.LM69:
+ 594               	/* #APP */
+ 595               	 ;  486 "ks0108.c" 1
+ 596 01ce 0000      		nop
+ 597 01d0 0000      		nop
+ 598 01d2 0000      		nop
+ 599               		
+ 600               	 ;  0 "" 2
+ 491:ks0108.c      **** 	data = LCD_DATA_IN;								// read Data			 
+ 602               	.LM70:
+ 603               	/* #NOAPP */
+ 604 01d4 13B3      		in r17,51-0x20
+ 493:ks0108.c      **** 	LCD_CMD_PORT &= ~(0x01 << EN);
+ 606               	.LM71:
+ 607 01d6 AA98      		cbi 53-0x20,2
+ 494:ks0108.c      **** 	for(i=0; i<8; i++);								// a little delay loop (faster than reading the busy flag)
+ 609               	.LM72:
+ 610 01d8 1982      		std Y+1,__zero_reg__
+ 611 01da 00C0      		rjmp .L33
+ 612               	.L34:
+ 613 01dc 8981      		ldd r24,Y+1
+ 614 01de 8F5F      		subi r24,lo8(-(1))
+ 615 01e0 8983      		std Y+1,r24
+ 616               	.L33:
+ 617 01e2 8981      		ldd r24,Y+1
+ 618 01e4 8830      		cpi r24,lo8(8)
+ 619 01e6 00F0      		brlo .L34
+ 496:ks0108.c      **** 	LCD_DATA_DIR = 0xFF;
+ 621               	.LM73:
+ 622 01e8 8FEF      		ldi r24,lo8(-1)
+ 623 01ea 84BB      		out 52-0x20,r24
+ 498:ks0108.c      **** 	ks0108GotoXY(ks0108Coord.x, ks0108Coord.y);
+ 625               	.LM74:
+ 626 01ec 8091 0000 		lds r24,ks0108Coord
+ 627 01f0 6091 0000 		lds r22,ks0108Coord+1
+ 628 01f4 0E94 0000 		call ks0108GotoXY
+ 500:ks0108.c      **** 	if(ks0108Inverted)
+ 630               	.LM75:
+ 631 01f8 8091 0000 		lds r24,ks0108Inverted
+ 632 01fc 8111      		cpse r24,__zero_reg__
+ 501:ks0108.c      **** 		data = ~data;
+ 634               	.LM76:
+ 635 01fe 1095      		com r17
+ 636               	.L35:
+ 503:ks0108.c      **** }
+ 638               	.LM77:
+ 639 0200 812F      		mov r24,r17
+ 640               	/* epilogue start */
+ 641 0202 0F90      		pop __tmp_reg__
+ 642 0204 CF91      		pop r28
+ 643 0206 DF91      		pop r29
+ 644 0208 1F91      		pop r17
+ 645 020a 0895      		ret
+ 651               	.Lscope8:
+ 654               	.global	ks0108WriteData
+ 656               	ks0108WriteData:
+ 526:ks0108.c      **** 
+ 527:ks0108.c      **** void ks0108WriteData(uint8_t data) {
+ 658               	.LM78:
+ 659               	.LFBB9:
+ 660 020c DF92      		push r13
+ 661 020e EF92      		push r14
+ 662 0210 FF92      		push r15
+ 663 0212 0F93      		push r16
+ 664 0214 1F93      		push r17
+ 665 0216 DF93      		push r29
+ 666 0218 CF93      		push r28
+ 667 021a 0F92      		push __tmp_reg__
+ 668 021c CDB7      		in r28,__SP_L__
+ 669 021e DEB7      		in r29,__SP_H__
+ 670               	/* prologue: function */
+ 671               	/* frame size = 1 */
+ 672 0220 182F      		mov r17,r24
+ 528:ks0108.c      **** 	uint8_t displayData, yOffset, cmdPort;
+ 529:ks0108.c      **** 
+ 530:ks0108.c      **** #ifdef DEBUG
+ 531:ks0108.c      **** 	volatile uint16_t i;
+ 532:ks0108.c      **** 	for(i=0; i<5000; i++);
+ 533:ks0108.c      **** #endif
+ 534:ks0108.c      **** 
+ 535:ks0108.c      **** 	if(ks0108Coord.x >= 128)
+ 674               	.LM79:
+ 675 0222 8091 0000 		lds r24,ks0108Coord
+ 676 0226 87FD      		sbrc r24,7
+ 677 0228 00C0      		rjmp .L52
+ 536:ks0108.c      **** 		return;
+ 537:ks0108.c      **** 
+ 538:ks0108.c      **** 	if(ks0108Coord.x < 64) {
+ 679               	.LM80:
+ 680 022a 8034      		cpi r24,lo8(64)
+ 681 022c 00F4      		brsh .L39
+ 539:ks0108.c      **** 		LCD_CMD_PORT &= ~(0x01 << CSEL2);			// deselect chip 2
+ 683               	.LM81:
+ 684 022e AC98      		cbi 53-0x20,4
+ 540:ks0108.c      **** 		LCD_CMD_PORT |= 0x01 << CSEL1;				// select chip 1
+ 686               	.LM82:
+ 687 0230 AB9A      		sbi 53-0x20,3
+ 688 0232 00C0      		rjmp .L40
+ 689               	.L39:
+ 541:ks0108.c      **** 	} else if(ks0108Coord.x >= 64) {
+ 542:ks0108.c      **** 		LCD_CMD_PORT &= ~(0x01 << CSEL1);			// deselect chip 1
+ 691               	.LM83:
+ 692 0234 AB98      		cbi 53-0x20,3
+ 543:ks0108.c      **** 		LCD_CMD_PORT |= 0x01 << CSEL2;				// select chip 2
+ 694               	.LM84:
+ 695 0236 AC9A      		sbi 53-0x20,4
+ 544:ks0108.c      **** 	}
+ 545:ks0108.c      **** 	if(ks0108Coord.x == 64)							// chip2 X-address = 0
+ 697               	.LM85:
+ 698 0238 8034      		cpi r24,lo8(64)
+ 699 023a 01F4      		brne .L40
+ 546:ks0108.c      **** 		ks0108WriteCommand(LCD_SET_ADD, CHIP2);
+ 701               	.LM86:
+ 702 023c 61E0      		ldi r22,lo8(1)
+ 703 023e 0E94 0000 		call ks0108WriteCommand
+ 704               	.L40:
+ 547:ks0108.c      **** 	
+ 548:ks0108.c      **** 	LCD_CMD_PORT |= 0x01 << D_I;					// D/I = 1
+ 706               	.LM87:
+ 707 0242 A89A      		sbi 53-0x20,0
+ 549:ks0108.c      **** 	LCD_CMD_PORT &= ~(0x01 << R_W);					// R/W = 0
+ 709               	.LM88:
+ 710 0244 A998      		cbi 53-0x20,1
+ 550:ks0108.c      **** 	LCD_DATA_DIR = 0xFF;							// data port is output
+ 712               	.LM89:
+ 713 0246 0FEF      		ldi r16,lo8(-1)
+ 714 0248 04BB      		out 52-0x20,r16
+ 551:ks0108.c      **** 	
+ 552:ks0108.c      **** 	
+ 553:ks0108.c      **** 	yOffset = ks0108Coord.y%8;
+ 716               	.LM90:
+ 717 024a E090 0000 		lds r14,ks0108Coord+1
+ 718 024e 87E0      		ldi r24,lo8(7)
+ 719 0250 E822      		and r14,r24
+ 554:ks0108.c      **** 	if(yOffset != 0) {
+ 721               	.LM91:
+ 722 0252 01F4      		brne .+2
+ 723 0254 00C0      		rjmp .L41
+ 555:ks0108.c      **** 		// first page
+ 556:ks0108.c      **** 		cmdPort = LCD_CMD_PORT;						// save command port
+ 725               	.LM92:
+ 726 0256 D5B2      		in r13,53-0x20
+ 727               	.LBB36:
+ 728               	.LBB37:
+ 506:ks0108.c      **** 	ks0108DoReadData(1);							// dummy read
+ 730               	.LM93:
+ 731 0258 81E0      		ldi r24,lo8(1)
+ 732 025a 0E94 0000 		call ks0108DoReadData
+ 507:ks0108.c      **** 	return ks0108DoReadData(0);						// "real" read
+ 734               	.LM94:
+ 735 025e 80E0      		ldi r24,lo8(0)
+ 736 0260 0E94 0000 		call ks0108DoReadData
+ 737               	.LBE37:
+ 738               	.LBE36:
+ 557:ks0108.c      **** 		displayData = ks0108ReadData();
+ 558:ks0108.c      **** 		
+ 559:ks0108.c      **** 		LCD_CMD_PORT = cmdPort;						// restore command port
+ 740               	.LM95:
+ 741 0264 D5BA      		out 53-0x20,r13
+ 560:ks0108.c      **** 		LCD_DATA_DIR = 0xFF;						// data port is output
+ 743               	.LM96:
+ 744 0266 04BB      		out 52-0x20,r16
+ 561:ks0108.c      **** 		
+ 562:ks0108.c      **** 		displayData |= data << yOffset;
+ 746               	.LM97:
+ 747 0268 012F      		mov r16,r17
+ 748 026a 10E0      		ldi r17,lo8(0)
+ 749 026c FF24      		clr r15
+ 750 026e 9801      		movw r18,r16
+ 751 0270 0E2C      		mov r0,r14
+ 752 0272 00C0      		rjmp 2f
+ 753 0274 220F      	1:	lsl r18
+ 754 0276 331F      		rol r19
+ 755 0278 0A94      	2:	dec r0
+ 756 027a 02F4      		brpl 1b
+ 757 027c 822B      		or r24,r18
+ 563:ks0108.c      **** 		if(ks0108Inverted)
+ 759               	.LM98:
+ 760 027e 9091 0000 		lds r25,ks0108Inverted
+ 761 0282 9111      		cpse r25,__zero_reg__
+ 564:ks0108.c      **** 			displayData = ~displayData;
+ 763               	.LM99:
+ 764 0284 8095      		com r24
+ 765               	.L42:
+ 565:ks0108.c      **** 		LCD_DATA_OUT = displayData;					// write data
+ 767               	.LM100:
+ 768 0286 85BB      		out 53-0x20,r24
+ 769               	.LBB38:
+ 770               	.LBB39:
+ 455:ks0108.c      **** 	LCD_CMD_PORT |= 0x01 << EN;						// EN high level width: min. 450ns
+ 772               	.LM101:
+ 773 0288 AA9A      		sbi 53-0x20,2
+ 456:ks0108.c      **** 	asm volatile("nop\n\t"
+ 775               	.LM102:
+ 776               	/* #APP */
+ 777               	 ;  456 "ks0108.c" 1
+ 778 028a 0000      		nop
+ 779 028c 0000      		nop
+ 780 028e 0000      		nop
+ 781               		
+ 782               	 ;  0 "" 2
+ 460:ks0108.c      **** 	LCD_CMD_PORT &= ~(0x01 << EN);
+ 784               	.LM103:
+ 785               	/* #NOAPP */
+ 786 0290 AA98      		cbi 53-0x20,2
+ 787               	.LBB40:
+ 461:ks0108.c      **** 	for(volatile uint8_t i=0; i<8; i++);			// a little delay loop (faster than reading the busy flag)
+ 789               	.LM104:
+ 790 0292 1982      		std Y+1,__zero_reg__
+ 791 0294 00C0      		rjmp .L43
+ 792               	.L44:
+ 793 0296 8981      		ldd r24,Y+1
+ 794 0298 8F5F      		subi r24,lo8(-(1))
+ 795 029a 8983      		std Y+1,r24
+ 796               	.L43:
+ 797 029c 8981      		ldd r24,Y+1
+ 798 029e 8830      		cpi r24,lo8(8)
+ 799 02a0 00F0      		brlo .L44
+ 800               	.LBE40:
+ 801               	.LBE39:
+ 802               	.LBE38:
+ 566:ks0108.c      **** 		ks0108Enable();								// enable
+ 567:ks0108.c      **** 		
+ 568:ks0108.c      **** 		// second page
+ 569:ks0108.c      **** 		ks0108GotoXY(ks0108Coord.x, ks0108Coord.y+8);
+ 804               	.LM105:
+ 805 02a2 6091 0000 		lds r22,ks0108Coord+1
+ 806 02a6 685F      		subi r22,lo8(-(8))
+ 807 02a8 8091 0000 		lds r24,ks0108Coord
+ 808 02ac 0E94 0000 		call ks0108GotoXY
+ 809               	.LBB41:
+ 810               	.LBB42:
+ 506:ks0108.c      **** 	ks0108DoReadData(1);							// dummy read
+ 812               	.LM106:
+ 813 02b0 81E0      		ldi r24,lo8(1)
+ 814 02b2 0E94 0000 		call ks0108DoReadData
+ 507:ks0108.c      **** 	return ks0108DoReadData(0);						// "real" read
+ 816               	.LM107:
+ 817 02b6 80E0      		ldi r24,lo8(0)
+ 818 02b8 0E94 0000 		call ks0108DoReadData
+ 819               	.LBE42:
+ 820               	.LBE41:
+ 570:ks0108.c      **** 		
+ 571:ks0108.c      **** 		displayData = ks0108ReadData();
+ 572:ks0108.c      **** 		
+ 573:ks0108.c      **** 		LCD_CMD_PORT = cmdPort;						// restore command port
+ 822               	.LM108:
+ 823 02bc D5BA      		out 53-0x20,r13
+ 574:ks0108.c      **** 		LCD_DATA_DIR = 0xFF;						// data port is output
+ 825               	.LM109:
+ 826 02be 9FEF      		ldi r25,lo8(-1)
+ 827 02c0 94BB      		out 52-0x20,r25
+ 575:ks0108.c      **** 		
+ 576:ks0108.c      **** 		displayData |= data >> (8-yOffset);
+ 829               	.LM110:
+ 830 02c2 28E0      		ldi r18,lo8(8)
+ 831 02c4 30E0      		ldi r19,hi8(8)
+ 832 02c6 2E19      		sub r18,r14
+ 833 02c8 3F09      		sbc r19,r15
+ 834 02ca 00C0      		rjmp 2f
+ 835 02cc 1595      	1:	asr r17
+ 836 02ce 0795      		ror r16
+ 837 02d0 2A95      	2:	dec r18
+ 838 02d2 02F4      		brpl 1b
+ 839 02d4 082B      		or r16,r24
+ 577:ks0108.c      **** 		if(ks0108Inverted)
+ 841               	.LM111:
+ 842 02d6 8091 0000 		lds r24,ks0108Inverted
+ 843 02da 8111      		cpse r24,__zero_reg__
+ 578:ks0108.c      **** 			displayData = ~displayData;
+ 845               	.LM112:
+ 846 02dc 0095      		com r16
+ 847               	.L45:
+ 579:ks0108.c      **** 		LCD_DATA_OUT = displayData;					// write data
+ 849               	.LM113:
+ 850 02de 05BB      		out 53-0x20,r16
+ 851               	.LBB43:
+ 852               	.LBB44:
+ 455:ks0108.c      **** 	LCD_CMD_PORT |= 0x01 << EN;						// EN high level width: min. 450ns
+ 854               	.LM114:
+ 855 02e0 AA9A      		sbi 53-0x20,2
+ 456:ks0108.c      **** 	asm volatile("nop\n\t"
+ 857               	.LM115:
+ 858               	/* #APP */
+ 859               	 ;  456 "ks0108.c" 1
+ 860 02e2 0000      		nop
+ 861 02e4 0000      		nop
+ 862 02e6 0000      		nop
+ 863               		
+ 864               	 ;  0 "" 2
+ 460:ks0108.c      **** 	LCD_CMD_PORT &= ~(0x01 << EN);
+ 866               	.LM116:
+ 867               	/* #NOAPP */
+ 868 02e8 AA98      		cbi 53-0x20,2
+ 869               	.LBB45:
+ 461:ks0108.c      **** 	for(volatile uint8_t i=0; i<8; i++);			// a little delay loop (faster than reading the busy flag)
+ 871               	.LM117:
+ 872 02ea 1982      		std Y+1,__zero_reg__
+ 873 02ec 00C0      		rjmp .L46
+ 874               	.L47:
+ 875 02ee 8981      		ldd r24,Y+1
+ 876 02f0 8F5F      		subi r24,lo8(-(1))
+ 877 02f2 8983      		std Y+1,r24
+ 878               	.L46:
+ 879 02f4 8981      		ldd r24,Y+1
+ 880 02f6 8830      		cpi r24,lo8(8)
+ 881 02f8 00F0      		brlo .L47
+ 882               	.LBE45:
+ 883               	.LBE44:
+ 884               	.LBE43:
+ 580:ks0108.c      **** 		ks0108Enable();								// enable
+ 581:ks0108.c      **** 		
+ 582:ks0108.c      **** 		ks0108GotoXY(ks0108Coord.x+1, ks0108Coord.y-8);
+ 886               	.LM118:
+ 887 02fa 8091 0000 		lds r24,ks0108Coord
+ 888 02fe 6091 0000 		lds r22,ks0108Coord+1
+ 889 0302 6850      		subi r22,lo8(-(-8))
+ 890 0304 8F5F      		subi r24,lo8(-(1))
+ 891 0306 0E94 0000 		call ks0108GotoXY
+ 892 030a 00C0      		rjmp .L48
+ 893               	.L41:
+ 583:ks0108.c      **** 	} else {
+ 584:ks0108.c      **** 		if(ks0108Inverted)
+ 895               	.LM119:
+ 896 030c 8091 0000 		lds r24,ks0108Inverted
+ 897 0310 8111      		cpse r24,__zero_reg__
+ 585:ks0108.c      **** 			data = ~data;
+ 899               	.LM120:
+ 900 0312 1095      		com r17
+ 901               	.L49:
+ 586:ks0108.c      **** 		LCD_DATA_OUT = data;						// write data
+ 903               	.LM121:
+ 904 0314 15BB      		out 53-0x20,r17
+ 905               	.LBB46:
+ 906               	.LBB47:
+ 455:ks0108.c      **** 	LCD_CMD_PORT |= 0x01 << EN;						// EN high level width: min. 450ns
+ 908               	.LM122:
+ 909 0316 AA9A      		sbi 53-0x20,2
+ 456:ks0108.c      **** 	asm volatile("nop\n\t"
+ 911               	.LM123:
+ 912               	/* #APP */
+ 913               	 ;  456 "ks0108.c" 1
+ 914 0318 0000      		nop
+ 915 031a 0000      		nop
+ 916 031c 0000      		nop
+ 917               		
+ 918               	 ;  0 "" 2
+ 460:ks0108.c      **** 	LCD_CMD_PORT &= ~(0x01 << EN);
+ 920               	.LM124:
+ 921               	/* #NOAPP */
+ 922 031e AA98      		cbi 53-0x20,2
+ 923               	.LBB48:
+ 461:ks0108.c      **** 	for(volatile uint8_t i=0; i<8; i++);			// a little delay loop (faster than reading the busy flag)
+ 925               	.LM125:
+ 926 0320 1982      		std Y+1,__zero_reg__
+ 927 0322 00C0      		rjmp .L50
+ 928               	.L51:
+ 929 0324 8981      		ldd r24,Y+1
+ 930 0326 8F5F      		subi r24,lo8(-(1))
+ 931 0328 8983      		std Y+1,r24
+ 932               	.L50:
+ 933 032a 8981      		ldd r24,Y+1
+ 934 032c 8830      		cpi r24,lo8(8)
+ 935 032e 00F0      		brlo .L51
+ 936               	.LBE48:
+ 937               	.LBE47:
+ 938               	.LBE46:
+ 587:ks0108.c      **** 		ks0108Enable();								// enable
+ 588:ks0108.c      **** 		ks0108Coord.x++;
+ 940               	.LM126:
+ 941 0330 8091 0000 		lds r24,ks0108Coord
+ 942 0334 8F5F      		subi r24,lo8(-(1))
+ 943 0336 8093 0000 		sts ks0108Coord,r24
+ 944               	.L48:
+ 589:ks0108.c      **** 	}
+ 590:ks0108.c      **** 	LCD_DATA_OUT = 0x00;
+ 946               	.LM127:
+ 947 033a 15BA      		out 53-0x20,__zero_reg__
+ 948               	.L52:
+ 949               	/* epilogue start */
+ 591:ks0108.c      **** }
+ 951               	.LM128:
+ 952 033c 0F90      		pop __tmp_reg__
+ 953 033e CF91      		pop r28
+ 954 0340 DF91      		pop r29
+ 955 0342 1F91      		pop r17
+ 956 0344 0F91      		pop r16
+ 957 0346 FF90      		pop r15
+ 958 0348 EF90      		pop r14
+ 959 034a DF90      		pop r13
+ 960 034c 0895      		ret
+ 976               	.Lscope9:
+ 979               	.global	ks0108PutChar
+ 981               	ks0108PutChar:
+ 305:ks0108.c      **** int ks0108PutChar(char c) {
+ 983               	.LM129:
+ 984               	.LFBB10:
+ 985 034e 2F92      		push r2
+ 986 0350 3F92      		push r3
+ 987 0352 4F92      		push r4
+ 988 0354 5F92      		push r5
+ 989 0356 6F92      		push r6
+ 990 0358 7F92      		push r7
+ 991 035a 8F92      		push r8
+ 992 035c 9F92      		push r9
+ 993 035e AF92      		push r10
+ 994 0360 BF92      		push r11
+ 995 0362 CF92      		push r12
+ 996 0364 DF92      		push r13
+ 997 0366 EF92      		push r14
+ 998 0368 FF92      		push r15
+ 999 036a 0F93      		push r16
+ 1000 036c 1F93      		push r17
+ 1001 036e CF93      		push r28
+ 1002 0370 DF93      		push r29
+ 1003               	/* prologue: function */
+ 1004               	/* frame size = 0 */
+ 1005 0372 E82E      		mov r14,r24
+ 307:ks0108.c      **** 	uint8_t height = ks0108FontRead(ks0108Font+FONT_HEIGHT);
+ 1007               	.LM130:
+ 1008 0374 8091 0000 		lds r24,ks0108Font
+ 1009 0378 9091 0000 		lds r25,(ks0108Font)+1
+ 1010 037c E091 0000 		lds r30,ks0108FontRead
+ 1011 0380 F091 0000 		lds r31,(ks0108FontRead)+1
+ 1012 0384 0396      		adiw r24,3
+ 1013 0386 0995      		icall
+ 1014 0388 882E      		mov r8,r24
+ 310:ks0108.c      **** 	uint8_t firstChar = ks0108FontRead(ks0108Font+FONT_FIRST_CHAR);
+ 1016               	.LM131:
+ 1017 038a 8091 0000 		lds r24,ks0108Font
+ 1018 038e 9091 0000 		lds r25,(ks0108Font)+1
+ 1019 0392 E091 0000 		lds r30,ks0108FontRead
+ 1020 0396 F091 0000 		lds r31,(ks0108FontRead)+1
+ 1021 039a 0496      		adiw r24,4
+ 1022 039c 0995      		icall
+ 1023 039e F82E      		mov r15,r24
+ 311:ks0108.c      **** 	uint8_t charCount = ks0108FontRead(ks0108Font+FONT_CHAR_COUNT);
+ 1025               	.LM132:
+ 1026 03a0 8091 0000 		lds r24,ks0108Font
+ 1027 03a4 9091 0000 		lds r25,(ks0108Font)+1
+ 1028 03a8 E091 0000 		lds r30,ks0108FontRead
+ 1029 03ac F091 0000 		lds r31,(ks0108FontRead)+1
+ 1030 03b0 0596      		adiw r24,5
+ 1031 03b2 0995      		icall
+ 1032 03b4 D82E      		mov r13,r24
+ 314:ks0108.c      **** 	uint8_t x = ks0108Coord.x, y = ks0108Coord.y;
+ 1034               	.LM133:
+ 1035 03b6 C090 0000 		lds r12,ks0108Coord
+ 1036 03ba 7090 0000 		lds r7,ks0108Coord+1
+ 316:ks0108.c      **** 	if(c < firstChar || c >= (firstChar+charCount)) {
+ 1038               	.LM134:
+ 1039 03be EF14      		cp r14,r15
+ 1040 03c0 00F4      		brsh .+2
+ 1041 03c2 00C0      		rjmp .L54
+ 1042 03c4 2E2D      		mov r18,r14
+ 1043 03c6 30E0      		ldi r19,lo8(0)
+ 1044 03c8 8F2D      		mov r24,r15
+ 1045 03ca 90E0      		ldi r25,lo8(0)
+ 1046 03cc 8D0D      		add r24,r13
+ 1047 03ce 911D      		adc r25,__zero_reg__
+ 1048 03d0 2817      		cp r18,r24
+ 1049 03d2 3907      		cpc r19,r25
+ 1050 03d4 04F0      		brlt .+2
+ 1051 03d6 00C0      		rjmp .L54
+ 319:ks0108.c      **** 	c-= firstChar;
+ 1053               	.LM135:
+ 1054 03d8 EF18      		sub r14,r15
+ 1055 03da C6E0      		ldi r28,lo8(6)
+ 1056 03dc D0E0      		ldi r29,hi8(6)
+ 1057 03de 00E0      		ldi r16,lo8(0)
+ 1058 03e0 10E0      		ldi r17,hi8(0)
+ 1059               	.LBB49:
+ 322:ks0108.c      **** 	for(uint8_t i=0; i<c; i++) {
+ 1061               	.LM136:
+ 1062 03e2 00C0      		rjmp .L55
+ 1063               	.L56:
+ 323:ks0108.c      **** 		index += ks0108FontRead(ks0108Font+FONT_WIDTH_TABLE+i);
+ 1065               	.LM137:
+ 1066 03e4 8C0F      		add r24,r28
+ 1067 03e6 9D1F      		adc r25,r29
+ 1068 03e8 0995      		icall
+ 1069 03ea 080F      		add r16,r24
+ 1070 03ec 111D      		adc r17,__zero_reg__
+ 1071 03ee 2196      		adiw r28,1
+ 1072               	.L55:
+ 322:ks0108.c      **** 	for(uint8_t i=0; i<c; i++) {
+ 1074               	.LM138:
+ 1075 03f0 CE01      		movw r24,r28
+ 1076 03f2 8650      		subi r24,lo8(-(-6))
+ 1077 03f4 282F      		mov r18,r24
+ 1078 03f6 8091 0000 		lds r24,ks0108Font
+ 1079 03fa 9091 0000 		lds r25,(ks0108Font)+1
+ 1080 03fe E091 0000 		lds r30,ks0108FontRead
+ 1081 0402 F091 0000 		lds r31,(ks0108FontRead)+1
+ 1082 0406 2E15      		cp r18,r14
+ 1083 0408 00F0      		brlo .L56
+ 1084               	.LBE49:
+ 308:ks0108.c      **** 	uint8_t bytes = (height+7)/8;
+ 1086               	.LM139:
+ 1087 040a 9924      		clr r9
+ 1088 040c 9401      		movw r18,r8
+ 1089 040e 295F      		subi r18,lo8(-(7))
+ 1090 0410 3F4F      		sbci r19,hi8(-(7))
+ 1091 0412 43E0      		ldi r20,3
+ 1092 0414 3595      	1:	asr r19
+ 1093 0416 2795      		ror r18
+ 1094 0418 4A95      		dec r20
+ 1095 041a 01F4      		brne 1b
+ 325:ks0108.c      **** 	index = index*bytes+charCount+FONT_WIDTH_TABLE;
+ 1097               	.LM140:
+ 1098 041c 622E      		mov r6,r18
+ 1099 041e 209F      		mul r18,r16
+ 1100 0420 A001      		movw r20,r0
+ 1101 0422 219F      		mul r18,r17
+ 1102 0424 500D      		add r21,r0
+ 1103 0426 309F      		mul r19,r16
+ 1104 0428 500D      		add r21,r0
+ 1105 042a 1124      		clr r1
+ 1106 042c 0D2D      		mov r16,r13
+ 1107 042e 10E0      		ldi r17,lo8(0)
+ 1108 0430 0A5F      		subi r16,lo8(-(6))
+ 1109 0432 1F4F      		sbci r17,hi8(-(6))
+ 1110 0434 040F      		add r16,r20
+ 1111 0436 151F      		adc r17,r21
+ 326:ks0108.c      **** 	width = ks0108FontRead(ks0108Font+FONT_WIDTH_TABLE+c);
+ 1113               	.LM141:
+ 1114 0438 2E2D      		mov r18,r14
+ 1115 043a 30E0      		ldi r19,lo8(0)
+ 1116 043c 2A5F      		subi r18,lo8(-(6))
+ 1117 043e 3F4F      		sbci r19,hi8(-(6))
+ 1118 0440 820F      		add r24,r18
+ 1119 0442 931F      		adc r25,r19
+ 1120 0444 0995      		icall
+ 1121 0446 F82E      		mov r15,r24
+ 1122 0448 C8E0      		ldi r28,lo8(8)
+ 1123 044a D0E0      		ldi r29,hi8(8)
+ 1124 044c C819      		sub r28,r8
+ 1125 044e D909      		sbc r29,r9
+ 1126 0450 88E0      		ldi r24,lo8(8)
+ 1127 0452 A82E      		mov r10,r24
+ 1128 0454 B12C      		mov r11,__zero_reg__
+ 1129 0456 DD24      		clr r13
+ 1130 0458 EE24      		clr r14
+ 1131               	.LBB50:
+ 329:ks0108.c      **** 	for(uint8_t i=0; i<bytes; i++) {
+ 1133               	.LM142:
+ 1134 045a 00C0      		rjmp .L57
+ 1135               	.L65:
+ 1136 045c 4C2E      		mov r4,r28
+ 1137 045e 1801      		movw r2,r16
+ 1138 0460 2D0C      		add r2,r13
+ 1139 0462 311C      		adc r3,__zero_reg__
+ 1140 0464 5524      		clr r5
+ 1141               	.LBB51:
+ 1142               	.LBB52:
+ 331:ks0108.c      **** 		for(uint8_t j=0; j<width; j++) {
+ 1144               	.LM143:
+ 1145 0466 00C0      		rjmp .L58
+ 1146               	.L62:
+ 1147               	.LBB53:
+ 332:ks0108.c      **** 			uint8_t data = ks0108FontRead(ks0108Font+index+page+j);
+ 1149               	.LM144:
+ 1150 0468 8091 0000 		lds r24,ks0108Font
+ 1151 046c 9091 0000 		lds r25,(ks0108Font)+1
+ 1152 0470 E091 0000 		lds r30,ks0108FontRead
+ 1153 0474 F091 0000 		lds r31,(ks0108FontRead)+1
+ 1154 0478 820D      		add r24,r2
+ 1155 047a 931D      		adc r25,r3
+ 1156 047c 0995      		icall
+ 334:ks0108.c      **** 			if(height < (i+1)*8) {
+ 1158               	.LM145:
+ 1159 047e 8A14      		cp r8,r10
+ 1160 0480 9B04      		cpc r9,r11
+ 1161 0482 04F4      		brge .L59
+ 335:ks0108.c      **** 				data >>= (i+1)*8-height;
+ 1163               	.LM146:
+ 1164 0484 90E0      		ldi r25,lo8(0)
+ 1165 0486 042C      		mov r0,r4
+ 1166 0488 00C0      		rjmp 2f
+ 1167 048a 9595      	1:	asr r25
+ 1168 048c 8795      		ror r24
+ 1169 048e 0A94      	2:	dec r0
+ 1170 0490 02F4      		brpl 1b
+ 1171               	.L59:
+ 338:ks0108.c      **** 			if(ks0108FontColor == BLACK) {
+ 1173               	.LM147:
+ 1174 0492 9091 0000 		lds r25,ks0108FontColor
+ 1175 0496 9F3F      		cpi r25,lo8(-1)
+ 1176 0498 01F0      		breq .L68
+ 341:ks0108.c      **** 				ks0108WriteData(~data);
+ 1178               	.LM148:
+ 1179 049a 8095      		com r24
+ 1180               	.L68:
+ 1181 049c 0E94 0000 		call ks0108WriteData
+ 1182               	.LBE53:
+ 331:ks0108.c      **** 		for(uint8_t j=0; j<width; j++) {
+ 1184               	.LM149:
+ 1185 04a0 5394      		inc r5
+ 1186 04a2 0894      		sec
+ 1187 04a4 211C      		adc r2,__zero_reg__
+ 1188 04a6 311C      		adc r3,__zero_reg__
+ 1189               	.L58:
+ 1190 04a8 5F14      		cp r5,r15
+ 1191 04aa 00F0      		brlo .L62
+ 1192               	.LBE52:
+ 345:ks0108.c      **** 		if(ks0108FontColor == BLACK) {
+ 1194               	.LM150:
+ 1195 04ac 8091 0000 		lds r24,ks0108FontColor
+ 1196 04b0 8F3F      		cpi r24,lo8(-1)
+ 1197 04b2 01F4      		brne .L63
+ 346:ks0108.c      **** 			ks0108WriteData(0x00);
+ 1199               	.LM151:
+ 1200 04b4 80E0      		ldi r24,lo8(0)
+ 1201 04b6 00C0      		rjmp .L69
+ 1202               	.L63:
+ 348:ks0108.c      **** 			ks0108WriteData(0xFF);
+ 1204               	.LM152:
+ 1205 04b8 8FEF      		ldi r24,lo8(-1)
+ 1206               	.L69:
+ 1207 04ba 0E94 0000 		call ks0108WriteData
+ 350:ks0108.c      **** 		ks0108GotoXY(x, ks0108Coord.y+8);
+ 1209               	.LM153:
+ 1210 04be 6091 0000 		lds r22,ks0108Coord+1
+ 1211 04c2 685F      		subi r22,lo8(-(8))
+ 1212 04c4 8C2D      		mov r24,r12
+ 1213 04c6 0E94 0000 		call ks0108GotoXY
+ 1214               	.LBE51:
+ 329:ks0108.c      **** 	for(uint8_t i=0; i<bytes; i++) {
+ 1216               	.LM154:
+ 1217 04ca E394      		inc r14
+ 1218 04cc DF0C      		add r13,r15
+ 1219 04ce 88E0      		ldi r24,lo8(8)
+ 1220 04d0 90E0      		ldi r25,hi8(8)
+ 1221 04d2 A80E      		add r10,r24
+ 1222 04d4 B91E      		adc r11,r25
+ 1223 04d6 2896      		adiw r28,8
+ 1224               	.L57:
+ 1225 04d8 E614      		cp r14,r6
+ 1226 04da 00F4      		brsh .+2
+ 1227 04dc 00C0      		rjmp .L65
+ 1228               	.LBE50:
+ 352:ks0108.c      **** 	ks0108GotoXY(x+width+1, y);
+ 1230               	.LM155:
+ 1231 04de 8C2D      		mov r24,r12
+ 1232 04e0 8F5F      		subi r24,lo8(-(1))
+ 1233 04e2 8F0D      		add r24,r15
+ 1234 04e4 672D      		mov r22,r7
+ 1235 04e6 0E94 0000 		call ks0108GotoXY
+ 1236 04ea 20E0      		ldi r18,lo8(0)
+ 1237 04ec 30E0      		ldi r19,hi8(0)
+ 354:ks0108.c      **** 	return 0;
+ 1239               	.LM156:
+ 1240 04ee 00C0      		rjmp .L66
+ 1241               	.L54:
+ 1242 04f0 21E0      		ldi r18,lo8(1)
+ 1243 04f2 30E0      		ldi r19,hi8(1)
+ 1244               	.L66:
+ 355:ks0108.c      **** }
+ 1246               	.LM157:
+ 1247 04f4 C901      		movw r24,r18
+ 1248               	/* epilogue start */
+ 1249 04f6 DF91      		pop r29
+ 1250 04f8 CF91      		pop r28
+ 1251 04fa 1F91      		pop r17
+ 1252 04fc 0F91      		pop r16
+ 1253 04fe FF90      		pop r15
+ 1254 0500 EF90      		pop r14
+ 1255 0502 DF90      		pop r13
+ 1256 0504 CF90      		pop r12
+ 1257 0506 BF90      		pop r11
+ 1258 0508 AF90      		pop r10
+ 1259 050a 9F90      		pop r9
+ 1260 050c 8F90      		pop r8
+ 1261 050e 7F90      		pop r7
+ 1262 0510 6F90      		pop r6
+ 1263 0512 5F90      		pop r5
+ 1264 0514 4F90      		pop r4
+ 1265 0516 3F90      		pop r3
+ 1266 0518 2F90      		pop r2
+ 1267 051a 0895      		ret
+ 1288               	.Lscope10:
+ 1291               	.global	ks0108Puts_P
+ 1293               	ks0108Puts_P:
+ 369:ks0108.c      **** void ks0108Puts_P(PGM_P str) {
+ 1295               	.LM158:
+ 1296               	.LFBB11:
+ 1297 051c 0F93      		push r16
+ 1298 051e 1F93      		push r17
+ 1299 0520 CF93      		push r28
+ 1300 0522 DF93      		push r29
+ 1301               	/* prologue: function */
+ 1302               	/* frame size = 0 */
+ 1303 0524 EC01      		movw r28,r24
+ 370:ks0108.c      **** 	int x = ks0108Coord.x;
+ 1305               	.LM159:
+ 1306 0526 1091 0000 		lds r17,ks0108Coord
+ 371:ks0108.c      **** 	while(pgm_read_byte(str) != 0) {
+ 1308               	.LM160:
+ 1309 052a 00C0      		rjmp .L71
+ 1310               	.L74:
+ 372:ks0108.c      **** 		if(pgm_read_byte(str) == '\n') {
+ 1312               	.LM161:
+ 1313 052c 8A30      		cpi r24,lo8(10)
+ 1314 052e 01F4      		brne .L72
+ 373:ks0108.c      **** 			ks0108GotoXY(x, ks0108Coord.y+ks0108FontRead(ks0108Font+FONT_HEIGHT));
+ 1316               	.LM162:
+ 1317 0530 0091 0000 		lds r16,ks0108Coord+1
+ 1318 0534 8091 0000 		lds r24,ks0108Font
+ 1319 0538 9091 0000 		lds r25,(ks0108Font)+1
+ 1320 053c E091 0000 		lds r30,ks0108FontRead
+ 1321 0540 F091 0000 		lds r31,(ks0108FontRead)+1
+ 1322 0544 0396      		adiw r24,3
+ 1323 0546 0995      		icall
+ 1324 0548 682F      		mov r22,r24
+ 1325 054a 600F      		add r22,r16
+ 1326 054c 812F      		mov r24,r17
+ 1327 054e 0E94 0000 		call ks0108GotoXY
+ 1328 0552 00C0      		rjmp .L73
+ 1329               	.L72:
+ 375:ks0108.c      **** 			ks0108PutChar(pgm_read_byte(str));
+ 1331               	.LM163:
+ 1332 0554 0E94 0000 		call ks0108PutChar
+ 1333               	.L73:
+ 377:ks0108.c      **** 		str++;
+ 1335               	.LM164:
+ 1336 0558 2196      		adiw r28,1
+ 1337               	.L71:
+ 1338               	.LBB54:
+ 371:ks0108.c      **** 	while(pgm_read_byte(str) != 0) {
+ 1340               	.LM165:
+ 1341 055a FE01      		movw r30,r28
+ 1342               	/* #APP */
+ 1343               	 ;  371 "ks0108.c" 1
+ 1344 055c 8491      		lpm r24, Z
+ 1345               		
+ 1346               	 ;  0 "" 2
+ 1347               	/* #NOAPP */
+ 1348               	.LBE54:
+ 1349 055e 8823      		tst r24
+ 1350 0560 01F4      		brne .L74
+ 1351               	/* epilogue start */
+ 379:ks0108.c      **** }
+ 1353               	.LM166:
+ 1354 0562 DF91      		pop r29
+ 1355 0564 CF91      		pop r28
+ 1356 0566 1F91      		pop r17
+ 1357 0568 0F91      		pop r16
+ 1358 056a 0895      		ret
+ 1363               	.Lscope11:
+ 1366               	.global	ks0108Puts
+ 1368               	ks0108Puts:
+ 357:ks0108.c      **** void ks0108Puts(char* str) {
+ 1370               	.LM167:
+ 1371               	.LFBB12:
+ 1372 056c 0F93      		push r16
+ 1373 056e 1F93      		push r17
+ 1374 0570 CF93      		push r28
+ 1375 0572 DF93      		push r29
+ 1376               	/* prologue: function */
+ 1377               	/* frame size = 0 */
+ 1378 0574 EC01      		movw r28,r24
+ 358:ks0108.c      **** 	int x = ks0108Coord.x;
+ 1380               	.LM168:
+ 1381 0576 1091 0000 		lds r17,ks0108Coord
+ 359:ks0108.c      **** 	while(*str != 0) {
+ 1383               	.LM169:
+ 1384 057a 00C0      		rjmp .L77
+ 1385               	.L80:
+ 360:ks0108.c      **** 		if(*str == '\n') {
+ 1387               	.LM170:
+ 1388 057c 8A30      		cpi r24,lo8(10)
+ 1389 057e 01F4      		brne .L78
+ 361:ks0108.c      **** 			ks0108GotoXY(x, ks0108Coord.y+ks0108FontRead(ks0108Font+FONT_HEIGHT));
+ 1391               	.LM171:
+ 1392 0580 0091 0000 		lds r16,ks0108Coord+1
+ 1393 0584 8091 0000 		lds r24,ks0108Font
+ 1394 0588 9091 0000 		lds r25,(ks0108Font)+1
+ 1395 058c E091 0000 		lds r30,ks0108FontRead
+ 1396 0590 F091 0000 		lds r31,(ks0108FontRead)+1
+ 1397 0594 0396      		adiw r24,3
+ 1398 0596 0995      		icall
+ 1399 0598 682F      		mov r22,r24
+ 1400 059a 600F      		add r22,r16
+ 1401 059c 812F      		mov r24,r17
+ 1402 059e 0E94 0000 		call ks0108GotoXY
+ 1403 05a2 00C0      		rjmp .L79
+ 1404               	.L78:
+ 363:ks0108.c      **** 			ks0108PutChar(*str);
+ 1406               	.LM172:
+ 1407 05a4 0E94 0000 		call ks0108PutChar
+ 1408               	.L79:
+ 365:ks0108.c      **** 		str++;
+ 1410               	.LM173:
+ 1411 05a8 2196      		adiw r28,1
+ 1412               	.L77:
+ 359:ks0108.c      **** 	while(*str != 0) {
+ 1414               	.LM174:
+ 1415 05aa 8881      		ld r24,Y
+ 1416 05ac 8823      		tst r24
+ 1417 05ae 01F4      		brne .L80
+ 1418               	/* epilogue start */
+ 367:ks0108.c      **** }
+ 1420               	.LM175:
+ 1421 05b0 DF91      		pop r29
+ 1422 05b2 CF91      		pop r28
+ 1423 05b4 1F91      		pop r17
+ 1424 05b6 0F91      		pop r16
+ 1425 05b8 0895      		ret
+ 1427               	.Lscope12:
+ 1432               	.global	ks0108SetDot
+ 1434               	ks0108SetDot:
+ 276:ks0108.c      **** void ks0108SetDot(uint8_t x, uint8_t y, uint8_t color) {
+ 1436               	.LM176:
+ 1437               	.LFBB13:
+ 1438 05ba 1F93      		push r17
+ 1439 05bc DF93      		push r29
+ 1440 05be CF93      		push r28
+ 1441 05c0 0F92      		push __tmp_reg__
+ 1442 05c2 CDB7      		in r28,__SP_L__
+ 1443 05c4 DEB7      		in r29,__SP_H__
+ 1444               	/* prologue: function */
+ 1445               	/* frame size = 1 */
+ 1446 05c6 162F      		mov r17,r22
+ 279:ks0108.c      **** 	ks0108GotoXY(x, y-y%8);					// read data from display memory
+ 1448               	.LM177:
+ 1449 05c8 687F      		andi r22,lo8(-8)
+ 1450 05ca 4983      		std Y+1,r20
+ 1451 05cc 0E94 0000 		call ks0108GotoXY
+ 1452               	.LBB55:
+ 1453               	.LBB56:
+ 506:ks0108.c      **** 	ks0108DoReadData(1);							// dummy read
+ 1455               	.LM178:
+ 1456 05d0 81E0      		ldi r24,lo8(1)
+ 1457 05d2 0E94 0000 		call ks0108DoReadData
+ 507:ks0108.c      **** 	return ks0108DoReadData(0);						// "real" read
+ 1459               	.LM179:
+ 1460 05d6 80E0      		ldi r24,lo8(0)
+ 1461 05d8 0E94 0000 		call ks0108DoReadData
+ 1462 05dc 982F      		mov r25,r24
+ 1463 05de 212F      		mov r18,r17
+ 1464 05e0 30E0      		ldi r19,lo8(0)
+ 1465               	.LBE56:
+ 1466               	.LBE55:
+ 282:ks0108.c      **** 	if(color == BLACK) {
+ 1468               	.LM180:
+ 1469 05e2 4981      		ldd r20,Y+1
+ 1470 05e4 4F3F      		cpi r20,lo8(-1)
+ 1471 05e6 01F4      		brne .L83
+ 283:ks0108.c      **** 		data |= 0x01 << (y%8);				// set dot
+ 1473               	.LM181:
+ 1474 05e8 A901      		movw r20,r18
+ 1475 05ea 4770      		andi r20,lo8(7)
+ 1476 05ec 5070      		andi r21,hi8(7)
+ 1477 05ee 21E0      		ldi r18,lo8(1)
+ 1478 05f0 30E0      		ldi r19,hi8(1)
+ 1479 05f2 00C0      		rjmp 2f
+ 1480 05f4 220F      	1:	lsl r18
+ 1481 05f6 331F      		rol r19
+ 1482 05f8 4A95      	2:	dec r20
+ 1483 05fa 02F4      		brpl 1b
+ 1484 05fc 822B      		or r24,r18
+ 1485 05fe 00C0      		rjmp .L84
+ 1486               	.L83:
+ 285:ks0108.c      **** 		data &= ~(0x01 << (y%8));			// clear dot
+ 1488               	.LM182:
+ 1489 0600 A901      		movw r20,r18
+ 1490 0602 4770      		andi r20,lo8(7)
+ 1491 0604 5070      		andi r21,hi8(7)
+ 1492 0606 21E0      		ldi r18,lo8(1)
+ 1493 0608 30E0      		ldi r19,hi8(1)
+ 1494 060a 00C0      		rjmp 2f
+ 1495 060c 220F      	1:	lsl r18
+ 1496 060e 331F      		rol r19
+ 1497 0610 4A95      	2:	dec r20
+ 1498 0612 02F4      		brpl 1b
+ 1499 0614 822F      		mov r24,r18
+ 1500 0616 8095      		com r24
+ 1501 0618 8923      		and r24,r25
+ 1502               	.L84:
+ 288:ks0108.c      **** 	ks0108WriteData(data);					// write data back to display
+ 1504               	.LM183:
+ 1505 061a 0E94 0000 		call ks0108WriteData
+ 1506               	/* epilogue start */
+ 289:ks0108.c      **** }
+ 1508               	.LM184:
+ 1509 061e 0F90      		pop __tmp_reg__
+ 1510 0620 CF91      		pop r28
+ 1511 0622 DF91      		pop r29
+ 1512 0624 1F91      		pop r17
+ 1513 0626 0895      		ret
+ 1518               	.Lscope13:
+ 1524               	.global	ks0108InvertRect
+ 1526               	ks0108InvertRect:
+ 222:ks0108.c      **** void ks0108InvertRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height) {
+ 1528               	.LM185:
+ 1529               	.LFBB14:
+ 1530 0628 AF92      		push r10
+ 1531 062a BF92      		push r11
+ 1532 062c CF92      		push r12
+ 1533 062e DF92      		push r13
+ 1534 0630 EF92      		push r14
+ 1535 0632 FF92      		push r15
+ 1536 0634 0F93      		push r16
+ 1537 0636 1F93      		push r17
+ 1538 0638 CF93      		push r28
+ 1539 063a DF93      		push r29
+ 1540               	/* prologue: function */
+ 1541               	/* frame size = 0 */
+ 1542 063c 182F      		mov r17,r24
+ 1543 063e 042F      		mov r16,r20
+ 1544 0640 D22E      		mov r13,r18
+ 224:ks0108.c      **** 	height++;
+ 1546               	.LM186:
+ 1547 0642 D394      		inc r13
+ 226:ks0108.c      **** 	pageOffset = y%8;
+ 1549               	.LM187:
+ 1550 0644 862F      		mov r24,r22
+ 1551 0646 8770      		andi r24,lo8(7)
+ 227:ks0108.c      **** 	y -= pageOffset;
+ 1553               	.LM188:
+ 1554 0648 E62E      		mov r14,r22
+ 1555 064a E81A      		sub r14,r24
+ 229:ks0108.c      **** 	if(height < 8-pageOffset) {
+ 1557               	.LM189:
+ 1558 064c CD2D      		mov r28,r13
+ 1559 064e D0E0      		ldi r29,lo8(0)
+ 1560 0650 282F      		mov r18,r24
+ 1561 0652 30E0      		ldi r19,lo8(0)
+ 1562 0654 48E0      		ldi r20,lo8(8)
+ 1563 0656 50E0      		ldi r21,hi8(8)
+ 1564 0658 BA01      		movw r22,r20
+ 1565 065a 621B      		sub r22,r18
+ 1566 065c 730B      		sbc r23,r19
+ 1567 065e C617      		cp r28,r22
+ 1568 0660 D707      		cpc r29,r23
+ 1569 0662 04F4      		brge .L87
+ 230:ks0108.c      **** 		mask >>= (8-height);
+ 1571               	.LM190:
+ 1572 0664 4C1B      		sub r20,r28
+ 1573 0666 5D0B      		sbc r21,r29
+ 1574 0668 8FEF      		ldi r24,lo8(255)
+ 1575 066a 90E0      		ldi r25,hi8(255)
+ 1576 066c 00C0      		rjmp 2f
+ 1577 066e 9595      	1:	asr r25
+ 1578 0670 8795      		ror r24
+ 1579 0672 4A95      	2:	dec r20
+ 1580 0674 02F4      		brpl 1b
+ 1581 0676 FD2C      		mov r15,r13
+ 1582 0678 00C0      		rjmp .L88
+ 1583               	.L87:
+ 233:ks0108.c      **** 		h = 8-pageOffset;
+ 1585               	.LM191:
+ 1586 067a 58E0      		ldi r21,lo8(8)
+ 1587 067c F52E      		mov r15,r21
+ 1588 067e F81A      		sub r15,r24
+ 1589 0680 8FEF      		ldi r24,lo8(-1)
+ 1590               	.L88:
+ 235:ks0108.c      **** 	mask <<= pageOffset;
+ 1592               	.LM192:
+ 1593 0682 90E0      		ldi r25,lo8(0)
+ 1594 0684 00C0      		rjmp 2f
+ 1595 0686 880F      	1:	lsl r24
+ 1596 0688 991F      		rol r25
+ 1597 068a 2A95      	2:	dec r18
+ 1598 068c 02F4      		brpl 1b
+ 1599 068e C82E      		mov r12,r24
+ 237:ks0108.c      **** 	ks0108GotoXY(x, y);
+ 1601               	.LM193:
+ 1602 0690 812F      		mov r24,r17
+ 1603 0692 6E2D      		mov r22,r14
+ 1604 0694 0E94 0000 		call ks0108GotoXY
+ 1605 0698 BB24      		clr r11
+ 241:ks0108.c      **** 		data = (tmpData & mask) | (data & ~mask);
+ 1607               	.LM194:
+ 1608 069a AC2C      		mov r10,r12
+ 1609 069c A094      		com r10
+ 1610               	.L89:
+ 1611               	.LBB57:
+ 1612               	.LBB58:
+ 506:ks0108.c      **** 	ks0108DoReadData(1);							// dummy read
+ 1614               	.LM195:
+ 1615 069e 81E0      		ldi r24,lo8(1)
+ 1616 06a0 0E94 0000 		call ks0108DoReadData
+ 507:ks0108.c      **** 	return ks0108DoReadData(0);						// "real" read
+ 1618               	.LM196:
+ 1619 06a4 80E0      		ldi r24,lo8(0)
+ 1620 06a6 0E94 0000 		call ks0108DoReadData
+ 1621               	.LBE58:
+ 1622               	.LBE57:
+ 241:ks0108.c      **** 		data = (tmpData & mask) | (data & ~mask);
+ 1624               	.LM197:
+ 1625 06aa 982F      		mov r25,r24
+ 1626 06ac 9095      		com r25
+ 1627 06ae 9C21      		and r25,r12
+ 1628 06b0 8A21      		and r24,r10
+ 242:ks0108.c      **** 		ks0108WriteData(data);
+ 1630               	.LM198:
+ 1631 06b2 892B      		or r24,r25
+ 1632 06b4 0E94 0000 		call ks0108WriteData
+ 238:ks0108.c      **** 	for(i=0; i<=width; i++) {
+ 1634               	.LM199:
+ 1635 06b8 B394      		inc r11
+ 1636 06ba 0B15      		cp r16,r11
+ 1637 06bc 00F4      		brsh .L89
+ 1638 06be 00C0      		rjmp .L99
+ 1639               	.L92:
+ 247:ks0108.c      **** 		y += 8;
+ 1641               	.LM200:
+ 1642 06c0 28E0      		ldi r18,lo8(8)
+ 1643 06c2 E20E      		add r14,r18
+ 248:ks0108.c      **** 		ks0108GotoXY(x, y);
+ 1645               	.LM201:
+ 1646 06c4 812F      		mov r24,r17
+ 1647 06c6 6E2D      		mov r22,r14
+ 1648 06c8 0E94 0000 		call ks0108GotoXY
+ 1649 06cc CC24      		clr r12
+ 1650               	.L91:
+ 1651               	.LBB59:
+ 1652               	.LBB60:
+ 506:ks0108.c      **** 	ks0108DoReadData(1);							// dummy read
+ 1654               	.LM202:
+ 1655 06ce 81E0      		ldi r24,lo8(1)
+ 1656 06d0 0E94 0000 		call ks0108DoReadData
+ 507:ks0108.c      **** 	return ks0108DoReadData(0);						// "real" read
+ 1658               	.LM203:
+ 1659 06d4 80E0      		ldi r24,lo8(0)
+ 1660 06d6 0E94 0000 		call ks0108DoReadData
+ 1661               	.LBE60:
+ 1662               	.LBE59:
+ 252:ks0108.c      **** 			ks0108WriteData(~data);
+ 1664               	.LM204:
+ 1665 06da 8095      		com r24
+ 1666 06dc 0E94 0000 		call ks0108WriteData
+ 250:ks0108.c      **** 		for(i=0; i<=width; i++) {
+ 1668               	.LM205:
+ 1669 06e0 C394      		inc r12
+ 1670 06e2 0C15      		cp r16,r12
+ 1671 06e4 00F4      		brsh .L91
+ 246:ks0108.c      **** 		h += 8;
+ 1673               	.LM206:
+ 1674 06e6 38E0      		ldi r19,lo8(8)
+ 1675 06e8 F30E      		add r15,r19
+ 1676               	.L99:
+ 245:ks0108.c      **** 	while(h+8 <= height) {
+ 1678               	.LM207:
+ 1679 06ea 8F2D      		mov r24,r15
+ 1680 06ec 90E0      		ldi r25,lo8(0)
+ 1681 06ee 9C01      		movw r18,r24
+ 1682 06f0 295F      		subi r18,lo8(-(7))
+ 1683 06f2 3F4F      		sbci r19,hi8(-(7))
+ 1684 06f4 2C17      		cp r18,r28
+ 1685 06f6 3D07      		cpc r19,r29
+ 1686 06f8 04F0      		brlt .L92
+ 256:ks0108.c      **** 	if(h < height) {
+ 1688               	.LM208:
+ 1689 06fa FD14      		cp r15,r13
+ 1690 06fc 00F4      		brsh .L95
+ 257:ks0108.c      **** 		mask = ~(0xFF << (height-h));
+ 1692               	.LM209:
+ 1693 06fe C81B      		sub r28,r24
+ 1694 0700 D90B      		sbc r29,r25
+ 1695 0702 8FEF      		ldi r24,lo8(255)
+ 1696 0704 90E0      		ldi r25,hi8(255)
+ 1697 0706 0C2E      		mov r0,r28
+ 1698 0708 00C0      		rjmp 2f
+ 1699 070a 880F      	1:	lsl r24
+ 1700 070c 991F      		rol r25
+ 1701 070e 0A94      	2:	dec r0
+ 1702 0710 02F4      		brpl 1b
+ 1703 0712 F82E      		mov r15,r24
+ 1704 0714 F094      		com r15
+ 258:ks0108.c      **** 		ks0108GotoXY(x, y+8);
+ 1706               	.LM210:
+ 1707 0716 6E2D      		mov r22,r14
+ 1708 0718 685F      		subi r22,lo8(-(8))
+ 1709 071a 812F      		mov r24,r17
+ 1710 071c 0E94 0000 		call ks0108GotoXY
+ 1711 0720 10E0      		ldi r17,lo8(0)
+ 263:ks0108.c      **** 			data = (tmpData & mask) | (data & ~mask);
+ 1713               	.LM211:
+ 1714 0722 EF2C      		mov r14,r15
+ 1715 0724 E094      		com r14
+ 1716               	.L94:
+ 1717               	.LBB61:
+ 1718               	.LBB62:
+ 506:ks0108.c      **** 	ks0108DoReadData(1);							// dummy read
+ 1720               	.LM212:
+ 1721 0726 81E0      		ldi r24,lo8(1)
+ 1722 0728 0E94 0000 		call ks0108DoReadData
+ 507:ks0108.c      **** 	return ks0108DoReadData(0);						// "real" read
+ 1724               	.LM213:
+ 1725 072c 80E0      		ldi r24,lo8(0)
+ 1726 072e 0E94 0000 		call ks0108DoReadData
+ 1727               	.LBE62:
+ 1728               	.LBE61:
+ 263:ks0108.c      **** 			data = (tmpData & mask) | (data & ~mask);
+ 1730               	.LM214:
+ 1731 0732 982F      		mov r25,r24
+ 1732 0734 9095      		com r25
+ 1733 0736 9F21      		and r25,r15
+ 1734 0738 8E21      		and r24,r14
+ 264:ks0108.c      **** 			ks0108WriteData(data);
+ 1736               	.LM215:
+ 1737 073a 892B      		or r24,r25
+ 1738 073c 0E94 0000 		call ks0108WriteData
+ 260:ks0108.c      **** 		for(i=0; i<=width; i++) {
+ 1740               	.LM216:
+ 1741 0740 1F5F      		subi r17,lo8(-(1))
+ 1742 0742 0117      		cp r16,r17
+ 1743 0744 00F4      		brsh .L94
+ 1744               	.L95:
+ 1745               	/* epilogue start */
+ 267:ks0108.c      **** }
+ 1747               	.LM217:
+ 1748 0746 DF91      		pop r29
+ 1749 0748 CF91      		pop r28
+ 1750 074a 1F91      		pop r17
+ 1751 074c 0F91      		pop r16
+ 1752 074e FF90      		pop r15
+ 1753 0750 EF90      		pop r14
+ 1754 0752 DF90      		pop r13
+ 1755 0754 CF90      		pop r12
+ 1756 0756 BF90      		pop r11
+ 1757 0758 AF90      		pop r10
+ 1758 075a 0895      		ret
+ 1766               	.Lscope14:
+ 1769               	.global	ks0108SetInverted
+ 1771               	ks0108SetInverted:
+ 269:ks0108.c      **** void ks0108SetInverted(uint8_t invert) {
+ 1773               	.LM218:
+ 1774               	.LFBB15:
+ 1775 075c 1F93      		push r17
+ 1776               	/* prologue: function */
+ 1777               	/* frame size = 0 */
+ 1778 075e 182F      		mov r17,r24
+ 270:ks0108.c      **** 	if(ks0108Inverted != invert) {
+ 1780               	.LM219:
+ 1781 0760 8091 0000 		lds r24,ks0108Inverted
+ 1782 0764 8117      		cp r24,r17
+ 1783 0766 01F0      		breq .L102
+ 271:ks0108.c      **** 		ks0108InvertRect(0,0,127,63);
+ 1785               	.LM220:
+ 1786 0768 80E0      		ldi r24,lo8(0)
+ 1787 076a 60E0      		ldi r22,lo8(0)
+ 1788 076c 4FE7      		ldi r20,lo8(127)
+ 1789 076e 2FE3      		ldi r18,lo8(63)
+ 1790 0770 0E94 0000 		call ks0108InvertRect
+ 272:ks0108.c      **** 		ks0108Inverted = invert;
+ 1792               	.LM221:
+ 1793 0774 1093 0000 		sts ks0108Inverted,r17
+ 1794               	.L102:
+ 1795               	/* epilogue start */
+ 274:ks0108.c      **** }
+ 1797               	.LM222:
+ 1798 0778 1F91      		pop r17
+ 1799 077a 0895      		ret
+ 1801               	.Lscope15:
+ 1808               	.global	ks0108FillRect
+ 1810               	ks0108FillRect:
+ 166:ks0108.c      **** void ks0108FillRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t color) {
+ 1812               	.LM223:
+ 1813               	.LFBB16:
+ 1814 077c 9F92      		push r9
+ 1815 077e AF92      		push r10
+ 1816 0780 BF92      		push r11
+ 1817 0782 CF92      		push r12
+ 1818 0784 DF92      		push r13
+ 1819 0786 EF92      		push r14
+ 1820 0788 FF92      		push r15
+ 1821 078a 0F93      		push r16
+ 1822 078c 1F93      		push r17
+ 1823 078e CF93      		push r28
+ 1824 0790 DF93      		push r29
+ 1825               	/* prologue: function */
+ 1826               	/* frame size = 0 */
+ 1827 0792 182F      		mov r17,r24
+ 1828 0794 F42E      		mov r15,r20
+ 1829 0796 E22E      		mov r14,r18
+ 1830 0798 C02E      		mov r12,r16
+ 168:ks0108.c      **** 	height++;
+ 1832               	.LM224:
+ 1833 079a E394      		inc r14
+ 170:ks0108.c      **** 	pageOffset = y%8;
+ 1835               	.LM225:
+ 1836 079c 862F      		mov r24,r22
+ 1837 079e 8770      		andi r24,lo8(7)
+ 171:ks0108.c      **** 	y -= pageOffset;
+ 1839               	.LM226:
+ 1840 07a0 D62E      		mov r13,r22
+ 1841 07a2 D81A      		sub r13,r24
+ 173:ks0108.c      **** 	if(height < 8-pageOffset) {
+ 1843               	.LM227:
+ 1844 07a4 CE2D      		mov r28,r14
+ 1845 07a6 D0E0      		ldi r29,lo8(0)
+ 1846 07a8 282F      		mov r18,r24
+ 1847 07aa 30E0      		ldi r19,lo8(0)
+ 1848 07ac 48E0      		ldi r20,lo8(8)
+ 1849 07ae 50E0      		ldi r21,hi8(8)
+ 1850 07b0 BA01      		movw r22,r20
+ 1851 07b2 621B      		sub r22,r18
+ 1852 07b4 730B      		sbc r23,r19
+ 1853 07b6 C617      		cp r28,r22
+ 1854 07b8 D707      		cpc r29,r23
+ 1855 07ba 04F4      		brge .L104
+ 174:ks0108.c      **** 		mask >>= (8-height);
+ 1857               	.LM228:
+ 1858 07bc 4C1B      		sub r20,r28
+ 1859 07be 5D0B      		sbc r21,r29
+ 1860 07c0 8FEF      		ldi r24,lo8(255)
+ 1861 07c2 90E0      		ldi r25,hi8(255)
+ 1862 07c4 00C0      		rjmp 2f
+ 1863 07c6 9595      	1:	asr r25
+ 1864 07c8 8795      		ror r24
+ 1865 07ca 4A95      	2:	dec r20
+ 1866 07cc 02F4      		brpl 1b
+ 1867 07ce 0E2D      		mov r16,r14
+ 1868 07d0 00C0      		rjmp .L105
+ 1869               	.L104:
+ 177:ks0108.c      **** 		h = 8-pageOffset;
+ 1871               	.LM229:
+ 1872 07d2 08E0      		ldi r16,lo8(8)
+ 1873 07d4 081B      		sub r16,r24
+ 1874 07d6 8FEF      		ldi r24,lo8(-1)
+ 1875               	.L105:
+ 179:ks0108.c      **** 	mask <<= pageOffset;
+ 1877               	.LM230:
+ 1878 07d8 90E0      		ldi r25,lo8(0)
+ 1879 07da 00C0      		rjmp 2f
+ 1880 07dc 880F      	1:	lsl r24
+ 1881 07de 991F      		rol r25
+ 1882 07e0 2A95      	2:	dec r18
+ 1883 07e2 02F4      		brpl 1b
+ 1884 07e4 B82E      		mov r11,r24
+ 181:ks0108.c      **** 	ks0108GotoXY(x, y);
+ 1886               	.LM231:
+ 1887 07e6 812F      		mov r24,r17
+ 1888 07e8 6D2D      		mov r22,r13
+ 1889 07ea 0E94 0000 		call ks0108GotoXY
+ 1890 07ee AA24      		clr r10
+ 188:ks0108.c      **** 			data &= ~mask;
+ 1892               	.LM232:
+ 1893 07f0 9B2C      		mov r9,r11
+ 1894 07f2 9094      		com r9
+ 1895               	.L108:
+ 1896               	.LBB63:
+ 1897               	.LBB64:
+ 506:ks0108.c      **** 	ks0108DoReadData(1);							// dummy read
+ 1899               	.LM233:
+ 1900 07f4 81E0      		ldi r24,lo8(1)
+ 1901 07f6 0E94 0000 		call ks0108DoReadData
+ 507:ks0108.c      **** 	return ks0108DoReadData(0);						// "real" read
+ 1903               	.LM234:
+ 1904 07fa 80E0      		ldi r24,lo8(0)
+ 1905 07fc 0E94 0000 		call ks0108DoReadData
+ 1906               	.LBE64:
+ 1907               	.LBE63:
+ 185:ks0108.c      **** 		if(color == BLACK) {
+ 1909               	.LM235:
+ 1910 0800 2FEF      		ldi r18,lo8(-1)
+ 1911 0802 C216      		cp r12,r18
+ 1912 0804 01F4      		brne .L106
+ 186:ks0108.c      **** 			data |= mask;
+ 1914               	.LM236:
+ 1915 0806 8B29      		or r24,r11
+ 1916 0808 00C0      		rjmp .L107
+ 1917               	.L106:
+ 188:ks0108.c      **** 			data &= ~mask;
+ 1919               	.LM237:
+ 1920 080a 8921      		and r24,r9
+ 1921               	.L107:
+ 191:ks0108.c      **** 		ks0108WriteData(data);
+ 1923               	.LM238:
+ 1924 080c 0E94 0000 		call ks0108WriteData
+ 182:ks0108.c      **** 	for(i=0; i<=width; i++) {
+ 1926               	.LM239:
+ 1927 0810 A394      		inc r10
+ 1928 0812 FA14      		cp r15,r10
+ 1929 0814 00F4      		brsh .L108
+ 1930 0816 00C0      		rjmp .L120
+ 1931               	.L111:
+ 196:ks0108.c      **** 		y += 8;
+ 1933               	.LM240:
+ 1934 0818 38E0      		ldi r19,lo8(8)
+ 1935 081a D30E      		add r13,r19
+ 197:ks0108.c      **** 		ks0108GotoXY(x, y);
+ 1937               	.LM241:
+ 1938 081c 812F      		mov r24,r17
+ 1939 081e 6D2D      		mov r22,r13
+ 1940 0820 0E94 0000 		call ks0108GotoXY
+ 1941 0824 BB24      		clr r11
+ 1942               	.L110:
+ 200:ks0108.c      **** 			ks0108WriteData(color);
+ 1944               	.LM242:
+ 1945 0826 8C2D      		mov r24,r12
+ 1946 0828 0E94 0000 		call ks0108WriteData
+ 199:ks0108.c      **** 		for(i=0; i<=width; i++) {
+ 1948               	.LM243:
+ 1949 082c B394      		inc r11
+ 1950 082e FB14      		cp r15,r11
+ 1951 0830 00F4      		brsh .L110
+ 195:ks0108.c      **** 		h += 8;
+ 1953               	.LM244:
+ 1954 0832 085F      		subi r16,lo8(-(8))
+ 1955               	.L120:
+ 194:ks0108.c      **** 	while(h+8 <= height) {
+ 1957               	.LM245:
+ 1958 0834 802F      		mov r24,r16
+ 1959 0836 90E0      		ldi r25,lo8(0)
+ 1960 0838 9C01      		movw r18,r24
+ 1961 083a 295F      		subi r18,lo8(-(7))
+ 1962 083c 3F4F      		sbci r19,hi8(-(7))
+ 1963 083e 2C17      		cp r18,r28
+ 1964 0840 3D07      		cpc r19,r29
+ 1965 0842 04F0      		brlt .L111
+ 204:ks0108.c      **** 	if(h < height) {
+ 1967               	.LM246:
+ 1968 0844 0E15      		cp r16,r14
+ 1969 0846 00F4      		brsh .L116
+ 205:ks0108.c      **** 		mask = ~(0xFF << (height-h));
+ 1971               	.LM247:
+ 1972 0848 C81B      		sub r28,r24
+ 1973 084a D90B      		sbc r29,r25
+ 1974 084c 8FEF      		ldi r24,lo8(255)
+ 1975 084e 90E0      		ldi r25,hi8(255)
+ 1976 0850 0C2E      		mov r0,r28
+ 1977 0852 00C0      		rjmp 2f
+ 1978 0854 880F      	1:	lsl r24
+ 1979 0856 991F      		rol r25
+ 1980 0858 0A94      	2:	dec r0
+ 1981 085a 02F4      		brpl 1b
+ 1982 085c 082F      		mov r16,r24
+ 1983 085e 0095      		com r16
+ 206:ks0108.c      **** 		ks0108GotoXY(x, y+8);
+ 1985               	.LM248:
+ 1986 0860 6D2D      		mov r22,r13
+ 1987 0862 685F      		subi r22,lo8(-(8))
+ 1988 0864 812F      		mov r24,r17
+ 1989 0866 0E94 0000 		call ks0108GotoXY
+ 1990 086a 10E0      		ldi r17,lo8(0)
+ 214:ks0108.c      **** 				data &= ~mask;
+ 1992               	.LM249:
+ 1993 086c E02E      		mov r14,r16
+ 1994 086e E094      		com r14
+ 1995               	.L115:
+ 1996               	.LBB65:
+ 1997               	.LBB66:
+ 506:ks0108.c      **** 	ks0108DoReadData(1);							// dummy read
+ 1999               	.LM250:
+ 2000 0870 81E0      		ldi r24,lo8(1)
+ 2001 0872 0E94 0000 		call ks0108DoReadData
+ 507:ks0108.c      **** 	return ks0108DoReadData(0);						// "real" read
+ 2003               	.LM251:
+ 2004 0876 80E0      		ldi r24,lo8(0)
+ 2005 0878 0E94 0000 		call ks0108DoReadData
+ 2006               	.LBE66:
+ 2007               	.LBE65:
+ 211:ks0108.c      **** 			if(color == BLACK) {
+ 2009               	.LM252:
+ 2010 087c 3FEF      		ldi r19,lo8(-1)
+ 2011 087e C316      		cp r12,r19
+ 2012 0880 01F4      		brne .L113
+ 212:ks0108.c      **** 				data |= mask;
+ 2014               	.LM253:
+ 2015 0882 802B      		or r24,r16
+ 2016 0884 00C0      		rjmp .L114
+ 2017               	.L113:
+ 214:ks0108.c      **** 				data &= ~mask;
+ 2019               	.LM254:
+ 2020 0886 8E21      		and r24,r14
+ 2021               	.L114:
+ 217:ks0108.c      **** 			ks0108WriteData(data);
+ 2023               	.LM255:
+ 2024 0888 0E94 0000 		call ks0108WriteData
+ 208:ks0108.c      **** 		for(i=0; i<=width; i++) {
+ 2026               	.LM256:
+ 2027 088c 1F5F      		subi r17,lo8(-(1))
+ 2028 088e F116      		cp r15,r17
+ 2029 0890 00F4      		brsh .L115
+ 2030               	.L116:
+ 2031               	/* epilogue start */
+ 220:ks0108.c      **** }
+ 2033               	.LM257:
+ 2034 0892 DF91      		pop r29
+ 2035 0894 CF91      		pop r28
+ 2036 0896 1F91      		pop r17
+ 2037 0898 0F91      		pop r16
+ 2038 089a FF90      		pop r15
+ 2039 089c EF90      		pop r14
+ 2040 089e DF90      		pop r13
+ 2041 08a0 CF90      		pop r12
+ 2042 08a2 BF90      		pop r11
+ 2043 08a4 AF90      		pop r10
+ 2044 08a6 9F90      		pop r9
+ 2045 08a8 0895      		ret
+ 2054               	.Lscope16:
+ 2057               	.global	ks0108Init
+ 2059               	ks0108Init:
+ 437:ks0108.c      **** void ks0108Init(uint8_t invert) {
+ 2061               	.LM258:
+ 2062               	.LFBB17:
+ 2063 08aa 0F93      		push r16
+ 2064               	/* prologue: function */
+ 2065               	/* frame size = 0 */
+ 438:ks0108.c      **** 	ks0108Coord.x = 0;
+ 2067               	.LM259:
+ 2068 08ac 1092 0000 		sts ks0108Coord,__zero_reg__
+ 439:ks0108.c      **** 	ks0108Coord.y = 0;
+ 2070               	.LM260:
+ 2071 08b0 1092 0000 		sts ks0108Coord+1,__zero_reg__
+ 440:ks0108.c      **** 	ks0108Coord.page = 0;
+ 2073               	.LM261:
+ 2074 08b4 1092 0000 		sts ks0108Coord+2,__zero_reg__
+ 442:ks0108.c      **** 	ks0108Inverted = invert;
+ 2076               	.LM262:
+ 2077 08b8 8093 0000 		sts ks0108Inverted,r24
+ 444:ks0108.c      **** 	LCD_CMD_DIR = 0xFF;								// command port is output
+ 2079               	.LM263:
+ 2080 08bc 8FEF      		ldi r24,lo8(-1)
+ 2081 08be 84BB      		out 52-0x20,r24
+ 445:ks0108.c      **** 	ks0108WriteCommand(LCD_ON, CHIP1);				// power on
+ 2083               	.LM264:
+ 2084 08c0 8FE3      		ldi r24,lo8(63)
+ 2085 08c2 60E0      		ldi r22,lo8(0)
+ 2086 08c4 0E94 0000 		call ks0108WriteCommand
+ 446:ks0108.c      **** 	ks0108WriteCommand(LCD_ON, CHIP2);
+ 2088               	.LM265:
+ 2089 08c8 8FE3      		ldi r24,lo8(63)
+ 2090 08ca 61E0      		ldi r22,lo8(1)
+ 2091 08cc 0E94 0000 		call ks0108WriteCommand
+ 448:ks0108.c      **** 	ks0108WriteCommand(LCD_DISP_START, CHIP1);		// display start line = 0
+ 2093               	.LM266:
+ 2094 08d0 80EC      		ldi r24,lo8(-64)
+ 2095 08d2 60E0      		ldi r22,lo8(0)
+ 2096 08d4 0E94 0000 		call ks0108WriteCommand
+ 449:ks0108.c      **** 	ks0108WriteCommand(LCD_DISP_START, CHIP2);
+ 2098               	.LM267:
+ 2099 08d8 80EC      		ldi r24,lo8(-64)
+ 2100 08da 61E0      		ldi r22,lo8(1)
+ 2101 08dc 0E94 0000 		call ks0108WriteCommand
+ 450:ks0108.c      **** 	ks0108ClearScreen();							// display clear
+ 2103               	.LM268:
+ 2104 08e0 80E0      		ldi r24,lo8(0)
+ 2105 08e2 60E0      		ldi r22,lo8(0)
+ 2106 08e4 4FE7      		ldi r20,lo8(127)
+ 2107 08e6 2FE3      		ldi r18,lo8(63)
+ 2108 08e8 00E0      		ldi r16,lo8(0)
+ 2109 08ea 0E94 0000 		call ks0108FillRect
+ 451:ks0108.c      **** 	ks0108GotoXY(0,0);
+ 2111               	.LM269:
+ 2112 08ee 80E0      		ldi r24,lo8(0)
+ 2113 08f0 60E0      		ldi r22,lo8(0)
+ 2114 08f2 0E94 0000 		call ks0108GotoXY
+ 2115               	/* epilogue start */
+ 452:ks0108.c      **** }
+ 2117               	.LM270:
+ 2118 08f6 0F91      		pop r16
+ 2119 08f8 0895      		ret
+ 2121               	.Lscope17:
+ 2129               	.global	ks0108DrawRoundRect
+ 2131               	ks0108DrawRoundRect:
+ 131:ks0108.c      **** void ks0108DrawRoundRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t radius, uint8
+ 2133               	.LM271:
+ 2134               	.LFBB18:
+ 2135 08fa 2F92      		push r2
+ 2136 08fc 3F92      		push r3
+ 2137 08fe 4F92      		push r4
+ 2138 0900 5F92      		push r5
+ 2139 0902 6F92      		push r6
+ 2140 0904 7F92      		push r7
+ 2141 0906 8F92      		push r8
+ 2142 0908 9F92      		push r9
+ 2143 090a AF92      		push r10
+ 2144 090c BF92      		push r11
+ 2145 090e CF92      		push r12
+ 2146 0910 DF92      		push r13
+ 2147 0912 EF92      		push r14
+ 2148 0914 FF92      		push r15
+ 2149 0916 0F93      		push r16
+ 2150 0918 1F93      		push r17
+ 2151 091a DF93      		push r29
+ 2152 091c CF93      		push r28
+ 2153 091e CDB7      		in r28,__SP_L__
+ 2154 0920 DEB7      		in r29,__SP_H__
+ 2155 0922 2B97      		sbiw r28,11
+ 2156 0924 0FB6      		in __tmp_reg__,__SREG__
+ 2157 0926 F894      		cli
+ 2158 0928 DEBF      		out __SP_H__,r29
+ 2159 092a 0FBE      		out __SREG__,__tmp_reg__
+ 2160 092c CDBF      		out __SP_L__,r28
+ 2161               	/* prologue: function */
+ 2162               	/* frame size = 11 */
+ 2163 092e 382F      		mov r19,r24
+ 2164 0930 162F      		mov r17,r22
+ 2165 0932 542F      		mov r21,r20
+ 2166 0934 2D83      		std Y+5,r18
+ 132:ks0108.c      ****   	int16_t tSwitch, x1 = 0, y1 = radius;
+ 2168               	.LM272:
+ 2169 0936 A02E      		mov r10,r16
+ 2170 0938 BB24      		clr r11
+ 133:ks0108.c      ****   	tSwitch = 3 - 2 * radius;
+ 2172               	.LM273:
+ 2173 093a C501      		movw r24,r10
+ 2174 093c 880F      		lsl r24
+ 2175 093e 991F      		rol r25
+ 2176 0940 6627      		clr r22
+ 2177 0942 7727      		clr r23
+ 2178 0944 681B      		sub r22,r24
+ 2179 0946 790B      		sbc r23,r25
+ 2180 0948 6D5F      		subi r22,lo8(-(3))
+ 2181 094a 7F4F      		sbci r23,hi8(-(3))
+ 2182 094c 7B87      		std Y+11,r23
+ 2183 094e 6A87      		std Y+10,r22
+ 2184 0950 D02E      		mov r13,r16
+ 2185 0952 D30E      		add r13,r19
+ 2186 0954 F02E      		mov r15,r16
+ 2187 0956 F10E      		add r15,r17
+ 131:ks0108.c      **** void ks0108DrawRoundRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t radius, uint8
+ 2189               	.LM274:
+ 2190 0958 742F      		mov r23,r20
+ 2191 095a 730F      		add r23,r19
+ 2192 095c 7C83      		std Y+4,r23
+ 2193 095e 701B      		sub r23,r16
+ 2194 0960 7A83      		std Y+2,r23
+ 2195 0962 822F      		mov r24,r18
+ 2196 0964 810F      		add r24,r17
+ 2197 0966 8B83      		std Y+3,r24
+ 2198 0968 801B      		sub r24,r16
+ 2199 096a 8983      		std Y+1,r24
+ 2200 096c 582E      		mov r5,r24
+ 2201 096e 672E      		mov r6,r23
+ 2202 0970 7F2C      		mov r7,r15
+ 2203 0972 CD2C      		mov r12,r13
+ 2204 0974 2224      		clr r2
+ 2205 0976 3324      		clr r3
+ 2206 0978 8824      		clr r8
+ 2207 097a 9924      		clr r9
+ 2208               	.L126:
+ 136:ks0108.c      **** 	    ks0108SetDot(x+radius - x1, y+radius - y1, color);
+ 2210               	.LM275:
+ 2211 097c 4A2C      		mov r4,r10
+ 2212 097e 9F2D      		mov r25,r15
+ 2213 0980 9A19      		sub r25,r10
+ 2214 0982 8C2D      		mov r24,r12
+ 2215 0984 692F      		mov r22,r25
+ 2216 0986 4E2D      		mov r20,r14
+ 2217 0988 3987      		std Y+9,r19
+ 2218 098a 5887      		std Y+8,r21
+ 2219 098c 9E83      		std Y+6,r25
+ 2220 098e 0E94 0000 		call ks0108SetDot
+ 137:ks0108.c      **** 	    ks0108SetDot(x+radius - y1, y+radius - x1, color);
+ 2222               	.LM276:
+ 2223 0992 2D2D      		mov r18,r13
+ 2224 0994 2A19      		sub r18,r10
+ 2225 0996 822F      		mov r24,r18
+ 2226 0998 672D      		mov r22,r7
+ 2227 099a 4E2D      		mov r20,r14
+ 2228 099c 2F83      		std Y+7,r18
+ 2229 099e 0E94 0000 		call ks0108SetDot
+ 139:ks0108.c      **** 	    ks0108SetDot(x+width-radius + x1, y+radius - y1, color);
+ 2231               	.LM277:
+ 2232 09a2 862D      		mov r24,r6
+ 2233 09a4 9E81      		ldd r25,Y+6
+ 2234 09a6 692F      		mov r22,r25
+ 2235 09a8 4E2D      		mov r20,r14
+ 2236 09aa 0E94 0000 		call ks0108SetDot
+ 140:ks0108.c      **** 	    ks0108SetDot(x+width-radius + y1, y+radius - x1, color);
+ 2238               	.LM278:
+ 2239 09ae 9A81      		ldd r25,Y+2
+ 2240 09b0 9A0D      		add r25,r10
+ 2241 09b2 892F      		mov r24,r25
+ 2242 09b4 672D      		mov r22,r7
+ 2243 09b6 4E2D      		mov r20,r14
+ 2244 09b8 9E83      		std Y+6,r25
+ 2245 09ba 0E94 0000 		call ks0108SetDot
+ 142:ks0108.c      **** 	    ks0108SetDot(x+width-radius + x1, y+height-radius + y1, color);
+ 2247               	.LM279:
+ 2248 09be E981      		ldd r30,Y+1
+ 2249 09c0 4E0E      		add r4,r30
+ 2250 09c2 862D      		mov r24,r6
+ 2251 09c4 642D      		mov r22,r4
+ 2252 09c6 4E2D      		mov r20,r14
+ 2253 09c8 0E94 0000 		call ks0108SetDot
+ 143:ks0108.c      **** 	    ks0108SetDot(x+width-radius + y1, y+height-radius + x1, color);
+ 2255               	.LM280:
+ 2256 09cc 9E81      		ldd r25,Y+6
+ 2257 09ce 892F      		mov r24,r25
+ 2258 09d0 652D      		mov r22,r5
+ 2259 09d2 4E2D      		mov r20,r14
+ 2260 09d4 0E94 0000 		call ks0108SetDot
+ 145:ks0108.c      **** 	    ks0108SetDot(x+radius - x1, y+height-radius + y1, color);
+ 2262               	.LM281:
+ 2263 09d8 8C2D      		mov r24,r12
+ 2264 09da 642D      		mov r22,r4
+ 2265 09dc 4E2D      		mov r20,r14
+ 2266 09de 0E94 0000 		call ks0108SetDot
+ 146:ks0108.c      **** 	    ks0108SetDot(x+radius - y1, y+height-radius + x1, color);
+ 2268               	.LM282:
+ 2269 09e2 2F81      		ldd r18,Y+7
+ 2270 09e4 822F      		mov r24,r18
+ 2271 09e6 652D      		mov r22,r5
+ 2272 09e8 4E2D      		mov r20,r14
+ 2273 09ea 0E94 0000 		call ks0108SetDot
+ 148:ks0108.c      **** 	    if (tSwitch < 0) {
+ 2275               	.LM283:
+ 2276 09ee 3985      		ldd r19,Y+9
+ 2277 09f0 5885      		ldd r21,Y+8
+ 2278 09f2 6A85      		ldd r22,Y+10
+ 2279 09f4 7B85      		ldd r23,Y+11
+ 2280 09f6 77FF      		sbrs r23,7
+ 2281 09f8 00C0      		rjmp .L124
+ 149:ks0108.c      **** 	    	tSwitch += (4 * x1 + 6);
+ 2283               	.LM284:
+ 2284 09fa 6A5F      		subi r22,lo8(-(6))
+ 2285 09fc 7F4F      		sbci r23,hi8(-(6))
+ 2286 09fe 620D      		add r22,r2
+ 2287 0a00 731D      		adc r23,r3
+ 2288 0a02 7B87      		std Y+11,r23
+ 2289 0a04 6A87      		std Y+10,r22
+ 2290 0a06 00C0      		rjmp .L125
+ 2291               	.L124:
+ 151:ks0108.c      **** 	    	tSwitch += (4 * (x1 - y1) + 10);
+ 2293               	.LM285:
+ 2294 0a08 8A85      		ldd r24,Y+10
+ 2295 0a0a 9B85      		ldd r25,Y+11
+ 2296 0a0c 0A96      		adiw r24,10
+ 2297 0a0e 9B87      		std Y+11,r25
+ 2298 0a10 8A87      		std Y+10,r24
+ 2299 0a12 C401      		movw r24,r8
+ 2300 0a14 8A19      		sub r24,r10
+ 2301 0a16 9B09      		sbc r25,r11
+ 2302 0a18 880F      		lsl r24
+ 2303 0a1a 991F      		rol r25
+ 2304 0a1c 880F      		lsl r24
+ 2305 0a1e 991F      		rol r25
+ 2306 0a20 EA85      		ldd r30,Y+10
+ 2307 0a22 FB85      		ldd r31,Y+11
+ 2308 0a24 E80F      		add r30,r24
+ 2309 0a26 F91F      		adc r31,r25
+ 2310 0a28 FB87      		std Y+11,r31
+ 2311 0a2a EA87      		std Y+10,r30
+ 152:ks0108.c      **** 	    	y1--;
+ 2313               	.LM286:
+ 2314 0a2c 0894      		sec
+ 2315 0a2e A108      		sbc r10,__zero_reg__
+ 2316 0a30 B108      		sbc r11,__zero_reg__
+ 2317               	.L125:
+ 154:ks0108.c      **** 	    x1++;
+ 2319               	.LM287:
+ 2320 0a32 0894      		sec
+ 2321 0a34 811C      		adc r8,__zero_reg__
+ 2322 0a36 911C      		adc r9,__zero_reg__
+ 2323 0a38 CA94      		dec r12
+ 2324 0a3a 7A94      		dec r7
+ 2325 0a3c 6394      		inc r6
+ 2326 0a3e 5394      		inc r5
+ 2327 0a40 64E0      		ldi r22,lo8(4)
+ 2328 0a42 70E0      		ldi r23,hi8(4)
+ 2329 0a44 260E      		add r2,r22
+ 2330 0a46 371E      		adc r3,r23
+ 135:ks0108.c      **** 	while (x1 <= y1) {
+ 2332               	.LM288:
+ 2333 0a48 A814      		cp r10,r8
+ 2334 0a4a B904      		cpc r11,r9
+ 2335 0a4c 04F0      		brlt .+2
+ 2336 0a4e 00C0      		rjmp .L126
+ 157:ks0108.c      **** 	ks0108DrawHoriLine(x+radius, y, width-(2*radius), color);			// top
+ 2338               	.LM289:
+ 2339 0a50 C02E      		mov r12,r16
+ 2340 0a52 CC0C      		lsl r12
+ 2341 0a54 C194      		neg r12
+ 2342 0a56 AC2C      		mov r10,r12
+ 2343 0a58 A50E      		add r10,r21
+ 2344 0a5a 8D2D      		mov r24,r13
+ 2345 0a5c 612F      		mov r22,r17
+ 2346 0a5e 4A2D      		mov r20,r10
+ 2347 0a60 20E0      		ldi r18,lo8(0)
+ 2348 0a62 0E2D      		mov r16,r14
+ 2349 0a64 3987      		std Y+9,r19
+ 2350 0a66 0E94 0000 		call ks0108FillRect
+ 158:ks0108.c      **** 	ks0108DrawHoriLine(x+radius, y+height, width-(2*radius), color);	// bottom
+ 2352               	.LM290:
+ 2353 0a6a 8D2D      		mov r24,r13
+ 2354 0a6c 6B81      		ldd r22,Y+3
+ 2355 0a6e 4A2D      		mov r20,r10
+ 2356 0a70 20E0      		ldi r18,lo8(0)
+ 2357 0a72 0E94 0000 		call ks0108FillRect
+ 159:ks0108.c      **** 	ks0108DrawVertLine(x, y+radius, height-(2*radius), color);			// left
+ 2359               	.LM291:
+ 2360 0a76 7D81      		ldd r23,Y+5
+ 2361 0a78 C70E      		add r12,r23
+ 2362 0a7a 3985      		ldd r19,Y+9
+ 2363 0a7c 832F      		mov r24,r19
+ 2364 0a7e 6F2D      		mov r22,r15
+ 2365 0a80 40E0      		ldi r20,lo8(0)
+ 2366 0a82 2C2D      		mov r18,r12
+ 2367 0a84 0E94 0000 		call ks0108FillRect
+ 160:ks0108.c      **** 	ks0108DrawVertLine(x+width, y+radius, height-(2*radius), color);	// right
+ 2369               	.LM292:
+ 2370 0a88 8C81      		ldd r24,Y+4
+ 2371 0a8a 6F2D      		mov r22,r15
+ 2372 0a8c 40E0      		ldi r20,lo8(0)
+ 2373 0a8e 2C2D      		mov r18,r12
+ 2374 0a90 0E94 0000 		call ks0108FillRect
+ 2375               	/* epilogue start */
+ 161:ks0108.c      **** }
+ 2377               	.LM293:
+ 2378 0a94 2B96      		adiw r28,11
+ 2379 0a96 0FB6      		in __tmp_reg__,__SREG__
+ 2380 0a98 F894      		cli
+ 2381 0a9a DEBF      		out __SP_H__,r29
+ 2382 0a9c 0FBE      		out __SREG__,__tmp_reg__
+ 2383 0a9e CDBF      		out __SP_L__,r28
+ 2384 0aa0 CF91      		pop r28
+ 2385 0aa2 DF91      		pop r29
+ 2386 0aa4 1F91      		pop r17
+ 2387 0aa6 0F91      		pop r16
+ 2388 0aa8 FF90      		pop r15
+ 2389 0aaa EF90      		pop r14
+ 2390 0aac DF90      		pop r13
+ 2391 0aae CF90      		pop r12
+ 2392 0ab0 BF90      		pop r11
+ 2393 0ab2 AF90      		pop r10
+ 2394 0ab4 9F90      		pop r9
+ 2395 0ab6 8F90      		pop r8
+ 2396 0ab8 7F90      		pop r7
+ 2397 0aba 6F90      		pop r6
+ 2398 0abc 5F90      		pop r5
+ 2399 0abe 4F90      		pop r4
+ 2400 0ac0 3F90      		pop r3
+ 2401 0ac2 2F90      		pop r2
+ 2402 0ac4 0895      		ret
+ 2409               	.Lscope18:
+ 2416               	.global	ks0108DrawRect
+ 2418               	ks0108DrawRect:
+ 124:ks0108.c      **** void ks0108DrawRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t color) {
+ 2420               	.LM294:
+ 2421               	.LFBB19:
+ 2422 0ac6 CF92      		push r12
+ 2423 0ac8 DF92      		push r13
+ 2424 0aca EF92      		push r14
+ 2425 0acc FF92      		push r15
+ 2426 0ace 0F93      		push r16
+ 2427 0ad0 1F93      		push r17
+ 2428               	/* prologue: function */
+ 2429               	/* frame size = 0 */
+ 2430 0ad2 E82E      		mov r14,r24
+ 2431 0ad4 F62E      		mov r15,r22
+ 2432 0ad6 C42E      		mov r12,r20
+ 2433 0ad8 D22E      		mov r13,r18
+ 125:ks0108.c      **** 	ks0108DrawHoriLine(x, y, width, color);				// top
+ 2435               	.LM295:
+ 2436 0ada 20E0      		ldi r18,lo8(0)
+ 2437 0adc 0E94 0000 		call ks0108FillRect
+ 126:ks0108.c      **** 	ks0108DrawHoriLine(x, y+height, width, color);		// bottom
+ 2439               	.LM296:
+ 2440 0ae0 6D2D      		mov r22,r13
+ 2441 0ae2 6F0D      		add r22,r15
+ 2442 0ae4 8E2D      		mov r24,r14
+ 2443 0ae6 4C2D      		mov r20,r12
+ 2444 0ae8 20E0      		ldi r18,lo8(0)
+ 2445 0aea 0E94 0000 		call ks0108FillRect
+ 127:ks0108.c      **** 	ks0108DrawVertLine(x, y, height, color);			// left
+ 2447               	.LM297:
+ 2448 0aee 8E2D      		mov r24,r14
+ 2449 0af0 6F2D      		mov r22,r15
+ 2450 0af2 40E0      		ldi r20,lo8(0)
+ 2451 0af4 2D2D      		mov r18,r13
+ 2452 0af6 0E94 0000 		call ks0108FillRect
+ 128:ks0108.c      **** 	ks0108DrawVertLine(x+width, y, height, color);		// right
+ 2454               	.LM298:
+ 2455 0afa 8C2D      		mov r24,r12
+ 2456 0afc 8E0D      		add r24,r14
+ 2457 0afe 6F2D      		mov r22,r15
+ 2458 0b00 40E0      		ldi r20,lo8(0)
+ 2459 0b02 2D2D      		mov r18,r13
+ 2460 0b04 0E94 0000 		call ks0108FillRect
+ 2461               	/* epilogue start */
+ 129:ks0108.c      **** }
+ 2463               	.LM299:
+ 2464 0b08 1F91      		pop r17
+ 2465 0b0a 0F91      		pop r16
+ 2466 0b0c FF90      		pop r15
+ 2467 0b0e EF90      		pop r14
+ 2468 0b10 DF90      		pop r13
+ 2469 0b12 CF90      		pop r12
+ 2470 0b14 0895      		ret
+ 2472               	.Lscope19:
+ 2479               	.global	ks0108DrawLine
+ 2481               	ks0108DrawLine:
+  22:ks0108.c      **** void ks0108DrawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t color) {
+ 2483               	.LM300:
+ 2484               	.LFBB20:
+ 2485 0b16 4F92      		push r4
+ 2486 0b18 5F92      		push r5
+ 2487 0b1a 6F92      		push r6
+ 2488 0b1c 7F92      		push r7
+ 2489 0b1e 8F92      		push r8
+ 2490 0b20 9F92      		push r9
+ 2491 0b22 AF92      		push r10
+ 2492 0b24 BF92      		push r11
+ 2493 0b26 CF92      		push r12
+ 2494 0b28 DF92      		push r13
+ 2495 0b2a EF92      		push r14
+ 2496 0b2c FF92      		push r15
+ 2497 0b2e 0F93      		push r16
+ 2498 0b30 1F93      		push r17
+ 2499 0b32 CF93      		push r28
+ 2500 0b34 DF93      		push r29
+ 2501               	/* prologue: function */
+ 2502               	/* frame size = 0 */
+ 2503 0b36 182F      		mov r17,r24
+ 2504 0b38 F62E      		mov r15,r22
+ 2505 0b3a D42E      		mov r13,r20
+ 2506 0b3c E22E      		mov r14,r18
+ 2507 0b3e B02E      		mov r11,r16
+  29:ks0108.c      **** 	if(x1 == x2) {
+ 2509               	.LM301:
+ 2510 0b40 8417      		cp r24,r20
+ 2511 0b42 01F4      		brne .L132
+  31:ks0108.c      **** 		if(y1 > y2) {
+ 2513               	.LM302:
+ 2514 0b44 2617      		cp r18,r22
+ 2515 0b46 00F4      		brsh .L133
+ 2516 0b48 F22E      		mov r15,r18
+ 2517 0b4a E62E      		mov r14,r22
+ 2518               	.L133:
+  36:ks0108.c      **** 		ks0108DrawVertLine(x1, y1, y2-y1, color);
+ 2520               	.LM303:
+ 2521 0b4c 2E2D      		mov r18,r14
+ 2522 0b4e 2F19      		sub r18,r15
+ 2523 0b50 812F      		mov r24,r17
+ 2524 0b52 6F2D      		mov r22,r15
+ 2525 0b54 40E0      		ldi r20,lo8(0)
+ 2526 0b56 00C0      		rjmp .L156
+ 2527               	.L132:
+  41:ks0108.c      **** 	} else if(y1 == y2) {	
+ 2529               	.LM304:
+ 2530 0b58 6217      		cp r22,r18
+ 2531 0b5a 01F4      		brne .L135
+  43:ks0108.c      **** 		if(x1 > x2) {
+ 2533               	.LM305:
+ 2534 0b5c 4817      		cp r20,r24
+ 2535 0b5e 00F4      		brsh .L136
+ 2536 0b60 142F      		mov r17,r20
+ 2537 0b62 D82E      		mov r13,r24
+ 2538               	.L136:
+  48:ks0108.c      **** 		ks0108DrawHoriLine(x1, y1, x2-x1, color);
+ 2540               	.LM306:
+ 2541 0b64 4D2D      		mov r20,r13
+ 2542 0b66 411B      		sub r20,r17
+ 2543 0b68 812F      		mov r24,r17
+ 2544 0b6a 6F2D      		mov r22,r15
+ 2545 0b6c 20E0      		ldi r18,lo8(0)
+ 2546               	.L156:
+ 2547 0b6e 0B2D      		mov r16,r11
+ 2548 0b70 0E94 0000 		call ks0108FillRect
+ 2549 0b74 00C0      		rjmp .L153
+ 2550               	.L135:
+  55:ks0108.c      **** 		if((y2-y1) >= (x2-x1) || (y1-y2) >= (x2-x1)) {
+ 2552               	.LM307:
+ 2553 0b76 30E0      		ldi r19,lo8(0)
+ 2554 0b78 462F      		mov r20,r22
+ 2555 0b7a 50E0      		ldi r21,lo8(0)
+ 2556 0b7c 8D2D      		mov r24,r13
+ 2557 0b7e 90E0      		ldi r25,lo8(0)
+ 2558 0b80 811B      		sub r24,r17
+ 2559 0b82 9109      		sbc r25,__zero_reg__
+ 2560 0b84 B901      		movw r22,r18
+ 2561 0b86 641B      		sub r22,r20
+ 2562 0b88 750B      		sbc r23,r21
+ 2563 0b8a 6817      		cp r22,r24
+ 2564 0b8c 7907      		cpc r23,r25
+ 2565 0b8e 04F4      		brge .L137
+ 2566 0b90 421B      		sub r20,r18
+ 2567 0b92 530B      		sbc r21,r19
+ 2568 0b94 4817      		cp r20,r24
+ 2569 0b96 5907      		cpc r21,r25
+ 2570 0b98 04F4      		brge .+2
+ 2571 0b9a 00C0      		rjmp .L138
+ 2572               	.L137:
+  57:ks0108.c      **** 			if(x1 > x2) {
+ 2574               	.LM308:
+ 2575 0b9c D116      		cp r13,r17
+ 2576 0b9e 00F4      		brsh .L139
+ 2577 0ba0 8F2D      		mov r24,r15
+ 2578 0ba2 FE2C      		mov r15,r14
+ 2579 0ba4 E82E      		mov r14,r24
+ 2580 0ba6 812F      		mov r24,r17
+ 2581 0ba8 1D2D      		mov r17,r13
+ 2582 0baa D82E      		mov r13,r24
+ 2583               	.L139:
+  66:ks0108.c      **** 			length = x2-x1;		// not really the length :)
+ 2585               	.LM309:
+ 2586 0bac AD2C      		mov r10,r13
+ 2587 0bae A11A      		sub r10,r17
+  67:ks0108.c      **** 			m = ((y2-y1)*200)/length;
+ 2589               	.LM310:
+ 2590 0bb0 EE2D      		mov r30,r14
+ 2591 0bb2 F0E0      		ldi r31,lo8(0)
+ 2592 0bb4 6F2C      		mov r6,r15
+ 2593 0bb6 7724      		clr r7
+ 2594 0bb8 4F01      		movw r8,r30
+ 2595 0bba 8618      		sub r8,r6
+ 2596 0bbc 9708      		sbc r9,r7
+ 2597 0bbe CA2D      		mov r28,r10
+ 2598 0bc0 D0E0      		ldi r29,lo8(0)
+ 2599 0bc2 88EC      		ldi r24,lo8(200)
+ 2600 0bc4 90E0      		ldi r25,hi8(200)
+ 2601 0bc6 9C01      		movw r18,r24
+ 2602 0bc8 829E      		mul r8,r18
+ 2603 0bca C001      		movw r24,r0
+ 2604 0bcc 839E      		mul r8,r19
+ 2605 0bce 900D      		add r25,r0
+ 2606 0bd0 929E      		mul r9,r18
+ 2607 0bd2 900D      		add r25,r0
+ 2608 0bd4 1124      		clr r1
+ 2609 0bd6 BE01      		movw r22,r28
+ 2610 0bd8 0E94 0000 		call __divmodhi4
+ 2611 0bdc 2B01      		movw r4,r22
+ 2612 0bde 2F2D      		mov r18,r15
+ 2613 0be0 CC24      		clr r12
+  82:ks0108.c      **** 				else if(length <= (y1-y2) && y1 > y2)
+ 2615               	.LM311:
+ 2616 0be2 6E1A      		sub r6,r30
+ 2617 0be4 7F0A      		sbc r7,r31
+ 2618               	.L145:
+  71:ks0108.c      **** 				y = ((m*i)/200)+y1;
+ 2620               	.LM312:
+ 2621 0be6 8C2D      		mov r24,r12
+ 2622 0be8 90E0      		ldi r25,lo8(0)
+ 2623 0bea 849D      		mul r24,r4
+ 2624 0bec F001      		movw r30,r0
+ 2625 0bee 859D      		mul r24,r5
+ 2626 0bf0 F00D      		add r31,r0
+ 2627 0bf2 949D      		mul r25,r4
+ 2628 0bf4 F00D      		add r31,r0
+ 2629 0bf6 1124      		clr r1
+ 2630 0bf8 CF01      		movw r24,r30
+ 2631 0bfa 68EC      		ldi r22,lo8(200)
+ 2632 0bfc 70E0      		ldi r23,hi8(200)
+ 2633 0bfe 0E94 0000 		call __divmodhi4
+ 2634 0c02 D62E      		mov r13,r22
+ 2635 0c04 DF0C      		add r13,r15
+  73:ks0108.c      **** 				if((m*i)%200 >= 100)
+ 2637               	.LM313:
+ 2638 0c06 CF01      		movw r24,r30
+ 2639 0c08 68EC      		ldi r22,lo8(200)
+ 2640 0c0a 70E0      		ldi r23,hi8(200)
+ 2641 0c0c 0E94 0000 		call __divmodhi4
+ 2642 0c10 8436      		cpi r24,100
+ 2643 0c12 9105      		cpc r25,__zero_reg__
+ 2644 0c14 04F0      		brlt .L140
+  74:ks0108.c      **** 					y++;
+ 2646               	.LM314:
+ 2647 0c16 D394      		inc r13
+ 2648 0c18 00C0      		rjmp .L141
+ 2649               	.L140:
+  75:ks0108.c      **** 				else if((m*i)%200 <= -100)
+ 2651               	.LM315:
+ 2652 0c1a 3FEF      		ldi r19,hi8(-99)
+ 2653 0c1c 8D39      		cpi r24,lo8(-99)
+ 2654 0c1e 9307      		cpc r25,r19
+ 2655 0c20 04F4      		brge .L141
+  76:ks0108.c      **** 					y--;
+ 2657               	.LM316:
+ 2658 0c22 DA94      		dec r13
+ 2659               	.L141:
+ 2660 0c24 4C2D      		mov r20,r12
+ 2661 0c26 410F      		add r20,r17
+  78:ks0108.c      **** 				ks0108DrawLine(x1+i, yAlt, x1+i, y, color);
+ 2663               	.LM317:
+ 2664 0c28 842F      		mov r24,r20
+ 2665 0c2a 622F      		mov r22,r18
+ 2666 0c2c 2D2D      		mov r18,r13
+ 2667 0c2e 0B2D      		mov r16,r11
+ 2668 0c30 0E94 0000 		call ks0108DrawLine
+  80:ks0108.c      **** 				if(length <= (y2-y1) && y1 < y2)
+ 2670               	.LM318:
+ 2671 0c34 8C16      		cp r8,r28
+ 2672 0c36 9D06      		cpc r9,r29
+ 2673 0c38 04F0      		brlt .L142
+ 2674 0c3a FE14      		cp r15,r14
+ 2675 0c3c 00F4      		brsh .L142
+  81:ks0108.c      **** 					yAlt = y+1;
+ 2677               	.LM319:
+ 2678 0c3e 2D2D      		mov r18,r13
+ 2679 0c40 2F5F      		subi r18,lo8(-(1))
+  80:ks0108.c      **** 				if(length <= (y2-y1) && y1 < y2)
+ 2681               	.LM320:
+ 2682 0c42 00C0      		rjmp .L143
+ 2683               	.L142:
+  82:ks0108.c      **** 				else if(length <= (y1-y2) && y1 > y2)
+ 2685               	.LM321:
+ 2686 0c44 6C16      		cp r6,r28
+ 2687 0c46 7D06      		cpc r7,r29
+ 2688 0c48 04F0      		brlt .L144
+ 2689 0c4a EF14      		cp r14,r15
+ 2690 0c4c 00F4      		brsh .L144
+  83:ks0108.c      **** 					yAlt = y-1;
+ 2692               	.LM322:
+ 2693 0c4e 2D2D      		mov r18,r13
+ 2694 0c50 2150      		subi r18,lo8(-(-1))
+  82:ks0108.c      **** 				else if(length <= (y1-y2) && y1 > y2)
+ 2696               	.LM323:
+ 2697 0c52 00C0      		rjmp .L143
+ 2698               	.L144:
+ 2699 0c54 2D2D      		mov r18,r13
+ 2700               	.L143:
+  70:ks0108.c      **** 			for(i=0; i<=length; i++) {
+ 2702               	.LM324:
+ 2703 0c56 C394      		inc r12
+ 2704 0c58 AC14      		cp r10,r12
+ 2705 0c5a 00F4      		brsh .L145
+ 2706 0c5c 00C0      		rjmp .L153
+ 2707               	.L138:
+  91:ks0108.c      **** 			if(y1 > y2) {
+ 2709               	.LM325:
+ 2710 0c5e EF14      		cp r14,r15
+ 2711 0c60 00F4      		brsh .L146
+ 2712 0c62 8F2D      		mov r24,r15
+ 2713 0c64 FE2C      		mov r15,r14
+ 2714 0c66 E82E      		mov r14,r24
+ 2715 0c68 812F      		mov r24,r17
+ 2716 0c6a 1D2D      		mov r17,r13
+ 2717 0c6c D82E      		mov r13,r24
+ 2718               	.L146:
+ 100:ks0108.c      **** 			length = y2-y1;
+ 2720               	.LM326:
+ 2721 0c6e AE2C      		mov r10,r14
+ 2722 0c70 AF18      		sub r10,r15
+ 101:ks0108.c      **** 			m = ((x2-x1)*200)/length;
+ 2724               	.LM327:
+ 2725 0c72 ED2D      		mov r30,r13
+ 2726 0c74 F0E0      		ldi r31,lo8(0)
+ 2727 0c76 612E      		mov r6,r17
+ 2728 0c78 7724      		clr r7
+ 2729 0c7a 4F01      		movw r8,r30
+ 2730 0c7c 8618      		sub r8,r6
+ 2731 0c7e 9708      		sbc r9,r7
+ 2732 0c80 CA2D      		mov r28,r10
+ 2733 0c82 D0E0      		ldi r29,lo8(0)
+ 2734 0c84 88EC      		ldi r24,lo8(200)
+ 2735 0c86 90E0      		ldi r25,hi8(200)
+ 2736 0c88 9C01      		movw r18,r24
+ 2737 0c8a 829E      		mul r8,r18
+ 2738 0c8c C001      		movw r24,r0
+ 2739 0c8e 839E      		mul r8,r19
+ 2740 0c90 900D      		add r25,r0
+ 2741 0c92 929E      		mul r9,r18
+ 2742 0c94 900D      		add r25,r0
+ 2743 0c96 1124      		clr r1
+ 2744 0c98 BE01      		movw r22,r28
+ 2745 0c9a 0E94 0000 		call __divmodhi4
+ 2746 0c9e 2B01      		movw r4,r22
+ 2747 0ca0 312F      		mov r19,r17
+ 2748 0ca2 CC24      		clr r12
+ 115:ks0108.c      **** 				else if(length <= (x1-x2) && x1 > x2)
+ 2750               	.LM328:
+ 2751 0ca4 6E1A      		sub r6,r30
+ 2752 0ca6 7F0A      		sbc r7,r31
+ 2753               	.L152:
+ 105:ks0108.c      **** 				y = ((m*i)/200)+x1;
+ 2755               	.LM329:
+ 2756 0ca8 8C2D      		mov r24,r12
+ 2757 0caa 90E0      		ldi r25,lo8(0)
+ 2758 0cac 849D      		mul r24,r4
+ 2759 0cae F001      		movw r30,r0
+ 2760 0cb0 859D      		mul r24,r5
+ 2761 0cb2 F00D      		add r31,r0
+ 2762 0cb4 949D      		mul r25,r4
+ 2763 0cb6 F00D      		add r31,r0
+ 2764 0cb8 1124      		clr r1
+ 2765 0cba CF01      		movw r24,r30
+ 2766 0cbc 68EC      		ldi r22,lo8(200)
+ 2767 0cbe 70E0      		ldi r23,hi8(200)
+ 2768 0cc0 0E94 0000 		call __divmodhi4
+ 2769 0cc4 E62E      		mov r14,r22
+ 2770 0cc6 E10E      		add r14,r17
+ 107:ks0108.c      **** 				if((m*i)%200 >= 100)
+ 2772               	.LM330:
+ 2773 0cc8 CF01      		movw r24,r30
+ 2774 0cca 68EC      		ldi r22,lo8(200)
+ 2775 0ccc 70E0      		ldi r23,hi8(200)
+ 2776 0cce 0E94 0000 		call __divmodhi4
+ 2777 0cd2 AC01      		movw r20,r24
+ 2778 0cd4 8436      		cpi r24,100
+ 2779 0cd6 9105      		cpc r25,__zero_reg__
+ 2780 0cd8 04F0      		brlt .L147
+ 108:ks0108.c      **** 					y++;
+ 2782               	.LM331:
+ 2783 0cda E394      		inc r14
+ 2784 0cdc 00C0      		rjmp .L148
+ 2785               	.L147:
+ 109:ks0108.c      **** 				else if((m*i)%200 <= -100)
+ 2787               	.LM332:
+ 2788 0cde 8FEF      		ldi r24,hi8(-99)
+ 2789 0ce0 4D39      		cpi r20,lo8(-99)
+ 2790 0ce2 5807      		cpc r21,r24
+ 2791 0ce4 04F4      		brge .L148
+ 110:ks0108.c      **** 					y--;
+ 2793               	.LM333:
+ 2794 0ce6 EA94      		dec r14
+ 2795               	.L148:
+ 2796 0ce8 2C2D      		mov r18,r12
+ 2797 0cea 2F0D      		add r18,r15
+ 112:ks0108.c      **** 				ks0108DrawLine(yAlt, y1+i, y, y1+i, color);
+ 2799               	.LM334:
+ 2800 0cec 832F      		mov r24,r19
+ 2801 0cee 622F      		mov r22,r18
+ 2802 0cf0 4E2D      		mov r20,r14
+ 2803 0cf2 0B2D      		mov r16,r11
+ 2804 0cf4 0E94 0000 		call ks0108DrawLine
+ 113:ks0108.c      **** 				if(length <= (x2-x1) && x1 < x2)
+ 2806               	.LM335:
+ 2807 0cf8 8C16      		cp r8,r28
+ 2808 0cfa 9D06      		cpc r9,r29
+ 2809 0cfc 04F0      		brlt .L149
+ 2810 0cfe 1D15      		cp r17,r13
+ 2811 0d00 00F4      		brsh .L149
+ 114:ks0108.c      **** 					yAlt = y+1;
+ 2813               	.LM336:
+ 2814 0d02 3E2D      		mov r19,r14
+ 2815 0d04 3F5F      		subi r19,lo8(-(1))
+ 113:ks0108.c      **** 				if(length <= (x2-x1) && x1 < x2)
+ 2817               	.LM337:
+ 2818 0d06 00C0      		rjmp .L150
+ 2819               	.L149:
+ 115:ks0108.c      **** 				else if(length <= (x1-x2) && x1 > x2)
+ 2821               	.LM338:
+ 2822 0d08 6C16      		cp r6,r28
+ 2823 0d0a 7D06      		cpc r7,r29
+ 2824 0d0c 04F0      		brlt .L151
+ 2825 0d0e D116      		cp r13,r17
+ 2826 0d10 00F4      		brsh .L151
+ 116:ks0108.c      **** 					yAlt = y-1;
+ 2828               	.LM339:
+ 2829 0d12 3E2D      		mov r19,r14
+ 2830 0d14 3150      		subi r19,lo8(-(-1))
+ 115:ks0108.c      **** 				else if(length <= (x1-x2) && x1 > x2)
+ 2832               	.LM340:
+ 2833 0d16 00C0      		rjmp .L150
+ 2834               	.L151:
+ 2835 0d18 3E2D      		mov r19,r14
+ 2836               	.L150:
+ 104:ks0108.c      **** 			for(i=0; i<=length; i++) {
+ 2838               	.LM341:
+ 2839 0d1a C394      		inc r12
+ 2840 0d1c AC14      		cp r10,r12
+ 2841 0d1e 00F4      		brsh .L152
+ 2842               	.L153:
+ 2843               	/* epilogue start */
+ 122:ks0108.c      **** }
+ 2845               	.LM342:
+ 2846 0d20 DF91      		pop r29
+ 2847 0d22 CF91      		pop r28
+ 2848 0d24 1F91      		pop r17
+ 2849 0d26 0F91      		pop r16
+ 2850 0d28 FF90      		pop r15
+ 2851 0d2a EF90      		pop r14
+ 2852 0d2c DF90      		pop r13
+ 2853 0d2e CF90      		pop r12
+ 2854 0d30 BF90      		pop r11
+ 2855 0d32 AF90      		pop r10
+ 2856 0d34 9F90      		pop r9
+ 2857 0d36 8F90      		pop r8
+ 2858 0d38 7F90      		pop r7
+ 2859 0d3a 6F90      		pop r6
+ 2860 0d3c 5F90      		pop r5
+ 2861 0d3e 4F90      		pop r4
+ 2862 0d40 0895      		ret
+ 2870               	.Lscope20:
+ 2871               	.global	ks0108Inverted
+ 2872               	.global	ks0108Inverted
+ 2873               		.section .bss
+ 2876               	ks0108Inverted:
+ 2877 0000 00        		.skip 1,0
+ 2878               		.comm ks0108Coord,3,1
+ 2879               		.comm ks0108FontRead,2,1
+ 2880               		.comm ks0108FontColor,1,1
+ 2881               		.comm ks0108Font,2,1
+ 2887               		.text
+ 2889               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ks0108.c
+     /tmp/ccsGu66T.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccsGu66T.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccsGu66T.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccsGu66T.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccsGu66T.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccsGu66T.s:91     .text:0000000000000000 ks0108ReadFontData
+     /tmp/ccsGu66T.s:123    .text:0000000000000006 ks0108SelectFont
+                            *COM*:0000000000000002 ks0108Font
+                            *COM*:0000000000000002 ks0108FontRead
+                            *COM*:0000000000000001 ks0108FontColor
+     /tmp/ccsGu66T.s:150    .text:000000000000001c ks0108CharWidth
+     /tmp/ccsGu66T.s:224    .text:000000000000008c ks0108StringWidth
+     /tmp/ccsGu66T.s:279    .text:00000000000000c4 ks0108StringWidth_P
+     /tmp/ccsGu66T.s:359    .text:0000000000000102 ks0108WriteCommand
+     /tmp/ccsGu66T.s:460    .text:000000000000014c ks0108GotoXY
+                            *COM*:0000000000000003 ks0108Coord
+     /tmp/ccsGu66T.s:534    .text:0000000000000196 ks0108DoReadData
+     /tmp/ccsGu66T.s:2876   .bss:0000000000000000 ks0108Inverted
+     /tmp/ccsGu66T.s:656    .text:000000000000020c ks0108WriteData
+     /tmp/ccsGu66T.s:981    .text:000000000000034e ks0108PutChar
+     /tmp/ccsGu66T.s:1293   .text:000000000000051c ks0108Puts_P
+     /tmp/ccsGu66T.s:1368   .text:000000000000056c ks0108Puts
+     /tmp/ccsGu66T.s:1434   .text:00000000000005ba ks0108SetDot
+     /tmp/ccsGu66T.s:1526   .text:0000000000000628 ks0108InvertRect
+     /tmp/ccsGu66T.s:1771   .text:000000000000075c ks0108SetInverted
+     /tmp/ccsGu66T.s:1810   .text:000000000000077c ks0108FillRect
+     /tmp/ccsGu66T.s:2059   .text:00000000000008aa ks0108Init
+     /tmp/ccsGu66T.s:2131   .text:00000000000008fa ks0108DrawRoundRect
+     /tmp/ccsGu66T.s:2418   .text:0000000000000ac6 ks0108DrawRect
+     /tmp/ccsGu66T.s:2481   .text:0000000000000b16 ks0108DrawLine
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+__divmodhi4

@@ -1,0 +1,2940 @@
+
+ks0108Test.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000188e  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .bss          00000009  00800100  00800100  00001922  2**0
+                  ALLOC
+  2 .stab         00001d64  00000000  00000000  00001924  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  3 .stabstr      00000db2  00000000  00000000  00003688  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+       0:	0c 94 1e 05 	jmp	0xa3c	; 0xa3c <__ctors_end>
+       4:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+       8:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+       c:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      10:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      14:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      18:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      1c:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      20:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      24:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      28:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      2c:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      30:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      34:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      38:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      3c:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      40:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      44:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      48:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      4c:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      50:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      54:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      58:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      5c:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      60:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      64:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      68:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+      6c:	0c 94 3b 05 	jmp	0xa76	; 0xa76 <__bad_interrupt>
+
+00000070 <Arial_Bold_14>:
+      70:	22 08 0a 0e 20 60 04 02 05 06 07 08 09 02 03 03     "... `..........
+      80:	05 08 02 04 02 04 07 04 07 07 07 07 07 07 07 07     ................
+      90:	02 02 07 07 07 08 0e 09 08 08 08 07 07 09 08 02     ................
+      a0:	07 08 07 0b 08 09 07 09 09 07 08 08 09 0d 07 08     ................
+      b0:	08 04 04 04 06 08 03 07 07 06 07 07 05 07 07 02     ................
+      c0:	03 06 02 0a 07 07 07 07 05 06 05 07 07 0b 06 07     ................
+      d0:	05 05 01 05 07 08 00 00 00 00 00 00 00 00 fe fe     ................
+      e0:	18 18 1e 1e 00 1e 1e 00 00 00 00 00 90 f8 9e 90     ................
+      f0:	f8 9e 1c 00 00 1c 00 00 18 3c 26 ff 66 cc 88 04     .........<&.f...
+     100:	0c 18 3c 18 0c 04 1c 22 1c c0 30 8e 40 80 00 00     ..<...."..0.@...
+     110:	18 04 00 0c 10 0c 80 cc 7e 72 f2 de 0c 80 00 0c     ........~r......
+     120:	1c 10 10 10 1c 0c 1c 10 1e 1e 00 00 f0 fc 06 1c     ................
+     130:	7c c0 06 fc f0 c0 7c 1c 14 14 0e 14 14 00 00 00     |.....|.........
+     140:	00 00 60 60 60 fc fc 60 60 60 00 00 00 0c 0c 00     ..```..```......
+     150:	00 00 00 00 58 38 c0 c0 c0 c0 00 00 00 00 00 00     ....X8..........
+     160:	18 18 00 c0 38 06 18 04 00 00 f8 fc 0e 06 0e fc     ....8...........
+     170:	f8 04 0c 1c 18 1c 0c 04 18 0c fe fe 00 00 1c 1c     ................
+     180:	18 1c 86 c6 66 3e 1c 18 1c 1c 18 18 18 18 88 8c     ....f>..........
+     190:	06 26 26 fe dc 04 0c 1c 18 18 0c 04 c0 e0 b8 8c     .&&.............
+     1a0:	fe fe 80 04 04 04 04 1c 1c 04 70 7e 3e 36 36 f6     ..........p~>66.
+     1b0:	c6 0c 1c 18 18 18 0c 04 f8 fc 6e 66 66 ee cc 04     ..........nff...
+     1c0:	0c 18 18 18 1c 0c 06 06 06 e6 76 1e 06 00 00 1c     ..........v.....
+     1d0:	1c 00 00 00 9c fe 66 66 66 fe 9c 0c 1c 18 18 18     ......fff.......
+     1e0:	1c 0c 3c 7e 66 66 66 fc f8 0c 1c 18 18 1c 0c 04     ..<~fff.........
+     1f0:	18 18 18 18 18 18 58 38 60 60 f0 f0 98 98 0c 00     ......X8``......
+     200:	00 00 00 04 04 0c d8 d8 d8 d8 d8 d8 d8 00 00 00     ................
+     210:	00 00 00 00 0c 98 98 f0 f0 60 60 0c 04 04 00 00     .........``.....
+     220:	00 00 08 0c 06 c6 e6 76 3c 18 00 00 00 18 18 00     .......v<.......
+     230:	00 00 e0 30 08 c4 f6 3a 1a 1a f2 fa 7e 04 08 f0     ...0...:....~...
+     240:	0c 30 60 4c 9c 98 98 8c 9c 9c 90 48 4c 20 00 c0     .0`L.......HL ..
+     250:	f8 be 86 be f8 c0 00 18 1c 04 04 04 04 04 1c 18     ................
+     260:	fe fe 66 66 66 66 fe dc 1c 1c 18 18 18 18 1c 0c     ..ffff..........
+     270:	f8 fc 0e 06 06 0e 9c 08 04 0c 1c 18 18 1c 0c 04     ................
+     280:	fe fe 06 06 06 0e fc f8 1c 1c 18 18 18 1c 0c 04     ................
+     290:	fe fe 66 66 66 66 66 1c 1c 18 18 18 18 18 fe fe     ..fffff.........
+     2a0:	66 66 66 66 06 1c 1c 00 00 00 00 00 f8 fc 0e 06     ffff............
+     2b0:	06 c6 ce dc c8 04 0c 1c 18 18 18 18 0c 04 fe fe     ................
+     2c0:	60 60 60 60 fe fe 1c 1c 00 00 00 00 1c 1c fe fe     ````............
+     2d0:	1c 1c 80 80 00 00 00 fe fe 0c 1c 18 18 18 1c 0c     ................
+     2e0:	fe fe 60 30 78 ec 86 02 1c 1c 00 00 00 04 1c 18     ..`0x...........
+     2f0:	fe fe 00 00 00 00 00 1c 1c 18 18 18 18 18 fe fe     ................
+     300:	0e 7c e0 00 e0 7c 0e fe fe 1c 1c 00 00 0c 1c 0c     .|...|..........
+     310:	00 00 1c 1c fe fe 1c 78 e0 80 fe fe 1c 1c 00 00     .......x........
+     320:	04 0c 1c 1c f8 fc 0e 06 06 06 0e fc f8 04 0c 1c     ................
+     330:	18 18 18 1c 0c 04 fe fe 66 66 66 7e 3c 1c 1c 00     ........fff~<...
+     340:	00 00 00 00 f8 fc 0e 06 86 06 0e fc f8 04 0c 1c     ................
+     350:	18 18 1c 0c 1c 24 fe fe 66 66 e6 e6 be 1c 00 1c     .....$..ff......
+     360:	1c 00 00 00 0c 1c 18 10 3c 7e 66 66 66 ee cc 0c     ........<~fff...
+     370:	1c 18 18 18 1c 0c 06 06 06 fe fe 06 06 06 00 00     ................
+     380:	00 1c 1c 00 00 00 fe fe 00 00 00 00 fe fe 04 0c     ................
+     390:	1c 18 18 1c 0c 04 02 1e fc e0 00 e0 fc 1e 02 00     ................
+     3a0:	00 00 1c 1c 1c 00 00 00 06 fe f8 00 f0 fe 0e fe     ................
+     3b0:	f0 00 f8 fe 06 00 00 1c 1c 1c 00 00 00 1c 1c 1c     ................
+     3c0:	00 00 06 0e f8 f0 f8 0e 06 18 1c 04 00 04 1c 18     ................
+     3d0:	06 0e 38 f0 f0 38 0e 06 00 00 00 1c 1c 00 00 00     ..8..8..........
+     3e0:	06 06 86 e6 76 1e 0e 06 18 1c 1c 18 18 18 18 18     ....v...........
+     3f0:	fe fe 06 06 fc fc c0 c0 06 38 c0 00 00 00 04 18     .........8......
+     400:	06 06 fe fe c0 c0 fc fc 20 38 0e 0e 38 20 00 00     ........ 8..8 ..
+	...
+     41c:	80 80 80 80 80 80 80 80 02 06 04 00 00 00 10 98     ................
+     42c:	d8 58 f8 f0 00 0c 1c 18 18 0c 1c 10 fe fe 30 18     .X............0.
+     43c:	38 f0 e0 1c 1c 0c 18 1c 0c 04 e0 f0 18 18 38 30     8.............80
+     44c:	04 0c 18 18 1c 0c e0 f0 38 18 30 fe fe 04 0c 1c     ........8.0.....
+     45c:	18 0c 1c 1c e0 f0 d8 d8 d8 f0 e0 04 0c 18 18 18     ................
+     46c:	18 08 18 fc fe 1a 1a 00 1c 1c 00 00 e0 f0 38 18     ..............8.
+     47c:	30 f8 f8 64 ec dc d8 cc fc 7c fe fe 30 18 18 f8     0..d.....|..0...
+     48c:	f0 1c 1c 00 00 00 1c 1c fa fa 1c 1c 00 fa fa c0     ................
+     49c:	fc 7c fe fe e0 f0 98 08 1c 1c 00 04 1c 18 fe fe     .|..............
+     4ac:	1c 1c f8 f8 10 18 f8 f0 18 18 f8 f0 1c 1c 00 00     ................
+     4bc:	1c 1c 00 00 1c 1c f8 f8 30 18 18 f8 f0 1c 1c 00     ........0.......
+     4cc:	00 00 1c 1c e0 f0 38 18 38 f0 e0 04 0c 1c 18 1c     ......8.8.......
+     4dc:	0c 04 f8 f8 30 18 38 f0 e0 fc fc 0c 18 1c 0c 04     ....0.8.........
+     4ec:	e0 f0 38 18 30 f8 f8 04 0c 1c 18 0c fc fc f8 f8     ..8.0...........
+     4fc:	30 18 18 1c 1c 00 00 00 70 f8 d8 d8 d8 90 08 18     0.......p.......
+     50c:	18 18 1c 0c 18 fc fe 18 18 00 0c 1c 18 18 f8 f8     ................
+     51c:	00 00 00 f8 f8 0c 1c 18 18 0c 1c 1c 38 f8 c0 00     ............8...
+     52c:	c0 f8 38 00 00 1c 1c 1c 00 00 18 f8 e0 00 f0 38     ..8............8
+     53c:	f0 00 e0 f8 18 00 00 1c 1c 0c 00 0c 1c 1c 00 00     ................
+     54c:	18 38 e0 e0 38 18 18 1c 04 04 1c 18 18 f8 e0 00     .8..8...........
+     55c:	e0 f8 18 00 84 fc f8 3c 04 00 18 98 d8 78 38 1c     .......<.....x8.
+     56c:	1c 18 18 18 80 fc 7e 06 06 00 7c fc c0 c0 fe fc     ......~...|.....
+     57c:	06 06 7e fc 80 c0 c0 fc 7c 00 60 30 30 70 60 60     ..~.....|.`00p``
+     58c:	30 00 00 00 00 00 00 00 fe 02 02 02 02 02 02 fe     0...............
+     59c:	1c 10 10 10 10 10 10 1c                             ........
+
+000005a4 <Corsiva_12>:
+     5a4:	16 3a 0a 0b 20 60 03 02 02 06 05 07 09 01 03 04     .:.. `..........
+     5b4:	02 05 02 03 01 05 05 04 05 04 05 06 05 05 05 05     ................
+     5c4:	02 03 05 05 05 04 07 07 07 06 08 07 07 07 0a 05     ................
+     5d4:	06 09 07 09 0a 06 07 09 09 06 08 08 08 0b 09 09     ................
+     5e4:	07 03 03 04 03 06 02 04 04 04 06 04 06 06 04 03     ................
+     5f4:	04 06 03 06 04 04 05 05 04 04 04 04 06 08 07 05     ................
+     604:	06 03 01 04 05 06 00 00 00 00 00 00 80 3e 00 00     .............>..
+     614:	08 06 00 00 a0 78 ae 78 2e 08 00 00 00 00 00 00     .....x.x........
+     624:	80 8c f2 bf 62 00 20 00 00 00 1c 92 7e 0c e2 90     ....b. .....~...
+     634:	70 00 00 00 00 00 00 00 70 c8 a8 b8 6c be 02 c2     p.......p...l...
+     644:	01 00 00 00 00 00 00 20 00 00 08 00 e0 18 06 60     ....... .......`
+     654:	80 00 00 00 c3 3c 40 20 00 00 0c 0f 00 00 10 10     .....<@ ........
+     664:	7c 10 10 00 00 00 00 00 00 80 40 20 20 20 20 00     |.........@    .
+     674:	00 00 80 00 00 c0 30 0c 03 60 00 00 00 00 78 84     ......0..`....x.
+     684:	82 42 3c 00 00 00 00 00 80 88 fc 86 00 00 00 00     .B<.............
+     694:	c0 c4 a2 92 4e 00 00 00 00 00 c0 80 da 76 00 00     ....N........v..
+     6a4:	00 00 20 30 a8 7e 02 00 00 00 00 00 80 80 84 4a     .. 0.~.........J
+     6b4:	32 02 00 00 00 00 00 00 70 ac 94 72 02 00 00 00     2.......p..r....
+     6c4:	00 00 c4 32 0a 06 02 00 00 00 00 00 e0 ac 92 6a     ...2...........j
+     6d4:	06 00 00 00 00 00 80 9c 52 72 1c 00 00 00 00 00     ........Rr......
+     6e4:	80 08 00 00 00 80 08 40 20 00 30 30 48 48 48 00     .......@ .00HHH.
+     6f4:	00 00 00 00 28 28 28 28 28 00 00 00 00 00 48 48     ....(((((.....HH
+     704:	48 30 30 00 00 00 00 00 80 36 12 0c 00 00 00 00     H00......6......
+     714:	70 cc b4 aa ba 62 1c 00 00 00 00 00 00 00 00 80     p....b..........
+     724:	4c 32 2e fe 82 20 00 00 00 00 00 00 38 24 86 fa     L2... ......8$..
+     734:	8e 8a 76 00 00 00 00 00 00 00 f0 8c 04 02 82 0c     ..v.............
+     744:	00 20 20 20 00 00 38 4c 86 ea 9a 82 46 3c 00 00     .   ..8L....F<..
+     754:	00 00 00 00 00 00 38 84 e2 9e 92 ba c6 00 00 00     ......8.........
+     764:	00 00 00 00 1c 86 e2 9e 12 3a 06 00 00 00 00 00     .........:......
+     774:	00 00 70 8c 84 82 d2 32 16 00 80 80 c0 20 00 00     ..p....2..... ..
+     784:	c0 8c c2 3a 16 90 f8 86 01 03 00 00 00 00 00 00     ...:............
+     794:	00 00 00 00 80 c0 fa 06 02 00 00 00 00 00 00 00     ................
+     7a4:	0c c2 3a 06 60 40 40 20 00 00 8c 82 f2 1e 78 88     ..:.`@@ ......x.
+     7b4:	06 02 02 00 00 00 00 00 20 40 40 40 80 c0 b8 84     ........ @@@....
+     7c4:	82 82 c0 00 00 00 00 00 00 00 80 9c 62 1e f8 60     ............b..`
+     7d4:	90 fc 0e 00 00 00 00 00 00 00 00 00 80 0c e2 12     ................
+     7e4:	0e f0 70 0c 02 02 20 20 00 00 00 00 00 00 00 00     ..p...  ........
+     7f4:	78 c4 82 82 46 3c 00 00 00 00 00 00 38 cc 86 fa     x...F<......8...
+     804:	92 12 0c 00 00 00 00 00 00 00 78 c4 82 82 42 26     ..........x...B&
+     814:	1c 00 00 00 00 00 20 60 c0 80 80 40 38 a4 86 fa     ...... `...@8...
+     824:	32 d2 0c 00 00 00 00 00 00 00 00 60 40 40 80 00     2..........`@@..
+     834:	0c 92 e2 0e 00 20 20 20 00 00 1c 86 82 f2 8e 02     .....   ........
+     844:	02 03 00 00 00 00 00 00 00 00 0c 7a 86 80 80 40     ...........z...@
+     854:	30 0f 00 00 00 00 00 00 00 00 0c 06 fe 42 20 10     0............B .
+     864:	0c 03 00 00 00 00 00 00 00 00 0c 06 fe 32 08 04     .............2..
+     874:	fe 20 10 08 07 00 00 00 00 00 00 00 00 00 00 00     . ..............
+     884:	00 80 40 22 1e f4 82 01 01 20 20 00 00 00 00 00     ..@".....  .....
+     894:	00 00 1c 04 82 c6 bc 8c 02 02 01 00 00 00 00 00     ................
+     8a4:	00 00 00 00 80 c0 a6 92 8a 86 c2 00 00 00 00 00     ................
+     8b4:	00 00 00 f0 0f c0 a0 00 07 fc 80 00 00 60 00 00     .............`..
+     8c4:	f1 0f 80 e0 00 00 04 02 04 00 00 00 00 00 00 00     ................
+     8d4:	00 00 40 40 40 40 40 40 01 02 00 00 e0 90 c8 b8     ..@@@@@@........
+     8e4:	00 00 00 00 e0 9e 49 39 00 00 00 00 e0 90 88 48     ......I9.......H
+     8f4:	00 00 00 00 e0 90 48 f8 4e 01 00 00 00 00 00 00     ......H.N.......
+     904:	f0 b0 a8 58 00 00 00 00 00 90 78 16 01 01 40 20     ...X......x...@ 
+     914:	00 00 00 00 00 e0 90 88 e8 18 e0 80 80 c0 60 00     ..............`.
+     924:	e0 1e d1 b9 00 00 00 00 e0 38 02 00 00 00 00 90     .........8......
+     934:	78 02 80 60 00 00 e0 3e e9 19 00 00 00 00 00 60     x..`...>.......`
+     944:	40 40 e0 9c 42 00 00 00 c8 38 d0 38 f0 98 00 00     @@..B....8.8....
+     954:	00 00 00 00 e8 18 d0 b8 00 00 00 00 f0 88 c8 38     ...............8
+     964:	00 00 00 00 88 f8 90 48 38 e0 80 00 00 00 e0 90     .......H8.......
+     974:	88 e8 18 00 80 c0 a0 00 c8 38 10 08 00 00 00 00     .........8......
+     984:	c0 98 e8 08 00 00 00 00 e8 9c 88 40 00 00 00 00     ...........@....
+     994:	e8 98 e0 98 00 00 00 00 10 08 f8 88 60 18 00 00     ............`...
+     9a4:	00 00 00 00 10 08 f8 88 40 f8 40 38 00 00 00 00     ........@.@8....
+     9b4:	00 00 00 00 80 d0 58 f0 10 08 00 00 00 00 00 20     ......X........ 
+     9c4:	40 60 10 18 f0 c0 38 80 40 20 00 00 80 d8 a8 98     @`....8.@ ......
+     9d4:	d8 08 00 00 00 00 00 00 a0 d8 07 e0 80 00 ff e0     ................
+     9e4:	00 00 d1 2f 80 c0 20 00 08 08 18 10 10 00 00 00     .../.. .........
+     9f4:	00 00 ff 81 81 81 81 ff 00 00 00 00 00 00           ..............
+
+00000a02 <__c.1420>:
+     a02:	68 74 74 70 3a 2f 2f 77 77 77 2e 61 70 65 74 65     http://www.apete
+     a12:	63 68 2e 64 65 0a 6d 61 69 6c 74 6f 3a 6d 65 40     ch.de.mailto:me@
+     a22:	61 70 65 74 65 63 68 2e 64 65 00                    apetech.de.
+
+00000a2d <__c.1418>:
+     a2d:	4b 53 30 31 30 38 2d 54 72 65 69 62 65 72 00        KS0108-Treiber.
+
+00000a3c <__ctors_end>:
+     a3c:	11 24       	eor	r1, r1
+     a3e:	1f be       	out	0x3f, r1	; 63
+     a40:	cf ef       	ldi	r28, 0xFF	; 255
+     a42:	d4 e0       	ldi	r29, 0x04	; 4
+     a44:	de bf       	out	0x3e, r29	; 62
+     a46:	cd bf       	out	0x3d, r28	; 61
+
+00000a48 <__do_copy_data>:
+     a48:	11 e0       	ldi	r17, 0x01	; 1
+     a4a:	a0 e0       	ldi	r26, 0x00	; 0
+     a4c:	b1 e0       	ldi	r27, 0x01	; 1
+     a4e:	ee e8       	ldi	r30, 0x8E	; 142
+     a50:	f8 e1       	ldi	r31, 0x18	; 24
+     a52:	02 c0       	rjmp	.+4      	; 0xa58 <__do_copy_data+0x10>
+     a54:	05 90       	lpm	r0, Z+
+     a56:	0d 92       	st	X+, r0
+     a58:	a0 30       	cpi	r26, 0x00	; 0
+     a5a:	b1 07       	cpc	r27, r17
+     a5c:	d9 f7       	brne	.-10     	; 0xa54 <__do_copy_data+0xc>
+
+00000a5e <__do_clear_bss>:
+     a5e:	11 e0       	ldi	r17, 0x01	; 1
+     a60:	a0 e0       	ldi	r26, 0x00	; 0
+     a62:	b1 e0       	ldi	r27, 0x01	; 1
+     a64:	01 c0       	rjmp	.+2      	; 0xa68 <.do_clear_bss_start>
+
+00000a66 <.do_clear_bss_loop>:
+     a66:	1d 92       	st	X+, r1
+
+00000a68 <.do_clear_bss_start>:
+     a68:	a9 30       	cpi	r26, 0x09	; 9
+     a6a:	b1 07       	cpc	r27, r17
+     a6c:	e1 f7       	brne	.-8      	; 0xa66 <.do_clear_bss_loop>
+     a6e:	0e 94 3d 05 	call	0xa7a	; 0xa7a <main>
+     a72:	0c 94 45 0c 	jmp	0x188a	; 0x188a <_exit>
+
+00000a76 <__bad_interrupt>:
+     a76:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000a7a <main>:
+
+#include "ks0108.h"
+#include "arial_bold_14.h"
+#include "corsiva_12.h"
+
+int main(void) {
+     a7a:	ef 92       	push	r14
+     a7c:	0f 93       	push	r16
+     a7e:	df 93       	push	r29
+     a80:	cf 93       	push	r28
+     a82:	00 d0       	rcall	.+0      	; 0xa84 <main+0xa>
+     a84:	cd b7       	in	r28, 0x3d	; 61
+     a86:	de b7       	in	r29, 0x3e	; 62
+	
+	// Wait a little while the display starts up
+	for(volatile uint16_t i=0; i<15000; i++);
+     a88:	1a 82       	std	Y+2, r1	; 0x02
+     a8a:	19 82       	std	Y+1, r1	; 0x01
+     a8c:	05 c0       	rjmp	.+10     	; 0xa98 <main+0x1e>
+     a8e:	89 81       	ldd	r24, Y+1	; 0x01
+     a90:	9a 81       	ldd	r25, Y+2	; 0x02
+     a92:	01 96       	adiw	r24, 0x01	; 1
+     a94:	9a 83       	std	Y+2, r25	; 0x02
+     a96:	89 83       	std	Y+1, r24	; 0x01
+     a98:	89 81       	ldd	r24, Y+1	; 0x01
+     a9a:	9a 81       	ldd	r25, Y+2	; 0x02
+     a9c:	2a e3       	ldi	r18, 0x3A	; 58
+     a9e:	88 39       	cpi	r24, 0x98	; 152
+     aa0:	92 07       	cpc	r25, r18
+     aa2:	a8 f3       	brcs	.-22     	; 0xa8e <main+0x14>
+	
+	// Initialize the LCD
+	ks0108Init(0);
+     aa4:	80 e0       	ldi	r24, 0x00	; 0
+     aa6:	0e 94 d2 09 	call	0x13a4	; 0x13a4 <ks0108Init>
+	
+	// Select a font
+	ks0108SelectFont(Arial_Bold_14, ks0108ReadFontData, BLACK);
+     aaa:	80 e7       	ldi	r24, 0x70	; 112
+     aac:	90 e0       	ldi	r25, 0x00	; 0
+     aae:	6d e7       	ldi	r22, 0x7D	; 125
+     ab0:	75 e0       	ldi	r23, 0x05	; 5
+     ab2:	4f ef       	ldi	r20, 0xFF	; 255
+     ab4:	0e 94 80 05 	call	0xb00	; 0xb00 <ks0108SelectFont>
+	// Set a position
+	ks0108GotoXY(15,10);
+     ab8:	8f e0       	ldi	r24, 0x0F	; 15
+     aba:	6a e0       	ldi	r22, 0x0A	; 10
+     abc:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+	// Print some text
+	ks0108Puts_P(PSTR("KS0108-Treiber"));
+     ac0:	8d e2       	ldi	r24, 0x2D	; 45
+     ac2:	9a e0       	ldi	r25, 0x0A	; 10
+     ac4:	0e 94 0b 08 	call	0x1016	; 0x1016 <ks0108Puts_P>
+	// a nice little round rect
+	ks0108DrawRoundRect(5, 5, 117, 20, 8, BLACK);
+     ac8:	85 e0       	ldi	r24, 0x05	; 5
+     aca:	65 e0       	ldi	r22, 0x05	; 5
+     acc:	45 e7       	ldi	r20, 0x75	; 117
+     ace:	24 e1       	ldi	r18, 0x14	; 20
+     ad0:	08 e0       	ldi	r16, 0x08	; 8
+     ad2:	ee 24       	eor	r14, r14
+     ad4:	ea 94       	dec	r14
+     ad6:	0e 94 fa 09 	call	0x13f4	; 0x13f4 <ks0108DrawRoundRect>
+
+	// Once again :)
+	// Select a font
+	ks0108SelectFont(Corsiva_12, ks0108ReadFontData, BLACK);
+     ada:	84 ea       	ldi	r24, 0xA4	; 164
+     adc:	95 e0       	ldi	r25, 0x05	; 5
+     ade:	6d e7       	ldi	r22, 0x7D	; 125
+     ae0:	75 e0       	ldi	r23, 0x05	; 5
+     ae2:	4f ef       	ldi	r20, 0xFF	; 255
+     ae4:	0e 94 80 05 	call	0xb00	; 0xb00 <ks0108SelectFont>
+	// Set a position
+	ks0108GotoXY(5,30);
+     ae8:	85 e0       	ldi	r24, 0x05	; 5
+     aea:	6e e1       	ldi	r22, 0x1E	; 30
+     aec:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+	// Print some text
+	ks0108Puts_P(PSTR("http://www.apetech.de\nmailto:me@apetech.de"));
+     af0:	82 e0       	ldi	r24, 0x02	; 2
+     af2:	9a e0       	ldi	r25, 0x0A	; 10
+     af4:	0e 94 0b 08 	call	0x1016	; 0x1016 <ks0108Puts_P>
+     af8:	ff cf       	rjmp	.-2      	; 0xaf8 <main+0x7e>
+
+00000afa <ks0108ReadFontData>:
+//
+// Font Functions
+//
+
+uint8_t ks0108ReadFontData(const uint8_t* ptr) {
+	return pgm_read_byte(ptr);
+     afa:	fc 01       	movw	r30, r24
+     afc:	84 91       	lpm	r24, Z
+}
+     afe:	08 95       	ret
+
+00000b00 <ks0108SelectFont>:
+
+void ks0108SelectFont(const char* font, ks0108FontCallback callback, uint8_t color) {
+	ks0108Font = font;
+     b00:	90 93 08 01 	sts	0x0108, r25
+     b04:	80 93 07 01 	sts	0x0107, r24
+	ks0108FontRead = callback;
+     b08:	70 93 06 01 	sts	0x0106, r23
+     b0c:	60 93 05 01 	sts	0x0105, r22
+	ks0108FontColor = color;
+     b10:	40 93 01 01 	sts	0x0101, r20
+}
+     b14:	08 95       	ret
+
+00000b16 <ks0108CharWidth>:
+		}
+		str++;
+	}
+}
+
+uint8_t ks0108CharWidth(char c) {
+     b16:	0f 93       	push	r16
+     b18:	1f 93       	push	r17
+     b1a:	08 2f       	mov	r16, r24
+	uint8_t width = 0;
+	uint8_t firstChar = ks0108FontRead(ks0108Font+FONT_FIRST_CHAR);
+     b1c:	80 91 07 01 	lds	r24, 0x0107
+     b20:	90 91 08 01 	lds	r25, 0x0108
+     b24:	e0 91 05 01 	lds	r30, 0x0105
+     b28:	f0 91 06 01 	lds	r31, 0x0106
+     b2c:	04 96       	adiw	r24, 0x04	; 4
+     b2e:	09 95       	icall
+     b30:	18 2f       	mov	r17, r24
+	uint8_t charCount = ks0108FontRead(ks0108Font+FONT_CHAR_COUNT);
+     b32:	80 91 07 01 	lds	r24, 0x0107
+     b36:	90 91 08 01 	lds	r25, 0x0108
+     b3a:	e0 91 05 01 	lds	r30, 0x0105
+     b3e:	f0 91 06 01 	lds	r31, 0x0106
+     b42:	05 96       	adiw	r24, 0x05	; 5
+     b44:	09 95       	icall
+	
+	// read width data
+	if(c >= firstChar && c < (firstChar+charCount)) {
+     b46:	01 17       	cp	r16, r17
+     b48:	d0 f0       	brcs	.+52     	; 0xb7e <ks0108CharWidth+0x68>
+     b4a:	40 2f       	mov	r20, r16
+     b4c:	50 e0       	ldi	r21, 0x00	; 0
+     b4e:	21 2f       	mov	r18, r17
+     b50:	30 e0       	ldi	r19, 0x00	; 0
+     b52:	28 0f       	add	r18, r24
+     b54:	31 1d       	adc	r19, r1
+     b56:	42 17       	cp	r20, r18
+     b58:	53 07       	cpc	r21, r19
+     b5a:	8c f4       	brge	.+34     	; 0xb7e <ks0108CharWidth+0x68>
+		c -= firstChar;
+		width = ks0108FontRead(ks0108Font+FONT_WIDTH_TABLE+c)+1;
+     b5c:	01 1b       	sub	r16, r17
+     b5e:	10 e0       	ldi	r17, 0x00	; 0
+     b60:	0a 5f       	subi	r16, 0xFA	; 250
+     b62:	1f 4f       	sbci	r17, 0xFF	; 255
+     b64:	80 91 07 01 	lds	r24, 0x0107
+     b68:	90 91 08 01 	lds	r25, 0x0108
+     b6c:	e0 91 05 01 	lds	r30, 0x0105
+     b70:	f0 91 06 01 	lds	r31, 0x0106
+     b74:	80 0f       	add	r24, r16
+     b76:	91 1f       	adc	r25, r17
+     b78:	09 95       	icall
+     b7a:	8f 5f       	subi	r24, 0xFF	; 255
+     b7c:	01 c0       	rjmp	.+2      	; 0xb80 <ks0108CharWidth+0x6a>
+     b7e:	80 e0       	ldi	r24, 0x00	; 0
+	}
+	
+	return width;
+}
+     b80:	1f 91       	pop	r17
+     b82:	0f 91       	pop	r16
+     b84:	08 95       	ret
+
+00000b86 <ks0108StringWidth>:
+
+uint16_t ks0108StringWidth(char* str) {
+     b86:	ef 92       	push	r14
+     b88:	ff 92       	push	r15
+     b8a:	0f 93       	push	r16
+     b8c:	1f 93       	push	r17
+     b8e:	cf 93       	push	r28
+     b90:	df 93       	push	r29
+     b92:	8c 01       	movw	r16, r24
+     b94:	c0 e0       	ldi	r28, 0x00	; 0
+     b96:	d0 e0       	ldi	r29, 0x00	; 0
+	uint16_t width = 0;
+	
+	while(*str != 0) {
+     b98:	06 c0       	rjmp	.+12     	; 0xba6 <ks0108StringWidth+0x20>
+		width += ks0108CharWidth(*str++);
+     b9a:	0f 5f       	subi	r16, 0xFF	; 255
+     b9c:	1f 4f       	sbci	r17, 0xFF	; 255
+     b9e:	0e 94 8b 05 	call	0xb16	; 0xb16 <ks0108CharWidth>
+     ba2:	c8 0f       	add	r28, r24
+     ba4:	d1 1d       	adc	r29, r1
+}
+
+uint16_t ks0108StringWidth(char* str) {
+	uint16_t width = 0;
+	
+	while(*str != 0) {
+     ba6:	f8 01       	movw	r30, r16
+     ba8:	80 81       	ld	r24, Z
+     baa:	88 23       	and	r24, r24
+     bac:	b1 f7       	brne	.-20     	; 0xb9a <ks0108StringWidth+0x14>
+		width += ks0108CharWidth(*str++);
+	}
+	
+	return width;
+}
+     bae:	ce 01       	movw	r24, r28
+     bb0:	df 91       	pop	r29
+     bb2:	cf 91       	pop	r28
+     bb4:	1f 91       	pop	r17
+     bb6:	0f 91       	pop	r16
+     bb8:	ff 90       	pop	r15
+     bba:	ef 90       	pop	r14
+     bbc:	08 95       	ret
+
+00000bbe <ks0108StringWidth_P>:
+
+uint16_t ks0108StringWidth_P(PGM_P str) {
+     bbe:	ef 92       	push	r14
+     bc0:	ff 92       	push	r15
+     bc2:	0f 93       	push	r16
+     bc4:	1f 93       	push	r17
+     bc6:	cf 93       	push	r28
+     bc8:	df 93       	push	r29
+     bca:	8c 01       	movw	r16, r24
+     bcc:	c0 e0       	ldi	r28, 0x00	; 0
+     bce:	d0 e0       	ldi	r29, 0x00	; 0
+	uint16_t width = 0;
+	
+	while(pgm_read_byte(str) != 0) {
+     bd0:	08 c0       	rjmp	.+16     	; 0xbe2 <ks0108StringWidth_P+0x24>
+		width += ks0108CharWidth(pgm_read_byte(str++));
+     bd2:	0f 5f       	subi	r16, 0xFF	; 255
+     bd4:	1f 4f       	sbci	r17, 0xFF	; 255
+     bd6:	f9 01       	movw	r30, r18
+     bd8:	84 91       	lpm	r24, Z
+     bda:	0e 94 8b 05 	call	0xb16	; 0xb16 <ks0108CharWidth>
+     bde:	c8 0f       	add	r28, r24
+     be0:	d1 1d       	adc	r29, r1
+     be2:	98 01       	movw	r18, r16
+}
+
+uint16_t ks0108StringWidth_P(PGM_P str) {
+	uint16_t width = 0;
+	
+	while(pgm_read_byte(str) != 0) {
+     be4:	f8 01       	movw	r30, r16
+     be6:	94 91       	lpm	r25, Z
+     be8:	99 23       	and	r25, r25
+     bea:	99 f7       	brne	.-26     	; 0xbd2 <ks0108StringWidth_P+0x14>
+		width += ks0108CharWidth(pgm_read_byte(str++));
+	}
+	
+	return width;
+}
+     bec:	ce 01       	movw	r24, r28
+     bee:	df 91       	pop	r29
+     bf0:	cf 91       	pop	r28
+     bf2:	1f 91       	pop	r17
+     bf4:	0f 91       	pop	r16
+     bf6:	ff 90       	pop	r15
+     bf8:	ef 90       	pop	r14
+     bfa:	08 95       	ret
+
+00000bfc <ks0108WriteCommand>:
+inline uint8_t ks0108ReadData(void) {
+	ks0108DoReadData(1);							// dummy read
+	return ks0108DoReadData(0);						// "real" read
+}
+
+void ks0108WriteCommand(uint8_t cmd, uint8_t chip) {
+     bfc:	df 93       	push	r29
+     bfe:	cf 93       	push	r28
+     c00:	0f 92       	push	r0
+     c02:	cd b7       	in	r28, 0x3d	; 61
+     c04:	de b7       	in	r29, 0x3e	; 62
+	if(chip == CHIP1) {
+     c06:	66 23       	and	r22, r22
+     c08:	19 f4       	brne	.+6      	; 0xc10 <ks0108WriteCommand+0x14>
+		LCD_CMD_PORT &= ~(0x01 << CSEL2);			// deselect chip 2
+     c0a:	ac 98       	cbi	0x15, 4	; 21
+		LCD_CMD_PORT |= 0x01 << CSEL1;				// select chip 1
+     c0c:	ab 9a       	sbi	0x15, 3	; 21
+     c0e:	04 c0       	rjmp	.+8      	; 0xc18 <ks0108WriteCommand+0x1c>
+	} else if(chip == CHIP2) {
+     c10:	61 30       	cpi	r22, 0x01	; 1
+     c12:	11 f4       	brne	.+4      	; 0xc18 <ks0108WriteCommand+0x1c>
+		LCD_CMD_PORT &= ~(0x01 << CSEL1);			// deselect chip 1
+     c14:	ab 98       	cbi	0x15, 3	; 21
+		LCD_CMD_PORT |= 0x01 << CSEL2;				// select chip 2
+     c16:	ac 9a       	sbi	0x15, 4	; 21
+	}
+	
+	LCD_CMD_PORT &= ~(0x01 << D_I);					// D/I = 0
+     c18:	a8 98       	cbi	0x15, 0	; 21
+	LCD_CMD_PORT &= ~(0x01 << R_W);					// R/W = 0
+     c1a:	a9 98       	cbi	0x15, 1	; 21
+	LCD_DATA_DIR = 0xFF;							// data port is output
+     c1c:	9f ef       	ldi	r25, 0xFF	; 255
+     c1e:	94 bb       	out	0x14, r25	; 20
+	LCD_DATA_OUT = cmd;								// write command
+     c20:	85 bb       	out	0x15, r24	; 21
+	ks0108ClearScreen();							// display clear
+	ks0108GotoXY(0,0);
+}
+
+inline void ks0108Enable(void) {
+	LCD_CMD_PORT |= 0x01 << EN;						// EN high level width: min. 450ns
+     c22:	aa 9a       	sbi	0x15, 2	; 21
+	asm volatile("nop\n\t"
+     c24:	00 00       	nop
+     c26:	00 00       	nop
+     c28:	00 00       	nop
+				 "nop\n\t"
+				 "nop\n\t"
+				 ::);
+	LCD_CMD_PORT &= ~(0x01 << EN);
+     c2a:	aa 98       	cbi	0x15, 2	; 21
+	for(volatile uint8_t i=0; i<8; i++);			// a little delay loop (faster than reading the busy flag)
+     c2c:	19 82       	std	Y+1, r1	; 0x01
+     c2e:	03 c0       	rjmp	.+6      	; 0xc36 <ks0108WriteCommand+0x3a>
+     c30:	89 81       	ldd	r24, Y+1	; 0x01
+     c32:	8f 5f       	subi	r24, 0xFF	; 255
+     c34:	89 83       	std	Y+1, r24	; 0x01
+     c36:	89 81       	ldd	r24, Y+1	; 0x01
+     c38:	88 30       	cpi	r24, 0x08	; 8
+     c3a:	d0 f3       	brcs	.-12     	; 0xc30 <ks0108WriteCommand+0x34>
+	LCD_CMD_PORT &= ~(0x01 << D_I);					// D/I = 0
+	LCD_CMD_PORT &= ~(0x01 << R_W);					// R/W = 0
+	LCD_DATA_DIR = 0xFF;							// data port is output
+	LCD_DATA_OUT = cmd;								// write command
+	ks0108Enable();									// enable
+	LCD_DATA_OUT = 0x00;
+     c3c:	15 ba       	out	0x15, r1	; 21
+}
+     c3e:	0f 90       	pop	r0
+     c40:	cf 91       	pop	r28
+     c42:	df 91       	pop	r29
+     c44:	08 95       	ret
+
+00000c46 <ks0108GotoXY>:
+	}
+	
+	return width;
+}
+
+void ks0108GotoXY(uint8_t x, uint8_t y) {
+     c46:	1f 93       	push	r17
+	uint8_t chip = CHIP1, cmd;
+	
+	if(x > 127) x = 0;								// ensure that coordinates are legal
+     c48:	87 fd       	sbrc	r24, 7
+     c4a:	80 e0       	ldi	r24, 0x00	; 0
+	if(y > 63)  y = 0;
+     c4c:	60 34       	cpi	r22, 0x40	; 64
+     c4e:	08 f0       	brcs	.+2      	; 0xc52 <ks0108GotoXY+0xc>
+     c50:	60 e0       	ldi	r22, 0x00	; 0
+	
+	ks0108Coord.x = x;								// save new coordinates
+     c52:	80 93 02 01 	sts	0x0102, r24
+	ks0108Coord.y = y;
+     c56:	60 93 03 01 	sts	0x0103, r22
+	ks0108Coord.page = y/8;
+     c5a:	66 95       	lsr	r22
+     c5c:	66 95       	lsr	r22
+     c5e:	66 95       	lsr	r22
+     c60:	60 93 04 01 	sts	0x0104, r22
+	
+	if(x >= 64) {									// select the right chip
+     c64:	80 34       	cpi	r24, 0x40	; 64
+     c66:	10 f4       	brcc	.+4      	; 0xc6c <ks0108GotoXY+0x26>
+     c68:	60 e0       	ldi	r22, 0x00	; 0
+     c6a:	02 c0       	rjmp	.+4      	; 0xc70 <ks0108GotoXY+0x2a>
+		x -= 64;
+     c6c:	80 54       	subi	r24, 0x40	; 64
+     c6e:	61 e0       	ldi	r22, 0x01	; 1
+		chip = CHIP2;
+	}
+	cmd = LCD_SET_ADD | x;
+	ks0108WriteCommand(cmd, chip);					// set x address on active chip
+     c70:	80 64       	ori	r24, 0x40	; 64
+     c72:	0e 94 fe 05 	call	0xbfc	; 0xbfc <ks0108WriteCommand>
+	
+	cmd = LCD_SET_PAGE | ks0108Coord.page;			// set y address on both chips
+     c76:	10 91 04 01 	lds	r17, 0x0104
+     c7a:	18 6b       	ori	r17, 0xB8	; 184
+	ks0108WriteCommand(cmd, CHIP1);
+     c7c:	81 2f       	mov	r24, r17
+     c7e:	60 e0       	ldi	r22, 0x00	; 0
+     c80:	0e 94 fe 05 	call	0xbfc	; 0xbfc <ks0108WriteCommand>
+	ks0108WriteCommand(cmd, CHIP2);
+     c84:	81 2f       	mov	r24, r17
+     c86:	61 e0       	ldi	r22, 0x01	; 1
+     c88:	0e 94 fe 05 	call	0xbfc	; 0xbfc <ks0108WriteCommand>
+}
+     c8c:	1f 91       	pop	r17
+     c8e:	08 95       	ret
+
+00000c90 <ks0108DoReadData>:
+				 ::);
+	LCD_CMD_PORT &= ~(0x01 << EN);
+	for(volatile uint8_t i=0; i<8; i++);			// a little delay loop (faster than reading the busy flag)
+}
+
+uint8_t ks0108DoReadData(uint8_t first) {
+     c90:	1f 93       	push	r17
+     c92:	df 93       	push	r29
+     c94:	cf 93       	push	r28
+     c96:	0f 92       	push	r0
+     c98:	cd b7       	in	r28, 0x3d	; 61
+     c9a:	de b7       	in	r29, 0x3e	; 62
+	uint8_t data;
+	volatile uint8_t i;
+	
+	LCD_DATA_OUT = 0x00;
+     c9c:	15 ba       	out	0x15, r1	; 21
+	LCD_DATA_DIR = 0x00;							// data port is input
+     c9e:	14 ba       	out	0x14, r1	; 20
+	
+	if(ks0108Coord.x < 64) {
+     ca0:	90 91 02 01 	lds	r25, 0x0102
+     ca4:	90 34       	cpi	r25, 0x40	; 64
+     ca6:	18 f4       	brcc	.+6      	; 0xcae <ks0108DoReadData+0x1e>
+		LCD_CMD_PORT &= ~(0x01 << CSEL2);			// deselect chip 2
+     ca8:	ac 98       	cbi	0x15, 4	; 21
+		LCD_CMD_PORT |= 0x01 << CSEL1;				// select chip 1
+     caa:	ab 9a       	sbi	0x15, 3	; 21
+     cac:	0a c0       	rjmp	.+20     	; 0xcc2 <ks0108DoReadData+0x32>
+	} else if(ks0108Coord.x >= 64) {
+		LCD_CMD_PORT &= ~(0x01 << CSEL1);			// deselect chip 1
+     cae:	ab 98       	cbi	0x15, 3	; 21
+		LCD_CMD_PORT |= 0x01 << CSEL2;				// select chip 2
+     cb0:	ac 9a       	sbi	0x15, 4	; 21
+	}
+	if(ks0108Coord.x == 64 && first) {				// chip2 X-address = 0
+     cb2:	90 34       	cpi	r25, 0x40	; 64
+     cb4:	31 f4       	brne	.+12     	; 0xcc2 <ks0108DoReadData+0x32>
+     cb6:	88 23       	and	r24, r24
+     cb8:	21 f0       	breq	.+8      	; 0xcc2 <ks0108DoReadData+0x32>
+		ks0108WriteCommand(LCD_SET_ADD, CHIP2); 	// wuff wuff
+     cba:	80 e4       	ldi	r24, 0x40	; 64
+     cbc:	61 e0       	ldi	r22, 0x01	; 1
+     cbe:	0e 94 fe 05 	call	0xbfc	; 0xbfc <ks0108WriteCommand>
+	}
+	
+	LCD_CMD_PORT |= 0x01 << D_I;					// D/I = 1
+     cc2:	a8 9a       	sbi	0x15, 0	; 21
+	LCD_CMD_PORT |= 0x01 << R_W;					// R/W = 1
+     cc4:	a9 9a       	sbi	0x15, 1	; 21
+	
+	LCD_CMD_PORT |= 0x01 << EN;						// EN high level width: min. 450ns
+     cc6:	aa 9a       	sbi	0x15, 2	; 21
+	asm volatile("nop\n\t"
+     cc8:	00 00       	nop
+     cca:	00 00       	nop
+     ccc:	00 00       	nop
+				 "nop\n\t"
+				 "nop\n\t"
+				 ::);
+	
+	data = LCD_DATA_IN;								// read Data			 
+     cce:	13 b3       	in	r17, 0x13	; 19
+	
+	LCD_CMD_PORT &= ~(0x01 << EN);
+     cd0:	aa 98       	cbi	0x15, 2	; 21
+	for(i=0; i<8; i++);								// a little delay loop (faster than reading the busy flag)
+     cd2:	19 82       	std	Y+1, r1	; 0x01
+     cd4:	03 c0       	rjmp	.+6      	; 0xcdc <ks0108DoReadData+0x4c>
+     cd6:	89 81       	ldd	r24, Y+1	; 0x01
+     cd8:	8f 5f       	subi	r24, 0xFF	; 255
+     cda:	89 83       	std	Y+1, r24	; 0x01
+     cdc:	89 81       	ldd	r24, Y+1	; 0x01
+     cde:	88 30       	cpi	r24, 0x08	; 8
+     ce0:	d0 f3       	brcs	.-12     	; 0xcd6 <ks0108DoReadData+0x46>
+	
+	LCD_DATA_DIR = 0xFF;
+     ce2:	8f ef       	ldi	r24, 0xFF	; 255
+     ce4:	84 bb       	out	0x14, r24	; 20
+	
+	ks0108GotoXY(ks0108Coord.x, ks0108Coord.y);
+     ce6:	80 91 02 01 	lds	r24, 0x0102
+     cea:	60 91 03 01 	lds	r22, 0x0103
+     cee:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+	
+	if(ks0108Inverted)
+     cf2:	80 91 00 01 	lds	r24, 0x0100
+     cf6:	81 11       	cpse	r24, r1
+		data = ~data;
+     cf8:	10 95       	com	r17
+	return data;
+}
+     cfa:	81 2f       	mov	r24, r17
+     cfc:	0f 90       	pop	r0
+     cfe:	cf 91       	pop	r28
+     d00:	df 91       	pop	r29
+     d02:	1f 91       	pop	r17
+     d04:	08 95       	ret
+
+00000d06 <ks0108WriteData>:
+	LCD_DATA_OUT = cmd;								// write command
+	ks0108Enable();									// enable
+	LCD_DATA_OUT = 0x00;
+}
+
+void ks0108WriteData(uint8_t data) {
+     d06:	df 92       	push	r13
+     d08:	ef 92       	push	r14
+     d0a:	ff 92       	push	r15
+     d0c:	0f 93       	push	r16
+     d0e:	1f 93       	push	r17
+     d10:	df 93       	push	r29
+     d12:	cf 93       	push	r28
+     d14:	0f 92       	push	r0
+     d16:	cd b7       	in	r28, 0x3d	; 61
+     d18:	de b7       	in	r29, 0x3e	; 62
+     d1a:	18 2f       	mov	r17, r24
+#ifdef DEBUG
+	volatile uint16_t i;
+	for(i=0; i<5000; i++);
+#endif
+
+	if(ks0108Coord.x >= 128)
+     d1c:	80 91 02 01 	lds	r24, 0x0102
+     d20:	87 fd       	sbrc	r24, 7
+     d22:	89 c0       	rjmp	.+274    	; 0xe36 <ks0108WriteData+0x130>
+		return;
+
+	if(ks0108Coord.x < 64) {
+     d24:	80 34       	cpi	r24, 0x40	; 64
+     d26:	18 f4       	brcc	.+6      	; 0xd2e <ks0108WriteData+0x28>
+		LCD_CMD_PORT &= ~(0x01 << CSEL2);			// deselect chip 2
+     d28:	ac 98       	cbi	0x15, 4	; 21
+		LCD_CMD_PORT |= 0x01 << CSEL1;				// select chip 1
+     d2a:	ab 9a       	sbi	0x15, 3	; 21
+     d2c:	07 c0       	rjmp	.+14     	; 0xd3c <ks0108WriteData+0x36>
+	} else if(ks0108Coord.x >= 64) {
+		LCD_CMD_PORT &= ~(0x01 << CSEL1);			// deselect chip 1
+     d2e:	ab 98       	cbi	0x15, 3	; 21
+		LCD_CMD_PORT |= 0x01 << CSEL2;				// select chip 2
+     d30:	ac 9a       	sbi	0x15, 4	; 21
+	}
+	if(ks0108Coord.x == 64)							// chip2 X-address = 0
+     d32:	80 34       	cpi	r24, 0x40	; 64
+     d34:	19 f4       	brne	.+6      	; 0xd3c <ks0108WriteData+0x36>
+		ks0108WriteCommand(LCD_SET_ADD, CHIP2);
+     d36:	61 e0       	ldi	r22, 0x01	; 1
+     d38:	0e 94 fe 05 	call	0xbfc	; 0xbfc <ks0108WriteCommand>
+	
+	LCD_CMD_PORT |= 0x01 << D_I;					// D/I = 1
+     d3c:	a8 9a       	sbi	0x15, 0	; 21
+	LCD_CMD_PORT &= ~(0x01 << R_W);					// R/W = 0
+     d3e:	a9 98       	cbi	0x15, 1	; 21
+	LCD_DATA_DIR = 0xFF;							// data port is output
+     d40:	0f ef       	ldi	r16, 0xFF	; 255
+     d42:	04 bb       	out	0x14, r16	; 20
+	
+	
+	yOffset = ks0108Coord.y%8;
+     d44:	e0 90 03 01 	lds	r14, 0x0103
+     d48:	87 e0       	ldi	r24, 0x07	; 7
+     d4a:	e8 22       	and	r14, r24
+	if(yOffset != 0) {
+     d4c:	09 f4       	brne	.+2      	; 0xd50 <ks0108WriteData+0x4a>
+     d4e:	5b c0       	rjmp	.+182    	; 0xe06 <ks0108WriteData+0x100>
+		// first page
+		cmdPort = LCD_CMD_PORT;						// save command port
+     d50:	d5 b2       	in	r13, 0x15	; 21
+		data = ~data;
+	return data;
+}
+
+inline uint8_t ks0108ReadData(void) {
+	ks0108DoReadData(1);							// dummy read
+     d52:	81 e0       	ldi	r24, 0x01	; 1
+     d54:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+	return ks0108DoReadData(0);						// "real" read
+     d58:	80 e0       	ldi	r24, 0x00	; 0
+     d5a:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+	if(yOffset != 0) {
+		// first page
+		cmdPort = LCD_CMD_PORT;						// save command port
+		displayData = ks0108ReadData();
+		
+		LCD_CMD_PORT = cmdPort;						// restore command port
+     d5e:	d5 ba       	out	0x15, r13	; 21
+		LCD_DATA_DIR = 0xFF;						// data port is output
+     d60:	04 bb       	out	0x14, r16	; 20
+		
+		displayData |= data << yOffset;
+     d62:	01 2f       	mov	r16, r17
+     d64:	10 e0       	ldi	r17, 0x00	; 0
+     d66:	ff 24       	eor	r15, r15
+     d68:	98 01       	movw	r18, r16
+     d6a:	0e 2c       	mov	r0, r14
+     d6c:	02 c0       	rjmp	.+4      	; 0xd72 <ks0108WriteData+0x6c>
+     d6e:	22 0f       	add	r18, r18
+     d70:	33 1f       	adc	r19, r19
+     d72:	0a 94       	dec	r0
+     d74:	e2 f7       	brpl	.-8      	; 0xd6e <ks0108WriteData+0x68>
+     d76:	82 2b       	or	r24, r18
+		if(ks0108Inverted)
+     d78:	90 91 00 01 	lds	r25, 0x0100
+     d7c:	91 11       	cpse	r25, r1
+			displayData = ~displayData;
+     d7e:	80 95       	com	r24
+		LCD_DATA_OUT = displayData;					// write data
+     d80:	85 bb       	out	0x15, r24	; 21
+	ks0108ClearScreen();							// display clear
+	ks0108GotoXY(0,0);
+}
+
+inline void ks0108Enable(void) {
+	LCD_CMD_PORT |= 0x01 << EN;						// EN high level width: min. 450ns
+     d82:	aa 9a       	sbi	0x15, 2	; 21
+	asm volatile("nop\n\t"
+     d84:	00 00       	nop
+     d86:	00 00       	nop
+     d88:	00 00       	nop
+				 "nop\n\t"
+				 "nop\n\t"
+				 ::);
+	LCD_CMD_PORT &= ~(0x01 << EN);
+     d8a:	aa 98       	cbi	0x15, 2	; 21
+	for(volatile uint8_t i=0; i<8; i++);			// a little delay loop (faster than reading the busy flag)
+     d8c:	19 82       	std	Y+1, r1	; 0x01
+     d8e:	03 c0       	rjmp	.+6      	; 0xd96 <ks0108WriteData+0x90>
+     d90:	89 81       	ldd	r24, Y+1	; 0x01
+     d92:	8f 5f       	subi	r24, 0xFF	; 255
+     d94:	89 83       	std	Y+1, r24	; 0x01
+     d96:	89 81       	ldd	r24, Y+1	; 0x01
+     d98:	88 30       	cpi	r24, 0x08	; 8
+     d9a:	d0 f3       	brcs	.-12     	; 0xd90 <ks0108WriteData+0x8a>
+			displayData = ~displayData;
+		LCD_DATA_OUT = displayData;					// write data
+		ks0108Enable();								// enable
+		
+		// second page
+		ks0108GotoXY(ks0108Coord.x, ks0108Coord.y+8);
+     d9c:	60 91 03 01 	lds	r22, 0x0103
+     da0:	68 5f       	subi	r22, 0xF8	; 248
+     da2:	80 91 02 01 	lds	r24, 0x0102
+     da6:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+		data = ~data;
+	return data;
+}
+
+inline uint8_t ks0108ReadData(void) {
+	ks0108DoReadData(1);							// dummy read
+     daa:	81 e0       	ldi	r24, 0x01	; 1
+     dac:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+	return ks0108DoReadData(0);						// "real" read
+     db0:	80 e0       	ldi	r24, 0x00	; 0
+     db2:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+		// second page
+		ks0108GotoXY(ks0108Coord.x, ks0108Coord.y+8);
+		
+		displayData = ks0108ReadData();
+		
+		LCD_CMD_PORT = cmdPort;						// restore command port
+     db6:	d5 ba       	out	0x15, r13	; 21
+		LCD_DATA_DIR = 0xFF;						// data port is output
+     db8:	9f ef       	ldi	r25, 0xFF	; 255
+     dba:	94 bb       	out	0x14, r25	; 20
+		
+		displayData |= data >> (8-yOffset);
+     dbc:	28 e0       	ldi	r18, 0x08	; 8
+     dbe:	30 e0       	ldi	r19, 0x00	; 0
+     dc0:	2e 19       	sub	r18, r14
+     dc2:	3f 09       	sbc	r19, r15
+     dc4:	02 c0       	rjmp	.+4      	; 0xdca <ks0108WriteData+0xc4>
+     dc6:	15 95       	asr	r17
+     dc8:	07 95       	ror	r16
+     dca:	2a 95       	dec	r18
+     dcc:	e2 f7       	brpl	.-8      	; 0xdc6 <ks0108WriteData+0xc0>
+     dce:	08 2b       	or	r16, r24
+		if(ks0108Inverted)
+     dd0:	80 91 00 01 	lds	r24, 0x0100
+     dd4:	81 11       	cpse	r24, r1
+			displayData = ~displayData;
+     dd6:	00 95       	com	r16
+		LCD_DATA_OUT = displayData;					// write data
+     dd8:	05 bb       	out	0x15, r16	; 21
+	ks0108ClearScreen();							// display clear
+	ks0108GotoXY(0,0);
+}
+
+inline void ks0108Enable(void) {
+	LCD_CMD_PORT |= 0x01 << EN;						// EN high level width: min. 450ns
+     dda:	aa 9a       	sbi	0x15, 2	; 21
+	asm volatile("nop\n\t"
+     ddc:	00 00       	nop
+     dde:	00 00       	nop
+     de0:	00 00       	nop
+				 "nop\n\t"
+				 "nop\n\t"
+				 ::);
+	LCD_CMD_PORT &= ~(0x01 << EN);
+     de2:	aa 98       	cbi	0x15, 2	; 21
+	for(volatile uint8_t i=0; i<8; i++);			// a little delay loop (faster than reading the busy flag)
+     de4:	19 82       	std	Y+1, r1	; 0x01
+     de6:	03 c0       	rjmp	.+6      	; 0xdee <ks0108WriteData+0xe8>
+     de8:	89 81       	ldd	r24, Y+1	; 0x01
+     dea:	8f 5f       	subi	r24, 0xFF	; 255
+     dec:	89 83       	std	Y+1, r24	; 0x01
+     dee:	89 81       	ldd	r24, Y+1	; 0x01
+     df0:	88 30       	cpi	r24, 0x08	; 8
+     df2:	d0 f3       	brcs	.-12     	; 0xde8 <ks0108WriteData+0xe2>
+		if(ks0108Inverted)
+			displayData = ~displayData;
+		LCD_DATA_OUT = displayData;					// write data
+		ks0108Enable();								// enable
+		
+		ks0108GotoXY(ks0108Coord.x+1, ks0108Coord.y-8);
+     df4:	80 91 02 01 	lds	r24, 0x0102
+     df8:	60 91 03 01 	lds	r22, 0x0103
+     dfc:	68 50       	subi	r22, 0x08	; 8
+     dfe:	8f 5f       	subi	r24, 0xFF	; 255
+     e00:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+     e04:	17 c0       	rjmp	.+46     	; 0xe34 <ks0108WriteData+0x12e>
+	} else {
+		if(ks0108Inverted)
+     e06:	80 91 00 01 	lds	r24, 0x0100
+     e0a:	81 11       	cpse	r24, r1
+			data = ~data;
+     e0c:	10 95       	com	r17
+		LCD_DATA_OUT = data;						// write data
+     e0e:	15 bb       	out	0x15, r17	; 21
+	ks0108ClearScreen();							// display clear
+	ks0108GotoXY(0,0);
+}
+
+inline void ks0108Enable(void) {
+	LCD_CMD_PORT |= 0x01 << EN;						// EN high level width: min. 450ns
+     e10:	aa 9a       	sbi	0x15, 2	; 21
+	asm volatile("nop\n\t"
+     e12:	00 00       	nop
+     e14:	00 00       	nop
+     e16:	00 00       	nop
+				 "nop\n\t"
+				 "nop\n\t"
+				 ::);
+	LCD_CMD_PORT &= ~(0x01 << EN);
+     e18:	aa 98       	cbi	0x15, 2	; 21
+	for(volatile uint8_t i=0; i<8; i++);			// a little delay loop (faster than reading the busy flag)
+     e1a:	19 82       	std	Y+1, r1	; 0x01
+     e1c:	03 c0       	rjmp	.+6      	; 0xe24 <ks0108WriteData+0x11e>
+     e1e:	89 81       	ldd	r24, Y+1	; 0x01
+     e20:	8f 5f       	subi	r24, 0xFF	; 255
+     e22:	89 83       	std	Y+1, r24	; 0x01
+     e24:	89 81       	ldd	r24, Y+1	; 0x01
+     e26:	88 30       	cpi	r24, 0x08	; 8
+     e28:	d0 f3       	brcs	.-12     	; 0xe1e <ks0108WriteData+0x118>
+	} else {
+		if(ks0108Inverted)
+			data = ~data;
+		LCD_DATA_OUT = data;						// write data
+		ks0108Enable();								// enable
+		ks0108Coord.x++;
+     e2a:	80 91 02 01 	lds	r24, 0x0102
+     e2e:	8f 5f       	subi	r24, 0xFF	; 255
+     e30:	80 93 02 01 	sts	0x0102, r24
+	}
+	LCD_DATA_OUT = 0x00;
+     e34:	15 ba       	out	0x15, r1	; 21
+}
+     e36:	0f 90       	pop	r0
+     e38:	cf 91       	pop	r28
+     e3a:	df 91       	pop	r29
+     e3c:	1f 91       	pop	r17
+     e3e:	0f 91       	pop	r16
+     e40:	ff 90       	pop	r15
+     e42:	ef 90       	pop	r14
+     e44:	df 90       	pop	r13
+     e46:	08 95       	ret
+
+00000e48 <ks0108PutChar>:
+	ks0108Font = font;
+	ks0108FontRead = callback;
+	ks0108FontColor = color;
+}
+
+int ks0108PutChar(char c) {
+     e48:	2f 92       	push	r2
+     e4a:	3f 92       	push	r3
+     e4c:	4f 92       	push	r4
+     e4e:	5f 92       	push	r5
+     e50:	6f 92       	push	r6
+     e52:	7f 92       	push	r7
+     e54:	8f 92       	push	r8
+     e56:	9f 92       	push	r9
+     e58:	af 92       	push	r10
+     e5a:	bf 92       	push	r11
+     e5c:	cf 92       	push	r12
+     e5e:	df 92       	push	r13
+     e60:	ef 92       	push	r14
+     e62:	ff 92       	push	r15
+     e64:	0f 93       	push	r16
+     e66:	1f 93       	push	r17
+     e68:	cf 93       	push	r28
+     e6a:	df 93       	push	r29
+     e6c:	e8 2e       	mov	r14, r24
+	uint8_t width = 0;
+	uint8_t height = ks0108FontRead(ks0108Font+FONT_HEIGHT);
+     e6e:	80 91 07 01 	lds	r24, 0x0107
+     e72:	90 91 08 01 	lds	r25, 0x0108
+     e76:	e0 91 05 01 	lds	r30, 0x0105
+     e7a:	f0 91 06 01 	lds	r31, 0x0106
+     e7e:	03 96       	adiw	r24, 0x03	; 3
+     e80:	09 95       	icall
+     e82:	88 2e       	mov	r8, r24
+	uint8_t bytes = (height+7)/8;
+	
+	uint8_t firstChar = ks0108FontRead(ks0108Font+FONT_FIRST_CHAR);
+     e84:	80 91 07 01 	lds	r24, 0x0107
+     e88:	90 91 08 01 	lds	r25, 0x0108
+     e8c:	e0 91 05 01 	lds	r30, 0x0105
+     e90:	f0 91 06 01 	lds	r31, 0x0106
+     e94:	04 96       	adiw	r24, 0x04	; 4
+     e96:	09 95       	icall
+     e98:	f8 2e       	mov	r15, r24
+	uint8_t charCount = ks0108FontRead(ks0108Font+FONT_CHAR_COUNT);
+     e9a:	80 91 07 01 	lds	r24, 0x0107
+     e9e:	90 91 08 01 	lds	r25, 0x0108
+     ea2:	e0 91 05 01 	lds	r30, 0x0105
+     ea6:	f0 91 06 01 	lds	r31, 0x0106
+     eaa:	05 96       	adiw	r24, 0x05	; 5
+     eac:	09 95       	icall
+     eae:	d8 2e       	mov	r13, r24
+	
+	uint16_t index = 0;
+	uint8_t x = ks0108Coord.x, y = ks0108Coord.y;
+     eb0:	c0 90 02 01 	lds	r12, 0x0102
+     eb4:	70 90 03 01 	lds	r7, 0x0103
+	
+	if(c < firstChar || c >= (firstChar+charCount)) {
+     eb8:	ef 14       	cp	r14, r15
+     eba:	08 f4       	brcc	.+2      	; 0xebe <ks0108PutChar+0x76>
+     ebc:	96 c0       	rjmp	.+300    	; 0xfea <ks0108PutChar+0x1a2>
+     ebe:	2e 2d       	mov	r18, r14
+     ec0:	30 e0       	ldi	r19, 0x00	; 0
+     ec2:	8f 2d       	mov	r24, r15
+     ec4:	90 e0       	ldi	r25, 0x00	; 0
+     ec6:	8d 0d       	add	r24, r13
+     ec8:	91 1d       	adc	r25, r1
+     eca:	28 17       	cp	r18, r24
+     ecc:	39 07       	cpc	r19, r25
+     ece:	0c f0       	brlt	.+2      	; 0xed2 <ks0108PutChar+0x8a>
+     ed0:	8c c0       	rjmp	.+280    	; 0xfea <ks0108PutChar+0x1a2>
+		return 1;
+	}
+	c-= firstChar;
+     ed2:	ef 18       	sub	r14, r15
+     ed4:	c6 e0       	ldi	r28, 0x06	; 6
+     ed6:	d0 e0       	ldi	r29, 0x00	; 0
+     ed8:	00 e0       	ldi	r16, 0x00	; 0
+     eda:	10 e0       	ldi	r17, 0x00	; 0
+	
+	// read width data, to get the index
+	for(uint8_t i=0; i<c; i++) {
+     edc:	06 c0       	rjmp	.+12     	; 0xeea <ks0108PutChar+0xa2>
+		index += ks0108FontRead(ks0108Font+FONT_WIDTH_TABLE+i);
+     ede:	8c 0f       	add	r24, r28
+     ee0:	9d 1f       	adc	r25, r29
+     ee2:	09 95       	icall
+     ee4:	08 0f       	add	r16, r24
+     ee6:	11 1d       	adc	r17, r1
+     ee8:	21 96       	adiw	r28, 0x01	; 1
+		return 1;
+	}
+	c-= firstChar;
+	
+	// read width data, to get the index
+	for(uint8_t i=0; i<c; i++) {
+     eea:	ce 01       	movw	r24, r28
+     eec:	86 50       	subi	r24, 0x06	; 6
+     eee:	28 2f       	mov	r18, r24
+     ef0:	80 91 07 01 	lds	r24, 0x0107
+     ef4:	90 91 08 01 	lds	r25, 0x0108
+     ef8:	e0 91 05 01 	lds	r30, 0x0105
+     efc:	f0 91 06 01 	lds	r31, 0x0106
+     f00:	2e 15       	cp	r18, r14
+     f02:	68 f3       	brcs	.-38     	; 0xede <ks0108PutChar+0x96>
+}
+
+int ks0108PutChar(char c) {
+	uint8_t width = 0;
+	uint8_t height = ks0108FontRead(ks0108Font+FONT_HEIGHT);
+	uint8_t bytes = (height+7)/8;
+     f04:	99 24       	eor	r9, r9
+     f06:	94 01       	movw	r18, r8
+     f08:	29 5f       	subi	r18, 0xF9	; 249
+     f0a:	3f 4f       	sbci	r19, 0xFF	; 255
+     f0c:	43 e0       	ldi	r20, 0x03	; 3
+     f0e:	35 95       	asr	r19
+     f10:	27 95       	ror	r18
+     f12:	4a 95       	dec	r20
+     f14:	e1 f7       	brne	.-8      	; 0xf0e <ks0108PutChar+0xc6>
+	
+	// read width data, to get the index
+	for(uint8_t i=0; i<c; i++) {
+		index += ks0108FontRead(ks0108Font+FONT_WIDTH_TABLE+i);
+	}
+	index = index*bytes+charCount+FONT_WIDTH_TABLE;
+     f16:	62 2e       	mov	r6, r18
+     f18:	20 9f       	mul	r18, r16
+     f1a:	a0 01       	movw	r20, r0
+     f1c:	21 9f       	mul	r18, r17
+     f1e:	50 0d       	add	r21, r0
+     f20:	30 9f       	mul	r19, r16
+     f22:	50 0d       	add	r21, r0
+     f24:	11 24       	eor	r1, r1
+     f26:	0d 2d       	mov	r16, r13
+     f28:	10 e0       	ldi	r17, 0x00	; 0
+     f2a:	0a 5f       	subi	r16, 0xFA	; 250
+     f2c:	1f 4f       	sbci	r17, 0xFF	; 255
+     f2e:	04 0f       	add	r16, r20
+     f30:	15 1f       	adc	r17, r21
+	width = ks0108FontRead(ks0108Font+FONT_WIDTH_TABLE+c);
+     f32:	2e 2d       	mov	r18, r14
+     f34:	30 e0       	ldi	r19, 0x00	; 0
+     f36:	2a 5f       	subi	r18, 0xFA	; 250
+     f38:	3f 4f       	sbci	r19, 0xFF	; 255
+     f3a:	82 0f       	add	r24, r18
+     f3c:	93 1f       	adc	r25, r19
+     f3e:	09 95       	icall
+     f40:	f8 2e       	mov	r15, r24
+     f42:	c8 e0       	ldi	r28, 0x08	; 8
+     f44:	d0 e0       	ldi	r29, 0x00	; 0
+     f46:	c8 19       	sub	r28, r8
+     f48:	d9 09       	sbc	r29, r9
+     f4a:	88 e0       	ldi	r24, 0x08	; 8
+     f4c:	a8 2e       	mov	r10, r24
+     f4e:	b1 2c       	mov	r11, r1
+     f50:	dd 24       	eor	r13, r13
+     f52:	ee 24       	eor	r14, r14
+	
+	// last but not least, draw the character
+	for(uint8_t i=0; i<bytes; i++) {
+     f54:	3e c0       	rjmp	.+124    	; 0xfd2 <ks0108PutChar+0x18a>
+     f56:	4c 2e       	mov	r4, r28
+     f58:	18 01       	movw	r2, r16
+     f5a:	2d 0c       	add	r2, r13
+     f5c:	31 1c       	adc	r3, r1
+     f5e:	55 24       	eor	r5, r5
+		uint8_t page = i*width;
+		for(uint8_t j=0; j<width; j++) {
+     f60:	20 c0       	rjmp	.+64     	; 0xfa2 <ks0108PutChar+0x15a>
+			uint8_t data = ks0108FontRead(ks0108Font+index+page+j);
+     f62:	80 91 07 01 	lds	r24, 0x0107
+     f66:	90 91 08 01 	lds	r25, 0x0108
+     f6a:	e0 91 05 01 	lds	r30, 0x0105
+     f6e:	f0 91 06 01 	lds	r31, 0x0106
+     f72:	82 0d       	add	r24, r2
+     f74:	93 1d       	adc	r25, r3
+     f76:	09 95       	icall
+			
+			if(height < (i+1)*8) {
+     f78:	8a 14       	cp	r8, r10
+     f7a:	9b 04       	cpc	r9, r11
+     f7c:	3c f4       	brge	.+14     	; 0xf8c <ks0108PutChar+0x144>
+				data >>= (i+1)*8-height;
+     f7e:	90 e0       	ldi	r25, 0x00	; 0
+     f80:	04 2c       	mov	r0, r4
+     f82:	02 c0       	rjmp	.+4      	; 0xf88 <ks0108PutChar+0x140>
+     f84:	95 95       	asr	r25
+     f86:	87 95       	ror	r24
+     f88:	0a 94       	dec	r0
+     f8a:	e2 f7       	brpl	.-8      	; 0xf84 <ks0108PutChar+0x13c>
+			}
+			
+			if(ks0108FontColor == BLACK) {
+     f8c:	90 91 01 01 	lds	r25, 0x0101
+     f90:	9f 3f       	cpi	r25, 0xFF	; 255
+     f92:	09 f0       	breq	.+2      	; 0xf96 <ks0108PutChar+0x14e>
+				ks0108WriteData(data);
+			} else {
+				ks0108WriteData(~data);
+     f94:	80 95       	com	r24
+     f96:	0e 94 83 06 	call	0xd06	; 0xd06 <ks0108WriteData>
+	width = ks0108FontRead(ks0108Font+FONT_WIDTH_TABLE+c);
+	
+	// last but not least, draw the character
+	for(uint8_t i=0; i<bytes; i++) {
+		uint8_t page = i*width;
+		for(uint8_t j=0; j<width; j++) {
+     f9a:	53 94       	inc	r5
+     f9c:	08 94       	sec
+     f9e:	21 1c       	adc	r2, r1
+     fa0:	31 1c       	adc	r3, r1
+     fa2:	5f 14       	cp	r5, r15
+     fa4:	f0 f2       	brcs	.-68     	; 0xf62 <ks0108PutChar+0x11a>
+			} else {
+				ks0108WriteData(~data);
+			}
+		}
+		// 1px gap between chars
+		if(ks0108FontColor == BLACK) {
+     fa6:	80 91 01 01 	lds	r24, 0x0101
+     faa:	8f 3f       	cpi	r24, 0xFF	; 255
+     fac:	11 f4       	brne	.+4      	; 0xfb2 <ks0108PutChar+0x16a>
+			ks0108WriteData(0x00);
+     fae:	80 e0       	ldi	r24, 0x00	; 0
+     fb0:	01 c0       	rjmp	.+2      	; 0xfb4 <ks0108PutChar+0x16c>
+		} else {
+			ks0108WriteData(0xFF);
+     fb2:	8f ef       	ldi	r24, 0xFF	; 255
+     fb4:	0e 94 83 06 	call	0xd06	; 0xd06 <ks0108WriteData>
+		}
+		ks0108GotoXY(x, ks0108Coord.y+8);
+     fb8:	60 91 03 01 	lds	r22, 0x0103
+     fbc:	68 5f       	subi	r22, 0xF8	; 248
+     fbe:	8c 2d       	mov	r24, r12
+     fc0:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+	}
+	index = index*bytes+charCount+FONT_WIDTH_TABLE;
+	width = ks0108FontRead(ks0108Font+FONT_WIDTH_TABLE+c);
+	
+	// last but not least, draw the character
+	for(uint8_t i=0; i<bytes; i++) {
+     fc4:	e3 94       	inc	r14
+     fc6:	df 0c       	add	r13, r15
+     fc8:	88 e0       	ldi	r24, 0x08	; 8
+     fca:	90 e0       	ldi	r25, 0x00	; 0
+     fcc:	a8 0e       	add	r10, r24
+     fce:	b9 1e       	adc	r11, r25
+     fd0:	28 96       	adiw	r28, 0x08	; 8
+     fd2:	e6 14       	cp	r14, r6
+     fd4:	08 f4       	brcc	.+2      	; 0xfd8 <ks0108PutChar+0x190>
+     fd6:	bf cf       	rjmp	.-130    	; 0xf56 <ks0108PutChar+0x10e>
+		} else {
+			ks0108WriteData(0xFF);
+		}
+		ks0108GotoXY(x, ks0108Coord.y+8);
+	}
+	ks0108GotoXY(x+width+1, y);
+     fd8:	8c 2d       	mov	r24, r12
+     fda:	8f 5f       	subi	r24, 0xFF	; 255
+     fdc:	8f 0d       	add	r24, r15
+     fde:	67 2d       	mov	r22, r7
+     fe0:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+     fe4:	20 e0       	ldi	r18, 0x00	; 0
+     fe6:	30 e0       	ldi	r19, 0x00	; 0
+	
+	return 0;
+     fe8:	02 c0       	rjmp	.+4      	; 0xfee <ks0108PutChar+0x1a6>
+     fea:	21 e0       	ldi	r18, 0x01	; 1
+     fec:	30 e0       	ldi	r19, 0x00	; 0
+}
+     fee:	c9 01       	movw	r24, r18
+     ff0:	df 91       	pop	r29
+     ff2:	cf 91       	pop	r28
+     ff4:	1f 91       	pop	r17
+     ff6:	0f 91       	pop	r16
+     ff8:	ff 90       	pop	r15
+     ffa:	ef 90       	pop	r14
+     ffc:	df 90       	pop	r13
+     ffe:	cf 90       	pop	r12
+    1000:	bf 90       	pop	r11
+    1002:	af 90       	pop	r10
+    1004:	9f 90       	pop	r9
+    1006:	8f 90       	pop	r8
+    1008:	7f 90       	pop	r7
+    100a:	6f 90       	pop	r6
+    100c:	5f 90       	pop	r5
+    100e:	4f 90       	pop	r4
+    1010:	3f 90       	pop	r3
+    1012:	2f 90       	pop	r2
+    1014:	08 95       	ret
+
+00001016 <ks0108Puts_P>:
+		}
+		str++;
+	}
+}
+
+void ks0108Puts_P(PGM_P str) {
+    1016:	0f 93       	push	r16
+    1018:	1f 93       	push	r17
+    101a:	cf 93       	push	r28
+    101c:	df 93       	push	r29
+    101e:	ec 01       	movw	r28, r24
+	int x = ks0108Coord.x;
+    1020:	10 91 02 01 	lds	r17, 0x0102
+	while(pgm_read_byte(str) != 0) {
+    1024:	17 c0       	rjmp	.+46     	; 0x1054 <ks0108Puts_P+0x3e>
+		if(pgm_read_byte(str) == '\n') {
+    1026:	8a 30       	cpi	r24, 0x0A	; 10
+    1028:	91 f4       	brne	.+36     	; 0x104e <ks0108Puts_P+0x38>
+			ks0108GotoXY(x, ks0108Coord.y+ks0108FontRead(ks0108Font+FONT_HEIGHT));
+    102a:	00 91 03 01 	lds	r16, 0x0103
+    102e:	80 91 07 01 	lds	r24, 0x0107
+    1032:	90 91 08 01 	lds	r25, 0x0108
+    1036:	e0 91 05 01 	lds	r30, 0x0105
+    103a:	f0 91 06 01 	lds	r31, 0x0106
+    103e:	03 96       	adiw	r24, 0x03	; 3
+    1040:	09 95       	icall
+    1042:	68 2f       	mov	r22, r24
+    1044:	60 0f       	add	r22, r16
+    1046:	81 2f       	mov	r24, r17
+    1048:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+    104c:	02 c0       	rjmp	.+4      	; 0x1052 <ks0108Puts_P+0x3c>
+		} else {
+			ks0108PutChar(pgm_read_byte(str));
+    104e:	0e 94 24 07 	call	0xe48	; 0xe48 <ks0108PutChar>
+		}
+		str++;
+    1052:	21 96       	adiw	r28, 0x01	; 1
+	}
+}
+
+void ks0108Puts_P(PGM_P str) {
+	int x = ks0108Coord.x;
+	while(pgm_read_byte(str) != 0) {
+    1054:	fe 01       	movw	r30, r28
+    1056:	84 91       	lpm	r24, Z
+    1058:	88 23       	and	r24, r24
+    105a:	29 f7       	brne	.-54     	; 0x1026 <ks0108Puts_P+0x10>
+		} else {
+			ks0108PutChar(pgm_read_byte(str));
+		}
+		str++;
+	}
+}
+    105c:	df 91       	pop	r29
+    105e:	cf 91       	pop	r28
+    1060:	1f 91       	pop	r17
+    1062:	0f 91       	pop	r16
+    1064:	08 95       	ret
+
+00001066 <ks0108Puts>:
+	ks0108GotoXY(x+width+1, y);
+	
+	return 0;
+}
+
+void ks0108Puts(char* str) {
+    1066:	0f 93       	push	r16
+    1068:	1f 93       	push	r17
+    106a:	cf 93       	push	r28
+    106c:	df 93       	push	r29
+    106e:	ec 01       	movw	r28, r24
+	int x = ks0108Coord.x;
+    1070:	10 91 02 01 	lds	r17, 0x0102
+	while(*str != 0) {
+    1074:	17 c0       	rjmp	.+46     	; 0x10a4 <ks0108Puts+0x3e>
+		if(*str == '\n') {
+    1076:	8a 30       	cpi	r24, 0x0A	; 10
+    1078:	91 f4       	brne	.+36     	; 0x109e <ks0108Puts+0x38>
+			ks0108GotoXY(x, ks0108Coord.y+ks0108FontRead(ks0108Font+FONT_HEIGHT));
+    107a:	00 91 03 01 	lds	r16, 0x0103
+    107e:	80 91 07 01 	lds	r24, 0x0107
+    1082:	90 91 08 01 	lds	r25, 0x0108
+    1086:	e0 91 05 01 	lds	r30, 0x0105
+    108a:	f0 91 06 01 	lds	r31, 0x0106
+    108e:	03 96       	adiw	r24, 0x03	; 3
+    1090:	09 95       	icall
+    1092:	68 2f       	mov	r22, r24
+    1094:	60 0f       	add	r22, r16
+    1096:	81 2f       	mov	r24, r17
+    1098:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+    109c:	02 c0       	rjmp	.+4      	; 0x10a2 <ks0108Puts+0x3c>
+		} else {
+			ks0108PutChar(*str);
+    109e:	0e 94 24 07 	call	0xe48	; 0xe48 <ks0108PutChar>
+		}
+		str++;
+    10a2:	21 96       	adiw	r28, 0x01	; 1
+	return 0;
+}
+
+void ks0108Puts(char* str) {
+	int x = ks0108Coord.x;
+	while(*str != 0) {
+    10a4:	88 81       	ld	r24, Y
+    10a6:	88 23       	and	r24, r24
+    10a8:	31 f7       	brne	.-52     	; 0x1076 <ks0108Puts+0x10>
+		} else {
+			ks0108PutChar(*str);
+		}
+		str++;
+	}
+}
+    10aa:	df 91       	pop	r29
+    10ac:	cf 91       	pop	r28
+    10ae:	1f 91       	pop	r17
+    10b0:	0f 91       	pop	r16
+    10b2:	08 95       	ret
+
+000010b4 <ks0108SetDot>:
+		ks0108InvertRect(0,0,127,63);
+		ks0108Inverted = invert;
+	}
+}
+
+void ks0108SetDot(uint8_t x, uint8_t y, uint8_t color) {
+    10b4:	1f 93       	push	r17
+    10b6:	df 93       	push	r29
+    10b8:	cf 93       	push	r28
+    10ba:	0f 92       	push	r0
+    10bc:	cd b7       	in	r28, 0x3d	; 61
+    10be:	de b7       	in	r29, 0x3e	; 62
+    10c0:	16 2f       	mov	r17, r22
+	uint8_t data;
+	
+	ks0108GotoXY(x, y-y%8);					// read data from display memory
+    10c2:	68 7f       	andi	r22, 0xF8	; 248
+    10c4:	49 83       	std	Y+1, r20	; 0x01
+    10c6:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+		data = ~data;
+	return data;
+}
+
+inline uint8_t ks0108ReadData(void) {
+	ks0108DoReadData(1);							// dummy read
+    10ca:	81 e0       	ldi	r24, 0x01	; 1
+    10cc:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+	return ks0108DoReadData(0);						// "real" read
+    10d0:	80 e0       	ldi	r24, 0x00	; 0
+    10d2:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+    10d6:	98 2f       	mov	r25, r24
+    10d8:	21 2f       	mov	r18, r17
+    10da:	30 e0       	ldi	r19, 0x00	; 0
+	uint8_t data;
+	
+	ks0108GotoXY(x, y-y%8);					// read data from display memory
+	data = ks0108ReadData();
+	
+	if(color == BLACK) {
+    10dc:	49 81       	ldd	r20, Y+1	; 0x01
+    10de:	4f 3f       	cpi	r20, 0xFF	; 255
+    10e0:	61 f4       	brne	.+24     	; 0x10fa <ks0108SetDot+0x46>
+		data |= 0x01 << (y%8);				// set dot
+    10e2:	a9 01       	movw	r20, r18
+    10e4:	47 70       	andi	r20, 0x07	; 7
+    10e6:	50 70       	andi	r21, 0x00	; 0
+    10e8:	21 e0       	ldi	r18, 0x01	; 1
+    10ea:	30 e0       	ldi	r19, 0x00	; 0
+    10ec:	02 c0       	rjmp	.+4      	; 0x10f2 <ks0108SetDot+0x3e>
+    10ee:	22 0f       	add	r18, r18
+    10f0:	33 1f       	adc	r19, r19
+    10f2:	4a 95       	dec	r20
+    10f4:	e2 f7       	brpl	.-8      	; 0x10ee <ks0108SetDot+0x3a>
+    10f6:	82 2b       	or	r24, r18
+    10f8:	0d c0       	rjmp	.+26     	; 0x1114 <ks0108SetDot+0x60>
+	} else {
+		data &= ~(0x01 << (y%8));			// clear dot
+    10fa:	a9 01       	movw	r20, r18
+    10fc:	47 70       	andi	r20, 0x07	; 7
+    10fe:	50 70       	andi	r21, 0x00	; 0
+    1100:	21 e0       	ldi	r18, 0x01	; 1
+    1102:	30 e0       	ldi	r19, 0x00	; 0
+    1104:	02 c0       	rjmp	.+4      	; 0x110a <ks0108SetDot+0x56>
+    1106:	22 0f       	add	r18, r18
+    1108:	33 1f       	adc	r19, r19
+    110a:	4a 95       	dec	r20
+    110c:	e2 f7       	brpl	.-8      	; 0x1106 <ks0108SetDot+0x52>
+    110e:	82 2f       	mov	r24, r18
+    1110:	80 95       	com	r24
+    1112:	89 23       	and	r24, r25
+	}
+	
+	ks0108WriteData(data);					// write data back to display
+    1114:	0e 94 83 06 	call	0xd06	; 0xd06 <ks0108WriteData>
+}
+    1118:	0f 90       	pop	r0
+    111a:	cf 91       	pop	r28
+    111c:	df 91       	pop	r29
+    111e:	1f 91       	pop	r17
+    1120:	08 95       	ret
+
+00001122 <ks0108InvertRect>:
+			ks0108WriteData(data);
+		}
+	}
+}
+
+void ks0108InvertRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height) {
+    1122:	af 92       	push	r10
+    1124:	bf 92       	push	r11
+    1126:	cf 92       	push	r12
+    1128:	df 92       	push	r13
+    112a:	ef 92       	push	r14
+    112c:	ff 92       	push	r15
+    112e:	0f 93       	push	r16
+    1130:	1f 93       	push	r17
+    1132:	cf 93       	push	r28
+    1134:	df 93       	push	r29
+    1136:	18 2f       	mov	r17, r24
+    1138:	04 2f       	mov	r16, r20
+    113a:	d2 2e       	mov	r13, r18
+	uint8_t mask, pageOffset, h, i, data, tmpData;
+	height++;
+    113c:	d3 94       	inc	r13
+	
+	pageOffset = y%8;
+    113e:	86 2f       	mov	r24, r22
+    1140:	87 70       	andi	r24, 0x07	; 7
+	y -= pageOffset;
+    1142:	e6 2e       	mov	r14, r22
+    1144:	e8 1a       	sub	r14, r24
+	mask = 0xFF;
+	if(height < 8-pageOffset) {
+    1146:	cd 2d       	mov	r28, r13
+    1148:	d0 e0       	ldi	r29, 0x00	; 0
+    114a:	28 2f       	mov	r18, r24
+    114c:	30 e0       	ldi	r19, 0x00	; 0
+    114e:	48 e0       	ldi	r20, 0x08	; 8
+    1150:	50 e0       	ldi	r21, 0x00	; 0
+    1152:	ba 01       	movw	r22, r20
+    1154:	62 1b       	sub	r22, r18
+    1156:	73 0b       	sbc	r23, r19
+    1158:	c6 17       	cp	r28, r22
+    115a:	d7 07       	cpc	r29, r23
+    115c:	5c f4       	brge	.+22     	; 0x1174 <ks0108InvertRect+0x52>
+		mask >>= (8-height);
+    115e:	4c 1b       	sub	r20, r28
+    1160:	5d 0b       	sbc	r21, r29
+    1162:	8f ef       	ldi	r24, 0xFF	; 255
+    1164:	90 e0       	ldi	r25, 0x00	; 0
+    1166:	02 c0       	rjmp	.+4      	; 0x116c <ks0108InvertRect+0x4a>
+    1168:	95 95       	asr	r25
+    116a:	87 95       	ror	r24
+    116c:	4a 95       	dec	r20
+    116e:	e2 f7       	brpl	.-8      	; 0x1168 <ks0108InvertRect+0x46>
+    1170:	fd 2c       	mov	r15, r13
+    1172:	04 c0       	rjmp	.+8      	; 0x117c <ks0108InvertRect+0x5a>
+		h = height;
+	} else {
+		h = 8-pageOffset;
+    1174:	58 e0       	ldi	r21, 0x08	; 8
+    1176:	f5 2e       	mov	r15, r21
+    1178:	f8 1a       	sub	r15, r24
+    117a:	8f ef       	ldi	r24, 0xFF	; 255
+	}
+	mask <<= pageOffset;
+    117c:	90 e0       	ldi	r25, 0x00	; 0
+    117e:	02 c0       	rjmp	.+4      	; 0x1184 <ks0108InvertRect+0x62>
+    1180:	88 0f       	add	r24, r24
+    1182:	99 1f       	adc	r25, r25
+    1184:	2a 95       	dec	r18
+    1186:	e2 f7       	brpl	.-8      	; 0x1180 <ks0108InvertRect+0x5e>
+    1188:	c8 2e       	mov	r12, r24
+	
+	ks0108GotoXY(x, y);
+    118a:	81 2f       	mov	r24, r17
+    118c:	6e 2d       	mov	r22, r14
+    118e:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+    1192:	bb 24       	eor	r11, r11
+	for(i=0; i<=width; i++) {
+		data = ks0108ReadData();
+		tmpData = ~data;
+		data = (tmpData & mask) | (data & ~mask);
+    1194:	ac 2c       	mov	r10, r12
+    1196:	a0 94       	com	r10
+		data = ~data;
+	return data;
+}
+
+inline uint8_t ks0108ReadData(void) {
+	ks0108DoReadData(1);							// dummy read
+    1198:	81 e0       	ldi	r24, 0x01	; 1
+    119a:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+	return ks0108DoReadData(0);						// "real" read
+    119e:	80 e0       	ldi	r24, 0x00	; 0
+    11a0:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+	
+	ks0108GotoXY(x, y);
+	for(i=0; i<=width; i++) {
+		data = ks0108ReadData();
+		tmpData = ~data;
+		data = (tmpData & mask) | (data & ~mask);
+    11a4:	98 2f       	mov	r25, r24
+    11a6:	90 95       	com	r25
+    11a8:	9c 21       	and	r25, r12
+    11aa:	8a 21       	and	r24, r10
+		ks0108WriteData(data);
+    11ac:	89 2b       	or	r24, r25
+    11ae:	0e 94 83 06 	call	0xd06	; 0xd06 <ks0108WriteData>
+		h = 8-pageOffset;
+	}
+	mask <<= pageOffset;
+	
+	ks0108GotoXY(x, y);
+	for(i=0; i<=width; i++) {
+    11b2:	b3 94       	inc	r11
+    11b4:	0b 15       	cp	r16, r11
+    11b6:	80 f7       	brcc	.-32     	; 0x1198 <ks0108InvertRect+0x76>
+    11b8:	15 c0       	rjmp	.+42     	; 0x11e4 <ks0108InvertRect+0xc2>
+		ks0108WriteData(data);
+	}
+	
+	while(h+8 <= height) {
+		h += 8;
+		y += 8;
+    11ba:	28 e0       	ldi	r18, 0x08	; 8
+    11bc:	e2 0e       	add	r14, r18
+		ks0108GotoXY(x, y);
+    11be:	81 2f       	mov	r24, r17
+    11c0:	6e 2d       	mov	r22, r14
+    11c2:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+    11c6:	cc 24       	eor	r12, r12
+		data = ~data;
+	return data;
+}
+
+inline uint8_t ks0108ReadData(void) {
+	ks0108DoReadData(1);							// dummy read
+    11c8:	81 e0       	ldi	r24, 0x01	; 1
+    11ca:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+	return ks0108DoReadData(0);						// "real" read
+    11ce:	80 e0       	ldi	r24, 0x00	; 0
+    11d0:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+		y += 8;
+		ks0108GotoXY(x, y);
+		
+		for(i=0; i<=width; i++) {
+			data = ks0108ReadData();
+			ks0108WriteData(~data);
+    11d4:	80 95       	com	r24
+    11d6:	0e 94 83 06 	call	0xd06	; 0xd06 <ks0108WriteData>
+	while(h+8 <= height) {
+		h += 8;
+		y += 8;
+		ks0108GotoXY(x, y);
+		
+		for(i=0; i<=width; i++) {
+    11da:	c3 94       	inc	r12
+    11dc:	0c 15       	cp	r16, r12
+    11de:	a0 f7       	brcc	.-24     	; 0x11c8 <ks0108InvertRect+0xa6>
+		data = (tmpData & mask) | (data & ~mask);
+		ks0108WriteData(data);
+	}
+	
+	while(h+8 <= height) {
+		h += 8;
+    11e0:	38 e0       	ldi	r19, 0x08	; 8
+    11e2:	f3 0e       	add	r15, r19
+		tmpData = ~data;
+		data = (tmpData & mask) | (data & ~mask);
+		ks0108WriteData(data);
+	}
+	
+	while(h+8 <= height) {
+    11e4:	8f 2d       	mov	r24, r15
+    11e6:	90 e0       	ldi	r25, 0x00	; 0
+    11e8:	9c 01       	movw	r18, r24
+    11ea:	29 5f       	subi	r18, 0xF9	; 249
+    11ec:	3f 4f       	sbci	r19, 0xFF	; 255
+    11ee:	2c 17       	cp	r18, r28
+    11f0:	3d 07       	cpc	r19, r29
+    11f2:	1c f3       	brlt	.-58     	; 0x11ba <ks0108InvertRect+0x98>
+			data = ks0108ReadData();
+			ks0108WriteData(~data);
+		}
+	}
+	
+	if(h < height) {
+    11f4:	fd 14       	cp	r15, r13
+    11f6:	20 f5       	brcc	.+72     	; 0x1240 <ks0108InvertRect+0x11e>
+		mask = ~(0xFF << (height-h));
+    11f8:	c8 1b       	sub	r28, r24
+    11fa:	d9 0b       	sbc	r29, r25
+    11fc:	8f ef       	ldi	r24, 0xFF	; 255
+    11fe:	90 e0       	ldi	r25, 0x00	; 0
+    1200:	0c 2e       	mov	r0, r28
+    1202:	02 c0       	rjmp	.+4      	; 0x1208 <ks0108InvertRect+0xe6>
+    1204:	88 0f       	add	r24, r24
+    1206:	99 1f       	adc	r25, r25
+    1208:	0a 94       	dec	r0
+    120a:	e2 f7       	brpl	.-8      	; 0x1204 <ks0108InvertRect+0xe2>
+    120c:	f8 2e       	mov	r15, r24
+    120e:	f0 94       	com	r15
+		ks0108GotoXY(x, y+8);
+    1210:	6e 2d       	mov	r22, r14
+    1212:	68 5f       	subi	r22, 0xF8	; 248
+    1214:	81 2f       	mov	r24, r17
+    1216:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+    121a:	10 e0       	ldi	r17, 0x00	; 0
+		
+		for(i=0; i<=width; i++) {
+			data = ks0108ReadData();
+			tmpData = ~data;
+			data = (tmpData & mask) | (data & ~mask);
+    121c:	ef 2c       	mov	r14, r15
+    121e:	e0 94       	com	r14
+		data = ~data;
+	return data;
+}
+
+inline uint8_t ks0108ReadData(void) {
+	ks0108DoReadData(1);							// dummy read
+    1220:	81 e0       	ldi	r24, 0x01	; 1
+    1222:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+	return ks0108DoReadData(0);						// "real" read
+    1226:	80 e0       	ldi	r24, 0x00	; 0
+    1228:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+		ks0108GotoXY(x, y+8);
+		
+		for(i=0; i<=width; i++) {
+			data = ks0108ReadData();
+			tmpData = ~data;
+			data = (tmpData & mask) | (data & ~mask);
+    122c:	98 2f       	mov	r25, r24
+    122e:	90 95       	com	r25
+    1230:	9f 21       	and	r25, r15
+    1232:	8e 21       	and	r24, r14
+			ks0108WriteData(data);
+    1234:	89 2b       	or	r24, r25
+    1236:	0e 94 83 06 	call	0xd06	; 0xd06 <ks0108WriteData>
+	
+	if(h < height) {
+		mask = ~(0xFF << (height-h));
+		ks0108GotoXY(x, y+8);
+		
+		for(i=0; i<=width; i++) {
+    123a:	1f 5f       	subi	r17, 0xFF	; 255
+    123c:	01 17       	cp	r16, r17
+    123e:	80 f7       	brcc	.-32     	; 0x1220 <ks0108InvertRect+0xfe>
+			tmpData = ~data;
+			data = (tmpData & mask) | (data & ~mask);
+			ks0108WriteData(data);
+		}
+	}
+}
+    1240:	df 91       	pop	r29
+    1242:	cf 91       	pop	r28
+    1244:	1f 91       	pop	r17
+    1246:	0f 91       	pop	r16
+    1248:	ff 90       	pop	r15
+    124a:	ef 90       	pop	r14
+    124c:	df 90       	pop	r13
+    124e:	cf 90       	pop	r12
+    1250:	bf 90       	pop	r11
+    1252:	af 90       	pop	r10
+    1254:	08 95       	ret
+
+00001256 <ks0108SetInverted>:
+
+void ks0108SetInverted(uint8_t invert) {
+    1256:	1f 93       	push	r17
+    1258:	18 2f       	mov	r17, r24
+	if(ks0108Inverted != invert) {
+    125a:	80 91 00 01 	lds	r24, 0x0100
+    125e:	81 17       	cp	r24, r17
+    1260:	41 f0       	breq	.+16     	; 0x1272 <ks0108SetInverted+0x1c>
+		ks0108InvertRect(0,0,127,63);
+    1262:	80 e0       	ldi	r24, 0x00	; 0
+    1264:	60 e0       	ldi	r22, 0x00	; 0
+    1266:	4f e7       	ldi	r20, 0x7F	; 127
+    1268:	2f e3       	ldi	r18, 0x3F	; 63
+    126a:	0e 94 91 08 	call	0x1122	; 0x1122 <ks0108InvertRect>
+		ks0108Inverted = invert;
+    126e:	10 93 00 01 	sts	0x0100, r17
+	}
+}
+    1272:	1f 91       	pop	r17
+    1274:	08 95       	ret
+
+00001276 <ks0108FillRect>:
+}
+
+/*
+ * Hardware-Functions 
+ */
+void ks0108FillRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t color) {
+    1276:	9f 92       	push	r9
+    1278:	af 92       	push	r10
+    127a:	bf 92       	push	r11
+    127c:	cf 92       	push	r12
+    127e:	df 92       	push	r13
+    1280:	ef 92       	push	r14
+    1282:	ff 92       	push	r15
+    1284:	0f 93       	push	r16
+    1286:	1f 93       	push	r17
+    1288:	cf 93       	push	r28
+    128a:	df 93       	push	r29
+    128c:	18 2f       	mov	r17, r24
+    128e:	f4 2e       	mov	r15, r20
+    1290:	e2 2e       	mov	r14, r18
+    1292:	c0 2e       	mov	r12, r16
+	uint8_t mask, pageOffset, h, i, data;
+	height++;
+    1294:	e3 94       	inc	r14
+	
+	pageOffset = y%8;
+    1296:	86 2f       	mov	r24, r22
+    1298:	87 70       	andi	r24, 0x07	; 7
+	y -= pageOffset;
+    129a:	d6 2e       	mov	r13, r22
+    129c:	d8 1a       	sub	r13, r24
+	mask = 0xFF;
+	if(height < 8-pageOffset) {
+    129e:	ce 2d       	mov	r28, r14
+    12a0:	d0 e0       	ldi	r29, 0x00	; 0
+    12a2:	28 2f       	mov	r18, r24
+    12a4:	30 e0       	ldi	r19, 0x00	; 0
+    12a6:	48 e0       	ldi	r20, 0x08	; 8
+    12a8:	50 e0       	ldi	r21, 0x00	; 0
+    12aa:	ba 01       	movw	r22, r20
+    12ac:	62 1b       	sub	r22, r18
+    12ae:	73 0b       	sbc	r23, r19
+    12b0:	c6 17       	cp	r28, r22
+    12b2:	d7 07       	cpc	r29, r23
+    12b4:	5c f4       	brge	.+22     	; 0x12cc <ks0108FillRect+0x56>
+		mask >>= (8-height);
+    12b6:	4c 1b       	sub	r20, r28
+    12b8:	5d 0b       	sbc	r21, r29
+    12ba:	8f ef       	ldi	r24, 0xFF	; 255
+    12bc:	90 e0       	ldi	r25, 0x00	; 0
+    12be:	02 c0       	rjmp	.+4      	; 0x12c4 <ks0108FillRect+0x4e>
+    12c0:	95 95       	asr	r25
+    12c2:	87 95       	ror	r24
+    12c4:	4a 95       	dec	r20
+    12c6:	e2 f7       	brpl	.-8      	; 0x12c0 <ks0108FillRect+0x4a>
+    12c8:	0e 2d       	mov	r16, r14
+    12ca:	03 c0       	rjmp	.+6      	; 0x12d2 <ks0108FillRect+0x5c>
+		h = height;
+	} else {
+		h = 8-pageOffset;
+    12cc:	08 e0       	ldi	r16, 0x08	; 8
+    12ce:	08 1b       	sub	r16, r24
+    12d0:	8f ef       	ldi	r24, 0xFF	; 255
+	}
+	mask <<= pageOffset;
+    12d2:	90 e0       	ldi	r25, 0x00	; 0
+    12d4:	02 c0       	rjmp	.+4      	; 0x12da <ks0108FillRect+0x64>
+    12d6:	88 0f       	add	r24, r24
+    12d8:	99 1f       	adc	r25, r25
+    12da:	2a 95       	dec	r18
+    12dc:	e2 f7       	brpl	.-8      	; 0x12d6 <ks0108FillRect+0x60>
+    12de:	b8 2e       	mov	r11, r24
+	
+	ks0108GotoXY(x, y);
+    12e0:	81 2f       	mov	r24, r17
+    12e2:	6d 2d       	mov	r22, r13
+    12e4:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+    12e8:	aa 24       	eor	r10, r10
+		data = ks0108ReadData();
+		
+		if(color == BLACK) {
+			data |= mask;
+		} else {
+			data &= ~mask;
+    12ea:	9b 2c       	mov	r9, r11
+    12ec:	90 94       	com	r9
+		data = ~data;
+	return data;
+}
+
+inline uint8_t ks0108ReadData(void) {
+	ks0108DoReadData(1);							// dummy read
+    12ee:	81 e0       	ldi	r24, 0x01	; 1
+    12f0:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+	return ks0108DoReadData(0);						// "real" read
+    12f4:	80 e0       	ldi	r24, 0x00	; 0
+    12f6:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+	
+	ks0108GotoXY(x, y);
+	for(i=0; i<=width; i++) {
+		data = ks0108ReadData();
+		
+		if(color == BLACK) {
+    12fa:	2f ef       	ldi	r18, 0xFF	; 255
+    12fc:	c2 16       	cp	r12, r18
+    12fe:	11 f4       	brne	.+4      	; 0x1304 <ks0108FillRect+0x8e>
+			data |= mask;
+    1300:	8b 29       	or	r24, r11
+    1302:	01 c0       	rjmp	.+2      	; 0x1306 <ks0108FillRect+0x90>
+		} else {
+			data &= ~mask;
+    1304:	89 21       	and	r24, r9
+		}
+
+		ks0108WriteData(data);
+    1306:	0e 94 83 06 	call	0xd06	; 0xd06 <ks0108WriteData>
+		h = 8-pageOffset;
+	}
+	mask <<= pageOffset;
+	
+	ks0108GotoXY(x, y);
+	for(i=0; i<=width; i++) {
+    130a:	a3 94       	inc	r10
+    130c:	fa 14       	cp	r15, r10
+    130e:	78 f7       	brcc	.-34     	; 0x12ee <ks0108FillRect+0x78>
+    1310:	0e c0       	rjmp	.+28     	; 0x132e <ks0108FillRect+0xb8>
+		ks0108WriteData(data);
+	}
+	
+	while(h+8 <= height) {
+		h += 8;
+		y += 8;
+    1312:	38 e0       	ldi	r19, 0x08	; 8
+    1314:	d3 0e       	add	r13, r19
+		ks0108GotoXY(x, y);
+    1316:	81 2f       	mov	r24, r17
+    1318:	6d 2d       	mov	r22, r13
+    131a:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+    131e:	bb 24       	eor	r11, r11
+		
+		for(i=0; i<=width; i++) {
+			ks0108WriteData(color);
+    1320:	8c 2d       	mov	r24, r12
+    1322:	0e 94 83 06 	call	0xd06	; 0xd06 <ks0108WriteData>
+	while(h+8 <= height) {
+		h += 8;
+		y += 8;
+		ks0108GotoXY(x, y);
+		
+		for(i=0; i<=width; i++) {
+    1326:	b3 94       	inc	r11
+    1328:	fb 14       	cp	r15, r11
+    132a:	d0 f7       	brcc	.-12     	; 0x1320 <ks0108FillRect+0xaa>
+
+		ks0108WriteData(data);
+	}
+	
+	while(h+8 <= height) {
+		h += 8;
+    132c:	08 5f       	subi	r16, 0xF8	; 248
+		}
+
+		ks0108WriteData(data);
+	}
+	
+	while(h+8 <= height) {
+    132e:	80 2f       	mov	r24, r16
+    1330:	90 e0       	ldi	r25, 0x00	; 0
+    1332:	9c 01       	movw	r18, r24
+    1334:	29 5f       	subi	r18, 0xF9	; 249
+    1336:	3f 4f       	sbci	r19, 0xFF	; 255
+    1338:	2c 17       	cp	r18, r28
+    133a:	3d 07       	cpc	r19, r29
+    133c:	54 f3       	brlt	.-44     	; 0x1312 <ks0108FillRect+0x9c>
+		for(i=0; i<=width; i++) {
+			ks0108WriteData(color);
+		}
+	}
+	
+	if(h < height) {
+    133e:	0e 15       	cp	r16, r14
+    1340:	28 f5       	brcc	.+74     	; 0x138c <ks0108FillRect+0x116>
+		mask = ~(0xFF << (height-h));
+    1342:	c8 1b       	sub	r28, r24
+    1344:	d9 0b       	sbc	r29, r25
+    1346:	8f ef       	ldi	r24, 0xFF	; 255
+    1348:	90 e0       	ldi	r25, 0x00	; 0
+    134a:	0c 2e       	mov	r0, r28
+    134c:	02 c0       	rjmp	.+4      	; 0x1352 <ks0108FillRect+0xdc>
+    134e:	88 0f       	add	r24, r24
+    1350:	99 1f       	adc	r25, r25
+    1352:	0a 94       	dec	r0
+    1354:	e2 f7       	brpl	.-8      	; 0x134e <ks0108FillRect+0xd8>
+    1356:	08 2f       	mov	r16, r24
+    1358:	00 95       	com	r16
+		ks0108GotoXY(x, y+8);
+    135a:	6d 2d       	mov	r22, r13
+    135c:	68 5f       	subi	r22, 0xF8	; 248
+    135e:	81 2f       	mov	r24, r17
+    1360:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+    1364:	10 e0       	ldi	r17, 0x00	; 0
+			data = ks0108ReadData();
+		
+			if(color == BLACK) {
+				data |= mask;
+			} else {
+				data &= ~mask;
+    1366:	e0 2e       	mov	r14, r16
+    1368:	e0 94       	com	r14
+		data = ~data;
+	return data;
+}
+
+inline uint8_t ks0108ReadData(void) {
+	ks0108DoReadData(1);							// dummy read
+    136a:	81 e0       	ldi	r24, 0x01	; 1
+    136c:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+	return ks0108DoReadData(0);						// "real" read
+    1370:	80 e0       	ldi	r24, 0x00	; 0
+    1372:	0e 94 48 06 	call	0xc90	; 0xc90 <ks0108DoReadData>
+		ks0108GotoXY(x, y+8);
+		
+		for(i=0; i<=width; i++) {
+			data = ks0108ReadData();
+		
+			if(color == BLACK) {
+    1376:	3f ef       	ldi	r19, 0xFF	; 255
+    1378:	c3 16       	cp	r12, r19
+    137a:	11 f4       	brne	.+4      	; 0x1380 <ks0108FillRect+0x10a>
+				data |= mask;
+    137c:	80 2b       	or	r24, r16
+    137e:	01 c0       	rjmp	.+2      	; 0x1382 <ks0108FillRect+0x10c>
+			} else {
+				data &= ~mask;
+    1380:	8e 21       	and	r24, r14
+			}
+	
+			ks0108WriteData(data);
+    1382:	0e 94 83 06 	call	0xd06	; 0xd06 <ks0108WriteData>
+	
+	if(h < height) {
+		mask = ~(0xFF << (height-h));
+		ks0108GotoXY(x, y+8);
+		
+		for(i=0; i<=width; i++) {
+    1386:	1f 5f       	subi	r17, 0xFF	; 255
+    1388:	f1 16       	cp	r15, r17
+    138a:	78 f7       	brcc	.-34     	; 0x136a <ks0108FillRect+0xf4>
+			}
+	
+			ks0108WriteData(data);
+		}
+	}
+}
+    138c:	df 91       	pop	r29
+    138e:	cf 91       	pop	r28
+    1390:	1f 91       	pop	r17
+    1392:	0f 91       	pop	r16
+    1394:	ff 90       	pop	r15
+    1396:	ef 90       	pop	r14
+    1398:	df 90       	pop	r13
+    139a:	cf 90       	pop	r12
+    139c:	bf 90       	pop	r11
+    139e:	af 90       	pop	r10
+    13a0:	9f 90       	pop	r9
+    13a2:	08 95       	ret
+
+000013a4 <ks0108Init>:
+	cmd = LCD_SET_PAGE | ks0108Coord.page;			// set y address on both chips
+	ks0108WriteCommand(cmd, CHIP1);
+	ks0108WriteCommand(cmd, CHIP2);
+}
+
+void ks0108Init(uint8_t invert) {
+    13a4:	0f 93       	push	r16
+	ks0108Coord.x = 0;
+    13a6:	10 92 02 01 	sts	0x0102, r1
+	ks0108Coord.y = 0;
+    13aa:	10 92 03 01 	sts	0x0103, r1
+	ks0108Coord.page = 0;
+    13ae:	10 92 04 01 	sts	0x0104, r1
+	
+	ks0108Inverted = invert;
+    13b2:	80 93 00 01 	sts	0x0100, r24
+	
+	LCD_CMD_DIR = 0xFF;								// command port is output
+    13b6:	8f ef       	ldi	r24, 0xFF	; 255
+    13b8:	84 bb       	out	0x14, r24	; 20
+	ks0108WriteCommand(LCD_ON, CHIP1);				// power on
+    13ba:	8f e3       	ldi	r24, 0x3F	; 63
+    13bc:	60 e0       	ldi	r22, 0x00	; 0
+    13be:	0e 94 fe 05 	call	0xbfc	; 0xbfc <ks0108WriteCommand>
+	ks0108WriteCommand(LCD_ON, CHIP2);
+    13c2:	8f e3       	ldi	r24, 0x3F	; 63
+    13c4:	61 e0       	ldi	r22, 0x01	; 1
+    13c6:	0e 94 fe 05 	call	0xbfc	; 0xbfc <ks0108WriteCommand>
+	
+	ks0108WriteCommand(LCD_DISP_START, CHIP1);		// display start line = 0
+    13ca:	80 ec       	ldi	r24, 0xC0	; 192
+    13cc:	60 e0       	ldi	r22, 0x00	; 0
+    13ce:	0e 94 fe 05 	call	0xbfc	; 0xbfc <ks0108WriteCommand>
+	ks0108WriteCommand(LCD_DISP_START, CHIP2);
+    13d2:	80 ec       	ldi	r24, 0xC0	; 192
+    13d4:	61 e0       	ldi	r22, 0x01	; 1
+    13d6:	0e 94 fe 05 	call	0xbfc	; 0xbfc <ks0108WriteCommand>
+	ks0108ClearScreen();							// display clear
+    13da:	80 e0       	ldi	r24, 0x00	; 0
+    13dc:	60 e0       	ldi	r22, 0x00	; 0
+    13de:	4f e7       	ldi	r20, 0x7F	; 127
+    13e0:	2f e3       	ldi	r18, 0x3F	; 63
+    13e2:	00 e0       	ldi	r16, 0x00	; 0
+    13e4:	0e 94 3b 09 	call	0x1276	; 0x1276 <ks0108FillRect>
+	ks0108GotoXY(0,0);
+    13e8:	80 e0       	ldi	r24, 0x00	; 0
+    13ea:	60 e0       	ldi	r22, 0x00	; 0
+    13ec:	0e 94 23 06 	call	0xc46	; 0xc46 <ks0108GotoXY>
+}
+    13f0:	0f 91       	pop	r16
+    13f2:	08 95       	ret
+
+000013f4 <ks0108DrawRoundRect>:
+	ks0108DrawHoriLine(x, y+height, width, color);		// bottom
+	ks0108DrawVertLine(x, y, height, color);			// left
+	ks0108DrawVertLine(x+width, y, height, color);		// right
+}
+
+void ks0108DrawRoundRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t radius, uint8_t color) {
+    13f4:	2f 92       	push	r2
+    13f6:	3f 92       	push	r3
+    13f8:	4f 92       	push	r4
+    13fa:	5f 92       	push	r5
+    13fc:	6f 92       	push	r6
+    13fe:	7f 92       	push	r7
+    1400:	8f 92       	push	r8
+    1402:	9f 92       	push	r9
+    1404:	af 92       	push	r10
+    1406:	bf 92       	push	r11
+    1408:	cf 92       	push	r12
+    140a:	df 92       	push	r13
+    140c:	ef 92       	push	r14
+    140e:	ff 92       	push	r15
+    1410:	0f 93       	push	r16
+    1412:	1f 93       	push	r17
+    1414:	df 93       	push	r29
+    1416:	cf 93       	push	r28
+    1418:	cd b7       	in	r28, 0x3d	; 61
+    141a:	de b7       	in	r29, 0x3e	; 62
+    141c:	2b 97       	sbiw	r28, 0x0b	; 11
+    141e:	0f b6       	in	r0, 0x3f	; 63
+    1420:	f8 94       	cli
+    1422:	de bf       	out	0x3e, r29	; 62
+    1424:	0f be       	out	0x3f, r0	; 63
+    1426:	cd bf       	out	0x3d, r28	; 61
+    1428:	38 2f       	mov	r19, r24
+    142a:	16 2f       	mov	r17, r22
+    142c:	54 2f       	mov	r21, r20
+    142e:	2d 83       	std	Y+5, r18	; 0x05
+  	int16_t tSwitch, x1 = 0, y1 = radius;
+    1430:	a0 2e       	mov	r10, r16
+    1432:	bb 24       	eor	r11, r11
+  	tSwitch = 3 - 2 * radius;
+    1434:	c5 01       	movw	r24, r10
+    1436:	88 0f       	add	r24, r24
+    1438:	99 1f       	adc	r25, r25
+    143a:	66 27       	eor	r22, r22
+    143c:	77 27       	eor	r23, r23
+    143e:	68 1b       	sub	r22, r24
+    1440:	79 0b       	sbc	r23, r25
+    1442:	6d 5f       	subi	r22, 0xFD	; 253
+    1444:	7f 4f       	sbci	r23, 0xFF	; 255
+    1446:	7b 87       	std	Y+11, r23	; 0x0b
+    1448:	6a 87       	std	Y+10, r22	; 0x0a
+    144a:	d0 2e       	mov	r13, r16
+    144c:	d3 0e       	add	r13, r19
+    144e:	f0 2e       	mov	r15, r16
+    1450:	f1 0e       	add	r15, r17
+	ks0108DrawHoriLine(x, y+height, width, color);		// bottom
+	ks0108DrawVertLine(x, y, height, color);			// left
+	ks0108DrawVertLine(x+width, y, height, color);		// right
+}
+
+void ks0108DrawRoundRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t radius, uint8_t color) {
+    1452:	74 2f       	mov	r23, r20
+    1454:	73 0f       	add	r23, r19
+    1456:	7c 83       	std	Y+4, r23	; 0x04
+    1458:	70 1b       	sub	r23, r16
+    145a:	7a 83       	std	Y+2, r23	; 0x02
+    145c:	82 2f       	mov	r24, r18
+    145e:	81 0f       	add	r24, r17
+    1460:	8b 83       	std	Y+3, r24	; 0x03
+    1462:	80 1b       	sub	r24, r16
+    1464:	89 83       	std	Y+1, r24	; 0x01
+    1466:	58 2e       	mov	r5, r24
+    1468:	67 2e       	mov	r6, r23
+    146a:	7f 2c       	mov	r7, r15
+    146c:	cd 2c       	mov	r12, r13
+    146e:	22 24       	eor	r2, r2
+    1470:	33 24       	eor	r3, r3
+    1472:	88 24       	eor	r8, r8
+    1474:	99 24       	eor	r9, r9
+  	int16_t tSwitch, x1 = 0, y1 = radius;
+  	tSwitch = 3 - 2 * radius;
+	
+	while (x1 <= y1) {
+	    ks0108SetDot(x+radius - x1, y+radius - y1, color);
+    1476:	4a 2c       	mov	r4, r10
+    1478:	9f 2d       	mov	r25, r15
+    147a:	9a 19       	sub	r25, r10
+    147c:	8c 2d       	mov	r24, r12
+    147e:	69 2f       	mov	r22, r25
+    1480:	4e 2d       	mov	r20, r14
+    1482:	39 87       	std	Y+9, r19	; 0x09
+    1484:	58 87       	std	Y+8, r21	; 0x08
+    1486:	9e 83       	std	Y+6, r25	; 0x06
+    1488:	0e 94 5a 08 	call	0x10b4	; 0x10b4 <ks0108SetDot>
+	    ks0108SetDot(x+radius - y1, y+radius - x1, color);
+    148c:	2d 2d       	mov	r18, r13
+    148e:	2a 19       	sub	r18, r10
+    1490:	82 2f       	mov	r24, r18
+    1492:	67 2d       	mov	r22, r7
+    1494:	4e 2d       	mov	r20, r14
+    1496:	2f 83       	std	Y+7, r18	; 0x07
+    1498:	0e 94 5a 08 	call	0x10b4	; 0x10b4 <ks0108SetDot>
+
+	    ks0108SetDot(x+width-radius + x1, y+radius - y1, color);
+    149c:	86 2d       	mov	r24, r6
+    149e:	9e 81       	ldd	r25, Y+6	; 0x06
+    14a0:	69 2f       	mov	r22, r25
+    14a2:	4e 2d       	mov	r20, r14
+    14a4:	0e 94 5a 08 	call	0x10b4	; 0x10b4 <ks0108SetDot>
+	    ks0108SetDot(x+width-radius + y1, y+radius - x1, color);
+    14a8:	9a 81       	ldd	r25, Y+2	; 0x02
+    14aa:	9a 0d       	add	r25, r10
+    14ac:	89 2f       	mov	r24, r25
+    14ae:	67 2d       	mov	r22, r7
+    14b0:	4e 2d       	mov	r20, r14
+    14b2:	9e 83       	std	Y+6, r25	; 0x06
+    14b4:	0e 94 5a 08 	call	0x10b4	; 0x10b4 <ks0108SetDot>
+	    
+	    ks0108SetDot(x+width-radius + x1, y+height-radius + y1, color);
+    14b8:	e9 81       	ldd	r30, Y+1	; 0x01
+    14ba:	4e 0e       	add	r4, r30
+    14bc:	86 2d       	mov	r24, r6
+    14be:	64 2d       	mov	r22, r4
+    14c0:	4e 2d       	mov	r20, r14
+    14c2:	0e 94 5a 08 	call	0x10b4	; 0x10b4 <ks0108SetDot>
+	    ks0108SetDot(x+width-radius + y1, y+height-radius + x1, color);
+    14c6:	9e 81       	ldd	r25, Y+6	; 0x06
+    14c8:	89 2f       	mov	r24, r25
+    14ca:	65 2d       	mov	r22, r5
+    14cc:	4e 2d       	mov	r20, r14
+    14ce:	0e 94 5a 08 	call	0x10b4	; 0x10b4 <ks0108SetDot>
+
+	    ks0108SetDot(x+radius - x1, y+height-radius + y1, color);
+    14d2:	8c 2d       	mov	r24, r12
+    14d4:	64 2d       	mov	r22, r4
+    14d6:	4e 2d       	mov	r20, r14
+    14d8:	0e 94 5a 08 	call	0x10b4	; 0x10b4 <ks0108SetDot>
+	    ks0108SetDot(x+radius - y1, y+height-radius + x1, color);
+    14dc:	2f 81       	ldd	r18, Y+7	; 0x07
+    14de:	82 2f       	mov	r24, r18
+    14e0:	65 2d       	mov	r22, r5
+    14e2:	4e 2d       	mov	r20, r14
+    14e4:	0e 94 5a 08 	call	0x10b4	; 0x10b4 <ks0108SetDot>
+
+	    if (tSwitch < 0) {
+    14e8:	39 85       	ldd	r19, Y+9	; 0x09
+    14ea:	58 85       	ldd	r21, Y+8	; 0x08
+    14ec:	6a 85       	ldd	r22, Y+10	; 0x0a
+    14ee:	7b 85       	ldd	r23, Y+11	; 0x0b
+    14f0:	77 ff       	sbrs	r23, 7
+    14f2:	07 c0       	rjmp	.+14     	; 0x1502 <ks0108DrawRoundRect+0x10e>
+	    	tSwitch += (4 * x1 + 6);
+    14f4:	6a 5f       	subi	r22, 0xFA	; 250
+    14f6:	7f 4f       	sbci	r23, 0xFF	; 255
+    14f8:	62 0d       	add	r22, r2
+    14fa:	73 1d       	adc	r23, r3
+    14fc:	7b 87       	std	Y+11, r23	; 0x0b
+    14fe:	6a 87       	std	Y+10, r22	; 0x0a
+    1500:	15 c0       	rjmp	.+42     	; 0x152c <ks0108DrawRoundRect+0x138>
+	    } else {
+	    	tSwitch += (4 * (x1 - y1) + 10);
+    1502:	8a 85       	ldd	r24, Y+10	; 0x0a
+    1504:	9b 85       	ldd	r25, Y+11	; 0x0b
+    1506:	0a 96       	adiw	r24, 0x0a	; 10
+    1508:	9b 87       	std	Y+11, r25	; 0x0b
+    150a:	8a 87       	std	Y+10, r24	; 0x0a
+    150c:	c4 01       	movw	r24, r8
+    150e:	8a 19       	sub	r24, r10
+    1510:	9b 09       	sbc	r25, r11
+    1512:	88 0f       	add	r24, r24
+    1514:	99 1f       	adc	r25, r25
+    1516:	88 0f       	add	r24, r24
+    1518:	99 1f       	adc	r25, r25
+    151a:	ea 85       	ldd	r30, Y+10	; 0x0a
+    151c:	fb 85       	ldd	r31, Y+11	; 0x0b
+    151e:	e8 0f       	add	r30, r24
+    1520:	f9 1f       	adc	r31, r25
+    1522:	fb 87       	std	Y+11, r31	; 0x0b
+    1524:	ea 87       	std	Y+10, r30	; 0x0a
+	    	y1--;
+    1526:	08 94       	sec
+    1528:	a1 08       	sbc	r10, r1
+    152a:	b1 08       	sbc	r11, r1
+	    }
+	    x1++;
+    152c:	08 94       	sec
+    152e:	81 1c       	adc	r8, r1
+    1530:	91 1c       	adc	r9, r1
+    1532:	ca 94       	dec	r12
+    1534:	7a 94       	dec	r7
+    1536:	63 94       	inc	r6
+    1538:	53 94       	inc	r5
+    153a:	64 e0       	ldi	r22, 0x04	; 4
+    153c:	70 e0       	ldi	r23, 0x00	; 0
+    153e:	26 0e       	add	r2, r22
+    1540:	37 1e       	adc	r3, r23
+
+void ks0108DrawRoundRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t radius, uint8_t color) {
+  	int16_t tSwitch, x1 = 0, y1 = radius;
+  	tSwitch = 3 - 2 * radius;
+	
+	while (x1 <= y1) {
+    1542:	a8 14       	cp	r10, r8
+    1544:	b9 04       	cpc	r11, r9
+    1546:	0c f0       	brlt	.+2      	; 0x154a <ks0108DrawRoundRect+0x156>
+    1548:	96 cf       	rjmp	.-212    	; 0x1476 <ks0108DrawRoundRect+0x82>
+	    	y1--;
+	    }
+	    x1++;
+	}
+	  	
+	ks0108DrawHoriLine(x+radius, y, width-(2*radius), color);			// top
+    154a:	c0 2e       	mov	r12, r16
+    154c:	cc 0c       	add	r12, r12
+    154e:	c1 94       	neg	r12
+    1550:	ac 2c       	mov	r10, r12
+    1552:	a5 0e       	add	r10, r21
+    1554:	8d 2d       	mov	r24, r13
+    1556:	61 2f       	mov	r22, r17
+    1558:	4a 2d       	mov	r20, r10
+    155a:	20 e0       	ldi	r18, 0x00	; 0
+    155c:	0e 2d       	mov	r16, r14
+    155e:	39 87       	std	Y+9, r19	; 0x09
+    1560:	0e 94 3b 09 	call	0x1276	; 0x1276 <ks0108FillRect>
+	ks0108DrawHoriLine(x+radius, y+height, width-(2*radius), color);	// bottom
+    1564:	8d 2d       	mov	r24, r13
+    1566:	6b 81       	ldd	r22, Y+3	; 0x03
+    1568:	4a 2d       	mov	r20, r10
+    156a:	20 e0       	ldi	r18, 0x00	; 0
+    156c:	0e 94 3b 09 	call	0x1276	; 0x1276 <ks0108FillRect>
+	ks0108DrawVertLine(x, y+radius, height-(2*radius), color);			// left
+    1570:	7d 81       	ldd	r23, Y+5	; 0x05
+    1572:	c7 0e       	add	r12, r23
+    1574:	39 85       	ldd	r19, Y+9	; 0x09
+    1576:	83 2f       	mov	r24, r19
+    1578:	6f 2d       	mov	r22, r15
+    157a:	40 e0       	ldi	r20, 0x00	; 0
+    157c:	2c 2d       	mov	r18, r12
+    157e:	0e 94 3b 09 	call	0x1276	; 0x1276 <ks0108FillRect>
+	ks0108DrawVertLine(x+width, y+radius, height-(2*radius), color);	// right
+    1582:	8c 81       	ldd	r24, Y+4	; 0x04
+    1584:	6f 2d       	mov	r22, r15
+    1586:	40 e0       	ldi	r20, 0x00	; 0
+    1588:	2c 2d       	mov	r18, r12
+    158a:	0e 94 3b 09 	call	0x1276	; 0x1276 <ks0108FillRect>
+}
+    158e:	2b 96       	adiw	r28, 0x0b	; 11
+    1590:	0f b6       	in	r0, 0x3f	; 63
+    1592:	f8 94       	cli
+    1594:	de bf       	out	0x3e, r29	; 62
+    1596:	0f be       	out	0x3f, r0	; 63
+    1598:	cd bf       	out	0x3d, r28	; 61
+    159a:	cf 91       	pop	r28
+    159c:	df 91       	pop	r29
+    159e:	1f 91       	pop	r17
+    15a0:	0f 91       	pop	r16
+    15a2:	ff 90       	pop	r15
+    15a4:	ef 90       	pop	r14
+    15a6:	df 90       	pop	r13
+    15a8:	cf 90       	pop	r12
+    15aa:	bf 90       	pop	r11
+    15ac:	af 90       	pop	r10
+    15ae:	9f 90       	pop	r9
+    15b0:	8f 90       	pop	r8
+    15b2:	7f 90       	pop	r7
+    15b4:	6f 90       	pop	r6
+    15b6:	5f 90       	pop	r5
+    15b8:	4f 90       	pop	r4
+    15ba:	3f 90       	pop	r3
+    15bc:	2f 90       	pop	r2
+    15be:	08 95       	ret
+
+000015c0 <ks0108DrawRect>:
+			}
+		}
+	}
+}
+
+void ks0108DrawRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t color) {
+    15c0:	cf 92       	push	r12
+    15c2:	df 92       	push	r13
+    15c4:	ef 92       	push	r14
+    15c6:	ff 92       	push	r15
+    15c8:	0f 93       	push	r16
+    15ca:	1f 93       	push	r17
+    15cc:	e8 2e       	mov	r14, r24
+    15ce:	f6 2e       	mov	r15, r22
+    15d0:	c4 2e       	mov	r12, r20
+    15d2:	d2 2e       	mov	r13, r18
+	ks0108DrawHoriLine(x, y, width, color);				// top
+    15d4:	20 e0       	ldi	r18, 0x00	; 0
+    15d6:	0e 94 3b 09 	call	0x1276	; 0x1276 <ks0108FillRect>
+	ks0108DrawHoriLine(x, y+height, width, color);		// bottom
+    15da:	6d 2d       	mov	r22, r13
+    15dc:	6f 0d       	add	r22, r15
+    15de:	8e 2d       	mov	r24, r14
+    15e0:	4c 2d       	mov	r20, r12
+    15e2:	20 e0       	ldi	r18, 0x00	; 0
+    15e4:	0e 94 3b 09 	call	0x1276	; 0x1276 <ks0108FillRect>
+	ks0108DrawVertLine(x, y, height, color);			// left
+    15e8:	8e 2d       	mov	r24, r14
+    15ea:	6f 2d       	mov	r22, r15
+    15ec:	40 e0       	ldi	r20, 0x00	; 0
+    15ee:	2d 2d       	mov	r18, r13
+    15f0:	0e 94 3b 09 	call	0x1276	; 0x1276 <ks0108FillRect>
+	ks0108DrawVertLine(x+width, y, height, color);		// right
+    15f4:	8c 2d       	mov	r24, r12
+    15f6:	8e 0d       	add	r24, r14
+    15f8:	6f 2d       	mov	r22, r15
+    15fa:	40 e0       	ldi	r20, 0x00	; 0
+    15fc:	2d 2d       	mov	r18, r13
+    15fe:	0e 94 3b 09 	call	0x1276	; 0x1276 <ks0108FillRect>
+}
+    1602:	1f 91       	pop	r17
+    1604:	0f 91       	pop	r16
+    1606:	ff 90       	pop	r15
+    1608:	ef 90       	pop	r14
+    160a:	df 90       	pop	r13
+    160c:	cf 90       	pop	r12
+    160e:	08 95       	ret
+
+00001610 <ks0108DrawLine>:
+uint8_t				ks0108Inverted=0;
+ks0108FontCallback	ks0108FontRead;
+uint8_t				ks0108FontColor;
+const uint8_t*		ks0108Font;
+
+void ks0108DrawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t color) {
+    1610:	4f 92       	push	r4
+    1612:	5f 92       	push	r5
+    1614:	6f 92       	push	r6
+    1616:	7f 92       	push	r7
+    1618:	8f 92       	push	r8
+    161a:	9f 92       	push	r9
+    161c:	af 92       	push	r10
+    161e:	bf 92       	push	r11
+    1620:	cf 92       	push	r12
+    1622:	df 92       	push	r13
+    1624:	ef 92       	push	r14
+    1626:	ff 92       	push	r15
+    1628:	0f 93       	push	r16
+    162a:	1f 93       	push	r17
+    162c:	cf 93       	push	r28
+    162e:	df 93       	push	r29
+    1630:	18 2f       	mov	r17, r24
+    1632:	f6 2e       	mov	r15, r22
+    1634:	d4 2e       	mov	r13, r20
+    1636:	e2 2e       	mov	r14, r18
+    1638:	b0 2e       	mov	r11, r16
+	int16_t m;
+	
+	//
+	// vertical line
+	//
+	if(x1 == x2) {
+    163a:	84 17       	cp	r24, r20
+    163c:	51 f4       	brne	.+20     	; 0x1652 <ks0108DrawLine+0x42>
+		// x1|y1 must be the upper point
+		if(y1 > y2) {
+    163e:	26 17       	cp	r18, r22
+    1640:	10 f4       	brcc	.+4      	; 0x1646 <ks0108DrawLine+0x36>
+    1642:	f2 2e       	mov	r15, r18
+    1644:	e6 2e       	mov	r14, r22
+			yTmp = y1;
+			y1 = y2;
+			y2 = yTmp;
+		}
+		ks0108DrawVertLine(x1, y1, y2-y1, color);
+    1646:	2e 2d       	mov	r18, r14
+    1648:	2f 19       	sub	r18, r15
+    164a:	81 2f       	mov	r24, r17
+    164c:	6f 2d       	mov	r22, r15
+    164e:	40 e0       	ldi	r20, 0x00	; 0
+    1650:	0b c0       	rjmp	.+22     	; 0x1668 <ks0108DrawLine+0x58>
+	
+	//
+	// horizontal line
+	//
+	} else if(y1 == y2) {	
+    1652:	62 17       	cp	r22, r18
+    1654:	69 f4       	brne	.+26     	; 0x1670 <ks0108DrawLine+0x60>
+		// x1|y1 must be the left point
+		if(x1 > x2) {
+    1656:	48 17       	cp	r20, r24
+    1658:	10 f4       	brcc	.+4      	; 0x165e <ks0108DrawLine+0x4e>
+    165a:	14 2f       	mov	r17, r20
+    165c:	d8 2e       	mov	r13, r24
+			xTmp = x1;
+			x1 = x2;
+			x2 = xTmp;
+		}
+		ks0108DrawHoriLine(x1, y1, x2-x1, color);
+    165e:	4d 2d       	mov	r20, r13
+    1660:	41 1b       	sub	r20, r17
+    1662:	81 2f       	mov	r24, r17
+    1664:	6f 2d       	mov	r22, r15
+    1666:	20 e0       	ldi	r18, 0x00	; 0
+    1668:	0b 2d       	mov	r16, r11
+    166a:	0e 94 3b 09 	call	0x1276	; 0x1276 <ks0108FillRect>
+    166e:	d5 c0       	rjmp	.+426    	; 0x181a <ks0108DrawLine+0x20a>
+	//
+	// schiefe line :)
+	//
+	} else {
+		// angle >= 45°
+		if((y2-y1) >= (x2-x1) || (y1-y2) >= (x2-x1)) {
+    1670:	30 e0       	ldi	r19, 0x00	; 0
+    1672:	46 2f       	mov	r20, r22
+    1674:	50 e0       	ldi	r21, 0x00	; 0
+    1676:	8d 2d       	mov	r24, r13
+    1678:	90 e0       	ldi	r25, 0x00	; 0
+    167a:	81 1b       	sub	r24, r17
+    167c:	91 09       	sbc	r25, r1
+    167e:	b9 01       	movw	r22, r18
+    1680:	64 1b       	sub	r22, r20
+    1682:	75 0b       	sbc	r23, r21
+    1684:	68 17       	cp	r22, r24
+    1686:	79 07       	cpc	r23, r25
+    1688:	34 f4       	brge	.+12     	; 0x1696 <ks0108DrawLine+0x86>
+    168a:	42 1b       	sub	r20, r18
+    168c:	53 0b       	sbc	r21, r19
+    168e:	48 17       	cp	r20, r24
+    1690:	59 07       	cpc	r21, r25
+    1692:	0c f4       	brge	.+2      	; 0x1696 <ks0108DrawLine+0x86>
+    1694:	61 c0       	rjmp	.+194    	; 0x1758 <ks0108DrawLine+0x148>
+			// x1 must be smaller than x2
+			if(x1 > x2) {
+    1696:	d1 16       	cp	r13, r17
+    1698:	30 f4       	brcc	.+12     	; 0x16a6 <ks0108DrawLine+0x96>
+    169a:	8f 2d       	mov	r24, r15
+    169c:	fe 2c       	mov	r15, r14
+    169e:	e8 2e       	mov	r14, r24
+    16a0:	81 2f       	mov	r24, r17
+    16a2:	1d 2d       	mov	r17, r13
+    16a4:	d8 2e       	mov	r13, r24
+				y1 = y2;
+				x2 = xTmp;
+				y2 = yTmp;
+			}
+		
+			length = x2-x1;		// not really the length :)
+    16a6:	ad 2c       	mov	r10, r13
+    16a8:	a1 1a       	sub	r10, r17
+			m = ((y2-y1)*200)/length;
+    16aa:	ee 2d       	mov	r30, r14
+    16ac:	f0 e0       	ldi	r31, 0x00	; 0
+    16ae:	6f 2c       	mov	r6, r15
+    16b0:	77 24       	eor	r7, r7
+    16b2:	4f 01       	movw	r8, r30
+    16b4:	86 18       	sub	r8, r6
+    16b6:	97 08       	sbc	r9, r7
+    16b8:	ca 2d       	mov	r28, r10
+    16ba:	d0 e0       	ldi	r29, 0x00	; 0
+    16bc:	88 ec       	ldi	r24, 0xC8	; 200
+    16be:	90 e0       	ldi	r25, 0x00	; 0
+    16c0:	9c 01       	movw	r18, r24
+    16c2:	82 9e       	mul	r8, r18
+    16c4:	c0 01       	movw	r24, r0
+    16c6:	83 9e       	mul	r8, r19
+    16c8:	90 0d       	add	r25, r0
+    16ca:	92 9e       	mul	r9, r18
+    16cc:	90 0d       	add	r25, r0
+    16ce:	11 24       	eor	r1, r1
+    16d0:	be 01       	movw	r22, r28
+    16d2:	0e 94 1e 0c 	call	0x183c	; 0x183c <__divmodhi4>
+    16d6:	2b 01       	movw	r4, r22
+    16d8:	2f 2d       	mov	r18, r15
+    16da:	cc 24       	eor	r12, r12
+				
+				ks0108DrawLine(x1+i, yAlt, x1+i, y, color);
+				
+				if(length <= (y2-y1) && y1 < y2)
+					yAlt = y+1;
+				else if(length <= (y1-y2) && y1 > y2)
+    16dc:	6e 1a       	sub	r6, r30
+    16de:	7f 0a       	sbc	r7, r31
+			length = x2-x1;		// not really the length :)
+			m = ((y2-y1)*200)/length;
+			yAlt = y1;
+			
+			for(i=0; i<=length; i++) {
+				y = ((m*i)/200)+y1;
+    16e0:	8c 2d       	mov	r24, r12
+    16e2:	90 e0       	ldi	r25, 0x00	; 0
+    16e4:	84 9d       	mul	r24, r4
+    16e6:	f0 01       	movw	r30, r0
+    16e8:	85 9d       	mul	r24, r5
+    16ea:	f0 0d       	add	r31, r0
+    16ec:	94 9d       	mul	r25, r4
+    16ee:	f0 0d       	add	r31, r0
+    16f0:	11 24       	eor	r1, r1
+    16f2:	cf 01       	movw	r24, r30
+    16f4:	68 ec       	ldi	r22, 0xC8	; 200
+    16f6:	70 e0       	ldi	r23, 0x00	; 0
+    16f8:	0e 94 1e 0c 	call	0x183c	; 0x183c <__divmodhi4>
+    16fc:	d6 2e       	mov	r13, r22
+    16fe:	df 0c       	add	r13, r15
+				
+				if((m*i)%200 >= 100)
+    1700:	cf 01       	movw	r24, r30
+    1702:	68 ec       	ldi	r22, 0xC8	; 200
+    1704:	70 e0       	ldi	r23, 0x00	; 0
+    1706:	0e 94 1e 0c 	call	0x183c	; 0x183c <__divmodhi4>
+    170a:	84 36       	cpi	r24, 0x64	; 100
+    170c:	91 05       	cpc	r25, r1
+    170e:	14 f0       	brlt	.+4      	; 0x1714 <ks0108DrawLine+0x104>
+					y++;
+    1710:	d3 94       	inc	r13
+    1712:	05 c0       	rjmp	.+10     	; 0x171e <ks0108DrawLine+0x10e>
+				else if((m*i)%200 <= -100)
+    1714:	3f ef       	ldi	r19, 0xFF	; 255
+    1716:	8d 39       	cpi	r24, 0x9D	; 157
+    1718:	93 07       	cpc	r25, r19
+    171a:	0c f4       	brge	.+2      	; 0x171e <ks0108DrawLine+0x10e>
+					y--;
+    171c:	da 94       	dec	r13
+    171e:	4c 2d       	mov	r20, r12
+    1720:	41 0f       	add	r20, r17
+				
+				ks0108DrawLine(x1+i, yAlt, x1+i, y, color);
+    1722:	84 2f       	mov	r24, r20
+    1724:	62 2f       	mov	r22, r18
+    1726:	2d 2d       	mov	r18, r13
+    1728:	0b 2d       	mov	r16, r11
+    172a:	0e 94 08 0b 	call	0x1610	; 0x1610 <ks0108DrawLine>
+				
+				if(length <= (y2-y1) && y1 < y2)
+    172e:	8c 16       	cp	r8, r28
+    1730:	9d 06       	cpc	r9, r29
+    1732:	2c f0       	brlt	.+10     	; 0x173e <ks0108DrawLine+0x12e>
+    1734:	fe 14       	cp	r15, r14
+    1736:	18 f4       	brcc	.+6      	; 0x173e <ks0108DrawLine+0x12e>
+					yAlt = y+1;
+    1738:	2d 2d       	mov	r18, r13
+    173a:	2f 5f       	subi	r18, 0xFF	; 255
+				else if((m*i)%200 <= -100)
+					y--;
+				
+				ks0108DrawLine(x1+i, yAlt, x1+i, y, color);
+				
+				if(length <= (y2-y1) && y1 < y2)
+    173c:	09 c0       	rjmp	.+18     	; 0x1750 <ks0108DrawLine+0x140>
+					yAlt = y+1;
+				else if(length <= (y1-y2) && y1 > y2)
+    173e:	6c 16       	cp	r6, r28
+    1740:	7d 06       	cpc	r7, r29
+    1742:	2c f0       	brlt	.+10     	; 0x174e <ks0108DrawLine+0x13e>
+    1744:	ef 14       	cp	r14, r15
+    1746:	18 f4       	brcc	.+6      	; 0x174e <ks0108DrawLine+0x13e>
+					yAlt = y-1;
+    1748:	2d 2d       	mov	r18, r13
+    174a:	21 50       	subi	r18, 0x01	; 1
+				
+				ks0108DrawLine(x1+i, yAlt, x1+i, y, color);
+				
+				if(length <= (y2-y1) && y1 < y2)
+					yAlt = y+1;
+				else if(length <= (y1-y2) && y1 > y2)
+    174c:	01 c0       	rjmp	.+2      	; 0x1750 <ks0108DrawLine+0x140>
+    174e:	2d 2d       	mov	r18, r13
+		
+			length = x2-x1;		// not really the length :)
+			m = ((y2-y1)*200)/length;
+			yAlt = y1;
+			
+			for(i=0; i<=length; i++) {
+    1750:	c3 94       	inc	r12
+    1752:	ac 14       	cp	r10, r12
+    1754:	28 f6       	brcc	.-118    	; 0x16e0 <ks0108DrawLine+0xd0>
+    1756:	61 c0       	rjmp	.+194    	; 0x181a <ks0108DrawLine+0x20a>
+			}
+		
+		// angle < 45°
+		} else {
+			// y1 must be smaller than y2
+			if(y1 > y2) {
+    1758:	ef 14       	cp	r14, r15
+    175a:	30 f4       	brcc	.+12     	; 0x1768 <ks0108DrawLine+0x158>
+    175c:	8f 2d       	mov	r24, r15
+    175e:	fe 2c       	mov	r15, r14
+    1760:	e8 2e       	mov	r14, r24
+    1762:	81 2f       	mov	r24, r17
+    1764:	1d 2d       	mov	r17, r13
+    1766:	d8 2e       	mov	r13, r24
+				y1 = y2;
+				x2 = xTmp;
+				y2 = yTmp;
+			}
+			
+			length = y2-y1;
+    1768:	ae 2c       	mov	r10, r14
+    176a:	af 18       	sub	r10, r15
+			m = ((x2-x1)*200)/length;
+    176c:	ed 2d       	mov	r30, r13
+    176e:	f0 e0       	ldi	r31, 0x00	; 0
+    1770:	61 2e       	mov	r6, r17
+    1772:	77 24       	eor	r7, r7
+    1774:	4f 01       	movw	r8, r30
+    1776:	86 18       	sub	r8, r6
+    1778:	97 08       	sbc	r9, r7
+    177a:	ca 2d       	mov	r28, r10
+    177c:	d0 e0       	ldi	r29, 0x00	; 0
+    177e:	88 ec       	ldi	r24, 0xC8	; 200
+    1780:	90 e0       	ldi	r25, 0x00	; 0
+    1782:	9c 01       	movw	r18, r24
+    1784:	82 9e       	mul	r8, r18
+    1786:	c0 01       	movw	r24, r0
+    1788:	83 9e       	mul	r8, r19
+    178a:	90 0d       	add	r25, r0
+    178c:	92 9e       	mul	r9, r18
+    178e:	90 0d       	add	r25, r0
+    1790:	11 24       	eor	r1, r1
+    1792:	be 01       	movw	r22, r28
+    1794:	0e 94 1e 0c 	call	0x183c	; 0x183c <__divmodhi4>
+    1798:	2b 01       	movw	r4, r22
+    179a:	31 2f       	mov	r19, r17
+    179c:	cc 24       	eor	r12, r12
+					y--;
+				
+				ks0108DrawLine(yAlt, y1+i, y, y1+i, color);
+				if(length <= (x2-x1) && x1 < x2)
+					yAlt = y+1;
+				else if(length <= (x1-x2) && x1 > x2)
+    179e:	6e 1a       	sub	r6, r30
+    17a0:	7f 0a       	sbc	r7, r31
+			length = y2-y1;
+			m = ((x2-x1)*200)/length;
+			yAlt = x1;
+			
+			for(i=0; i<=length; i++) {
+				y = ((m*i)/200)+x1;
+    17a2:	8c 2d       	mov	r24, r12
+    17a4:	90 e0       	ldi	r25, 0x00	; 0
+    17a6:	84 9d       	mul	r24, r4
+    17a8:	f0 01       	movw	r30, r0
+    17aa:	85 9d       	mul	r24, r5
+    17ac:	f0 0d       	add	r31, r0
+    17ae:	94 9d       	mul	r25, r4
+    17b0:	f0 0d       	add	r31, r0
+    17b2:	11 24       	eor	r1, r1
+    17b4:	cf 01       	movw	r24, r30
+    17b6:	68 ec       	ldi	r22, 0xC8	; 200
+    17b8:	70 e0       	ldi	r23, 0x00	; 0
+    17ba:	0e 94 1e 0c 	call	0x183c	; 0x183c <__divmodhi4>
+    17be:	e6 2e       	mov	r14, r22
+    17c0:	e1 0e       	add	r14, r17
+				
+				if((m*i)%200 >= 100)
+    17c2:	cf 01       	movw	r24, r30
+    17c4:	68 ec       	ldi	r22, 0xC8	; 200
+    17c6:	70 e0       	ldi	r23, 0x00	; 0
+    17c8:	0e 94 1e 0c 	call	0x183c	; 0x183c <__divmodhi4>
+    17cc:	ac 01       	movw	r20, r24
+    17ce:	84 36       	cpi	r24, 0x64	; 100
+    17d0:	91 05       	cpc	r25, r1
+    17d2:	14 f0       	brlt	.+4      	; 0x17d8 <ks0108DrawLine+0x1c8>
+					y++;
+    17d4:	e3 94       	inc	r14
+    17d6:	05 c0       	rjmp	.+10     	; 0x17e2 <ks0108DrawLine+0x1d2>
+				else if((m*i)%200 <= -100)
+    17d8:	8f ef       	ldi	r24, 0xFF	; 255
+    17da:	4d 39       	cpi	r20, 0x9D	; 157
+    17dc:	58 07       	cpc	r21, r24
+    17de:	0c f4       	brge	.+2      	; 0x17e2 <ks0108DrawLine+0x1d2>
+					y--;
+    17e0:	ea 94       	dec	r14
+    17e2:	2c 2d       	mov	r18, r12
+    17e4:	2f 0d       	add	r18, r15
+				
+				ks0108DrawLine(yAlt, y1+i, y, y1+i, color);
+    17e6:	83 2f       	mov	r24, r19
+    17e8:	62 2f       	mov	r22, r18
+    17ea:	4e 2d       	mov	r20, r14
+    17ec:	0b 2d       	mov	r16, r11
+    17ee:	0e 94 08 0b 	call	0x1610	; 0x1610 <ks0108DrawLine>
+				if(length <= (x2-x1) && x1 < x2)
+    17f2:	8c 16       	cp	r8, r28
+    17f4:	9d 06       	cpc	r9, r29
+    17f6:	2c f0       	brlt	.+10     	; 0x1802 <ks0108DrawLine+0x1f2>
+    17f8:	1d 15       	cp	r17, r13
+    17fa:	18 f4       	brcc	.+6      	; 0x1802 <ks0108DrawLine+0x1f2>
+					yAlt = y+1;
+    17fc:	3e 2d       	mov	r19, r14
+    17fe:	3f 5f       	subi	r19, 0xFF	; 255
+					y++;
+				else if((m*i)%200 <= -100)
+					y--;
+				
+				ks0108DrawLine(yAlt, y1+i, y, y1+i, color);
+				if(length <= (x2-x1) && x1 < x2)
+    1800:	09 c0       	rjmp	.+18     	; 0x1814 <ks0108DrawLine+0x204>
+					yAlt = y+1;
+				else if(length <= (x1-x2) && x1 > x2)
+    1802:	6c 16       	cp	r6, r28
+    1804:	7d 06       	cpc	r7, r29
+    1806:	2c f0       	brlt	.+10     	; 0x1812 <ks0108DrawLine+0x202>
+    1808:	d1 16       	cp	r13, r17
+    180a:	18 f4       	brcc	.+6      	; 0x1812 <ks0108DrawLine+0x202>
+					yAlt = y-1;
+    180c:	3e 2d       	mov	r19, r14
+    180e:	31 50       	subi	r19, 0x01	; 1
+					y--;
+				
+				ks0108DrawLine(yAlt, y1+i, y, y1+i, color);
+				if(length <= (x2-x1) && x1 < x2)
+					yAlt = y+1;
+				else if(length <= (x1-x2) && x1 > x2)
+    1810:	01 c0       	rjmp	.+2      	; 0x1814 <ks0108DrawLine+0x204>
+    1812:	3e 2d       	mov	r19, r14
+			
+			length = y2-y1;
+			m = ((x2-x1)*200)/length;
+			yAlt = x1;
+			
+			for(i=0; i<=length; i++) {
+    1814:	c3 94       	inc	r12
+    1816:	ac 14       	cp	r10, r12
+    1818:	20 f6       	brcc	.-120    	; 0x17a2 <ks0108DrawLine+0x192>
+				else
+					yAlt = y;
+			}
+		}
+	}
+}
+    181a:	df 91       	pop	r29
+    181c:	cf 91       	pop	r28
+    181e:	1f 91       	pop	r17
+    1820:	0f 91       	pop	r16
+    1822:	ff 90       	pop	r15
+    1824:	ef 90       	pop	r14
+    1826:	df 90       	pop	r13
+    1828:	cf 90       	pop	r12
+    182a:	bf 90       	pop	r11
+    182c:	af 90       	pop	r10
+    182e:	9f 90       	pop	r9
+    1830:	8f 90       	pop	r8
+    1832:	7f 90       	pop	r7
+    1834:	6f 90       	pop	r6
+    1836:	5f 90       	pop	r5
+    1838:	4f 90       	pop	r4
+    183a:	08 95       	ret
+
+0000183c <__divmodhi4>:
+    183c:	97 fb       	bst	r25, 7
+    183e:	09 2e       	mov	r0, r25
+    1840:	07 26       	eor	r0, r23
+    1842:	0a d0       	rcall	.+20     	; 0x1858 <__divmodhi4_neg1>
+    1844:	77 fd       	sbrc	r23, 7
+    1846:	04 d0       	rcall	.+8      	; 0x1850 <__divmodhi4_neg2>
+    1848:	0c d0       	rcall	.+24     	; 0x1862 <__udivmodhi4>
+    184a:	06 d0       	rcall	.+12     	; 0x1858 <__divmodhi4_neg1>
+    184c:	00 20       	and	r0, r0
+    184e:	1a f4       	brpl	.+6      	; 0x1856 <__divmodhi4_exit>
+
+00001850 <__divmodhi4_neg2>:
+    1850:	70 95       	com	r23
+    1852:	61 95       	neg	r22
+    1854:	7f 4f       	sbci	r23, 0xFF	; 255
+
+00001856 <__divmodhi4_exit>:
+    1856:	08 95       	ret
+
+00001858 <__divmodhi4_neg1>:
+    1858:	f6 f7       	brtc	.-4      	; 0x1856 <__divmodhi4_exit>
+    185a:	90 95       	com	r25
+    185c:	81 95       	neg	r24
+    185e:	9f 4f       	sbci	r25, 0xFF	; 255
+    1860:	08 95       	ret
+
+00001862 <__udivmodhi4>:
+    1862:	aa 1b       	sub	r26, r26
+    1864:	bb 1b       	sub	r27, r27
+    1866:	51 e1       	ldi	r21, 0x11	; 17
+    1868:	07 c0       	rjmp	.+14     	; 0x1878 <__udivmodhi4_ep>
+
+0000186a <__udivmodhi4_loop>:
+    186a:	aa 1f       	adc	r26, r26
+    186c:	bb 1f       	adc	r27, r27
+    186e:	a6 17       	cp	r26, r22
+    1870:	b7 07       	cpc	r27, r23
+    1872:	10 f0       	brcs	.+4      	; 0x1878 <__udivmodhi4_ep>
+    1874:	a6 1b       	sub	r26, r22
+    1876:	b7 0b       	sbc	r27, r23
+
+00001878 <__udivmodhi4_ep>:
+    1878:	88 1f       	adc	r24, r24
+    187a:	99 1f       	adc	r25, r25
+    187c:	5a 95       	dec	r21
+    187e:	a9 f7       	brne	.-22     	; 0x186a <__udivmodhi4_loop>
+    1880:	80 95       	com	r24
+    1882:	90 95       	com	r25
+    1884:	bc 01       	movw	r22, r24
+    1886:	cd 01       	movw	r24, r26
+    1888:	08 95       	ret
+
+0000188a <_exit>:
+    188a:	f8 94       	cli
+
+0000188c <__stop_program>:
+    188c:	ff cf       	rjmp	.-2      	; 0x188c <__stop_program>
