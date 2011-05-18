@@ -248,7 +248,7 @@
 		return 0;
    	} 
    	
-	unsigned char USART_Receive( void )
+   	unsigned char USART_Receive( void )
    	{
 	  /* Wait for data to be received */
 	  while ( !(UCSRA & (1<<RXC)) )
@@ -267,7 +267,7 @@
 	}
 	
 	
-	int fpower(int number,int power)
+   	int fpower(int number,int power)
    	{
 	  int temp = number;
 	  if (power == 0) return 1;
