@@ -1,0 +1,1179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><title>VPF::usb_get_busses() возвращает NULL - Форум программистов</title>
+
+ 
+ 
+<meta http-equiv="content-type" content="text/html; charset=utf-8"> 
+<meta name="description" content="VPF:: - Форум программистов Vingrad">
+<meta name="keywords" content="VPF:: - Форум программистов Vingrad, программирование">
+<meta name="title" content="VPF:: - Форум программистов Vingrad">
+<link rel="stylesheet" type="text/css" href="kw-usb-get-busses_files/menu.css">
+<link rel="stylesheet" type="text/css" href="kw-usb-get-busses_files/other.css">
+<link rel="stylesheet" type="text/css" href="kw-usb-get-busses_files/rating.css">
+<link rel="stylesheet" type="text/css" href="kw-usb-get-busses_files/reklame.css">
+<link rel="stylesheet" type="text/css" href="kw-usb-get-busses_files/main.css">
+<script type="text/javascript" src="kw-usb-get-busses_files/locale.js"></script>
+<script type="text/javascript" src="kw-usb-get-busses_files/time1201624806.js"></script>
+<script type="text/javascript" src="kw-usb-get-busses_files/prototype.js"></script>
+<script type="text/javascript" src="kw-usb-get-busses_files/scriptaculous.js"></script>
+<script type="text/javascript" src="kw-usb-get-busses_files/includer.js"></script></head><body>
+<div class="minwidth">
+<div class="layout">
+<div class="container">
+<span style="display: none;" id="ajax_w"><b>Загрузка. Пожалуйста,<br>подождите...</b><br><br><img src="kw-usb-get-busses_files/l_ajax.gif" alt=""></span><script type="text/javascript">
+<!--
+function buddy_pop() { window.open('index.php?act=buddy&s=','BrowserBuddy','width=250,height=500,resizable=yes,scrollbars=yes'); }
+function chat_pop(cw,ch)  { window.open('index.php?s=&act=chat&pop=1','Chat','width='+cw+',height='+ch+',resizable=yes,scrollbars=yes'); }
+function multi_page_jump( url_bit, total_posts, per_page, ajax_s, ajax_e )
+{
+pages = 1; cur_st = parseInt("0"); cur_page  = 1;
+if ( total_posts % per_page == 0 ) { pages = total_posts / per_page; }
+else { pages = Math.ceil( total_posts / per_page ); }
+msg = "Введите номер страницы, к которой хотите перейти." + " " + pages;
+if ( cur_st> 0 ) { cur_page = cur_st / per_page; cur_page = cur_page -1; }
+show_page = 1;
+if ( cur_page <pages )  { show_page = cur_page + 1; }
+if ( cur_page>= pages ) { show_page = cur_page - 1; }
+else { show_page = cur_page + 1; }
+userPage = prompt( msg, show_page );
+if ( userPage > 0  ) {
+if ( userPage <1 )     {    userPage = 1;  }
+if ( userPage> pages ) { userPage = pages; }
+if ( userPage == 1 )    {     start = 0;    }
+else { start = (userPage - 1) * per_page; }
+if ((typeof(ajax_s)=='string')&&(typeof(ajax_e)=='string')&&(ajax_s!='')&&(ajax_e!=''))
+{var r_1 = new RegExp('\%22','g'),
+r_2 = new RegExp('\%27','g'),
+ajax = ajax_s+start+ajax_e;
+ajax = ajax.replace(r_1, "\"");
+eval(ajax.replace(r_2, "'"));
+} else
+{var r = new RegExp('(\/index)?\.html\&st=([0-9]+)\s*$','i'),
+s = "";
+s = url_bit+"&st=" + start;
+window.location = s.replace(r, "/$2.html");
+}
+}
+}
+//-->
+</script>
+<div class="div_fullwidth">
+<table id="bnr" cellspacing="0">
+<tbody><tr>
+<td align="left">
+<iframe src="kw-usb-get-busses_files/ibm.html" name="reklama_ibm" style="border: 0px none ;" height="60" scrolling="no" width="550"></iframe>        
+</td>
+<td align="right">
+<a linkindex="0" href="http://forum.vingrad.ru/openads/adclick.php?bannerid=66&amp;zoneid=49&amp;source=&amp;dest=http%3A%2F%2Fwww.luxoft.com%2Fgo.php%3Fc%3D4%26p%3D4%26b%3D6" target="_blank"><img src="kw-usb-get-busses_files/luxsoft_banner_unix.gif" alt="Работа программистам!" title="Работа программистам!" border="0" height="60" width="468"></a><div id="beacon_66" style="position: absolute; left: 0px; top: 0px; visibility: hidden;"><img src="kw-usb-get-busses_files/adlog.gif" alt="" style="width: 0px; height: 0px;" height="0" width="0"></div>
+</td>
+</tr>
+</tbody></table>
+<table id="menu0" cellspacing="0">
+<tbody><tr>
+<td align="left">
+<span class="nobr">
+Здравствуйте, Гость (
+<a href="http://forum.vingrad.ru/act-Login/CODE-00.html">Вход</a> | 
+<a linkindex="1" href="http://forum.vingrad.ru/act-Reg/CODE-00.html">Регистрация</a> |  
+<a linkindex="2" href="http://forum.vingrad.ru/act-Help/CODE-01/HID-1.html">Что даёт регистрация на форуме?</a> 
+)
+</span>
+</td>
+<td align="right">
+<span class="nobr"><a linkindex="3" href="http://forum.vingrad.ru/act-Reg/CODE-10.html">Восстановить пароль</a></span> |  
+<span class="nobr"><a linkindex="4" href="http://forum.vingrad.ru/act-Reg/CODE/reval/index.html">Выслать повторно письмо для активации</a></span>
+</td>
+</tr>
+</tbody></table>
+</div> 
+<div class="div_cutwidth">
+<table cellspacing="0">
+<tbody><tr>
+<td id="menu1">
+<div>
+<img src="kw-usb-get-busses_files/menu_forum.gif" usemap="#map1" alt=""><br>
+<map name="map1" id="map1"><area shape="rect" coords="431,21,479,64" href="http://forum.vingrad.ru/act-boardrules.html" alt="Правила"><area shape="rect" coords="491,21,531,64" href="http://forum.vingrad.ru/act-Help.html" alt="Помощь"><area shape="rect" coords="542,23,587,64" href="http://forum.vingrad.ru/act-rep/CODE/totals/index.html" alt="Рейтинг"><area shape="rect" coords="598,23,640,65" href="http://forum.vingrad.ru/act-fav.html" alt="Избранное"><area shape="rect" coords="649,22,693,61" href="http://forum.vingrad.ru/act-Search/f-101.html" alt="Поиск"><area shape="rect" coords="708,19,752,58" href="http://forum.vingrad.ru/act-Members.html" alt="Участники"><area shape="rect" coords="369,65,557,129" href="http://forum.vingrad.ru/" alt="На главную"><area shape="rect" coords="6,129,51,179" href="http://forum.vingrad.ru/news/c-c++programming-under-Unix-Linux.html" alt="Новости" id="nav_news"><area shape="rect" coords="58,129,100,183" href="http://forum.vingrad.ru/forum/c-c++programming-under-Unix-Linux.html" alt="Форум" id="nav_forum"><area shape="rect" coords="111,130,153,181" href="http://forum.vingrad.ru/articles/c-c++programming-under-Unix-Linux.html" alt="Статьи" id="nav_articles"><area shape="rect" coords="164,130,205,180" href="http://forum.vingrad.ru/faq/c-c++programming-under-Unix-Linux.html" alt="FAQ" id="nav_faq"><area shape="rect" coords="162,72,207,124" href="http://forum.vingrad.ru/sources/c-c++programming-under-Unix-Linux.html" alt="Исходники" id="nav_sources"><area shape="rect" coords="213,71,258,124" href="http://forum.vingrad.ru/books/c-c++programming-under-Unix-Linux.html" alt="Книги" id="nav_books"><area shape="rect" coords="266,72,309,125" href="http://forum.vingrad.ru/requests/index.html" alt="Запросы"><area shape="rect" coords="317,72,361,126" href="http://wiki.vingrad.ru/" alt="Вики">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</map>
+</div>
+<span id="txt_map">
+<span id="noimg_heading"><a linkindex="5" href="http://forum.vingrad.ru/act-idx.html">Форум программистов Vingrad</a></span><br><br>
+<span id="noimg_menu1_1"><a linkindex="6" href="http://news.vingrad.ru/">Новости</a> ·
+<a linkindex="7" href="http://forum.vingrad.ru/requests/index.html">Запросы</a> ·
+<a linkindex="8" href="http://wiki.vingrad.ru/">Wiki</a> ·
+<a href="#">FAQ</a></span><br><br>
+<span id="noimg_menu1_2"><a linkindex="9" href="http://forum.vingrad.ru/act-boardrules.html">Правила</a> ·
+<a linkindex="10" href="http://forum.vingrad.ru/act-Help.html">Помощь</a> ·
+<a linkindex="11" href="http://forum.vingrad.ru/act-rep/CODE/totals/index.html">Рейтинг</a> ·
+<a linkindex="12" href="http://forum.vingrad.ru/act-fav.html">Избранное</a> ·
+<a linkindex="13" href="http://forum.vingrad.ru/act-Search/f-101.html">Поиск</a> ·
+<a linkindex="14" href="http://forum.vingrad.ru/act-Members.html">Участники</a></span>
+</span>
+</td>
+</tr>
+</tbody></table>
+<div id="reklama_top_left">
+<a linkindex="15" href="http://allsoft.ru/ads/re.php?id=6898" target="_blank"><img src="kw-usb-get-busses_files/codegear.gif" alt="codegear"></a>
+</div>
+<div id="rekl_header_right">
+<script type="text/javascript"><!--
+google_ad_client = "pub-2195614373928501";
+//234x60, создано 22.12.07
+google_ad_slot = "9650652146";
+google_ad_width = 234;
+google_ad_height = 60;
+//--></script>
+<script type="text/javascript" src="kw-usb-get-busses_files/show_ads.js">
+</script>
+</div>
+<div id="nav">
+<a linkindex="16" href="http://forum.vingrad.ru/forum/act-idx.html">Форум</a>&nbsp;-&gt;&nbsp;<a set="yes" linkindex="17" href="http://forum.vingrad.ru/forum/act-SC/c-1.html">Программирование</a>&nbsp;-&gt;&nbsp;<a linkindex="18" href="http://forum.vingrad.ru/forum/C++C.html">C++</a>&nbsp;-&gt;&nbsp;<a linkindex="19" href="http://forum.vingrad.ru/forum/c-c++programming-under-Unix-Linux.html">C/C++: Программирование под Unix/Linux</a><script type="text/javascript">
+var menu_this_level=new Array();
+menu_this_level[0]='<a href="http://forum.vingrad.ru/forum/forum-471.html">C/C++: Для новичков<\/a>';
+menu_this_level[1]='<a href="http://forum.vingrad.ru/forum/c-c++general-questions.html">C/C++: Общие вопросы<\/a>';
+menu_this_level[2]='<a href="http://forum.vingrad.ru/forum/borland-c++builder.html">Borland C++ Builder<\/a>';
+menu_this_level[3]='<a href="http://forum.vingrad.ru/forum/c-c++multimedia-OpenGL-DirectX.html">C/C++: Мультимедия, OpenGL/DirectX<\/a>';
+menu_this_level[4]='<a href="http://forum.vingrad.ru/forum/c-c++system-programming-WinAPI.html">C/C++: Системное программирование и WinAPI<\/a>';
+menu_this_level[5]='<a href="http://forum.vingrad.ru/forum/VisualC++MFC-WTL.html">Visual C++/MFC/WTL<\/a>';
+menu_this_level[6]='<a href="http://forum.vingrad.ru/forum/c-c++db-database.html">C/C++: Базы данных<\/a>';
+menu_this_level[7]='<a href="http://forum.vingrad.ru/forum/c-c++network.html">C/C++: Сети<\/a>';
+menu_this_level[8]='<a href="http://forum.vingrad.ru/forum/c-c++COM-DCOM-AvtiveX-ATL-COBRA.html">C/C++: COM/DCOM/ActiveX/ATL/CORBA<\/a>';
+menu_this_level[9]='<a href="http://forum.vingrad.ru/forum/c-c++QT-gtk-wxWidgets.html">С/С++: Кроссплатформенное программирование, QT/Gtk+/wxWidgets<\/a>';
+</script>                                                
+<span onclick="return clickreturnvalue()" onmouseover="dropdownmenu(this, event, menu_this_level, '350px', 350)" onmouseout="delayhidemenu()">(еще)</span></div>
+<script type="text/javascript">
+<!--
+function link_to_post(pid)
+{
+temp = prompt( "Копирование прямой ссылки этой темы, для сохранения ссылки в буфере обмена Вашего компьютера", "http://forum.vingrad.ru"+"/index.php?showtopic=177237&view=findpost&p=" + pid );
+return false;
+}
+function PopUp(url, name, width,height,center,resize,scroll,posleft,postop) {
+if (posleft != 0) { x = posleft }
+if (postop  != 0) { y = postop  }
+if (!scroll) { scroll = 1 }
+if (!resize) { resize = 1 }
+if ((parseInt (navigator.appVersion)>= 4 ) && (center)) {
+X = (screen.width  - width ) / 2;
+Y = (screen.height - height) / 2;
+}
+if (scroll != 0) { scroll = 1 }
+var Win = window.open( url, name, 'width='+width+',height='+height+',top='+Y+',left='+X+',resizable='+resize+',scrollbars='+scroll+',location=no,directories=no,status=no,menubar=no,toolbar=no');
+}
+function ShowHide(id1, id2) {
+if (id1 != '') expMenu(id1);
+if (id2 != '') expMenu(id2);
+}
+function expMenu(id) {
+var itm = null;
+if (document.getElementById) {
+itm = document.getElementById(id);
+} else if (document.all){
+itm = document.all[id];
+} else if (document.layers){
+itm = document.layers[id];
+}
+if (!itm) {
+// do nothing
+}
+else if (itm.style) {
+if (itm.style.display == "none") { itm.style.display = ""; }
+else { itm.style.display = "none"; }
+}
+else { itm.visibility = "show"; }
+}
+//-->
+</script>
+<a name="top"></a>
+<table cellspacing="0">
+<tbody><tr>
+<td class="leftalign">
+Модераторы: <a linkindex="20" href="http://vingrad.ru/@MAKCim">MAKCim</a><br>        
+<a name="go_p"></a>
+<div id="s_pages_1" style="display: inline;">&nbsp;&nbsp;<br></div>
+</td>
+<td class="rightalign_ch1">
+<form action="http://forum.vingrad.ru/index.php?" method="post" name="search"><p class="inline_p">
+<input name="forums" value="101" type="hidden">
+<input name="show_type" value="forum" type="hidden">
+<input name="cat_forum" value="forum_id" type="hidden">
+<input name="act" value="Search" type="hidden">
+<input name="joinname" value="1" type="hidden">
+<input name="CODE" value="01" type="hidden">
+<span>Поиск: </span><input size="20" name="keywords" class="forminput" value="Введите слово" onfocus="if (this.value == 'Введите слово') this.value = '';" onblur="if (this.value == '') this.value = 'Введите слово';" type="text"><input value="Go" class="forminput" type="submit"></p>
+</form>
+</td>
+<td class="rightalign_ch3">
+<a linkindex="21" href="http://forum.vingrad.ru/act-Post/CODE-02/f-101/t-177237/syntax-cpp.html"><img src="kw-usb-get-busses_files/t_reply.gif" alt="Ответ в тему" title="Ответ в тему" border="0"></a><a linkindex="22" href="http://forum.vingrad.ru/forum/act-Post/CODE-00/f-101/syntax-cpp.html" title="Создание новой темы"><img src="kw-usb-get-busses_files/t_new.gif" alt="Создание новой темы" title="Создание новой темы" border="0"></a>
+<a linkindex="23" href="http://forum.vingrad.ru/forum/act-Post/CODE-10/f-101.html"><img src="kw-usb-get-busses_files/t_poll.gif" alt="Создание опроса" title="Создание опроса" border="0"></a>
+<a linkindex="24" href="http://forum.vingrad.ru/news/act-Post/CODE-00/syntax-cpp.html" title="Добавить новость "><img src="kw-usb-get-busses_files/t_add_news.gif" alt="Добавить новость " title="Добавить новость" border="0"></a>
+</td>
+</tr>
+</tbody></table><div id="edit_title" style="display: inline;">&nbsp;</div><br>
+<table class="maintable" cellspacing="1">
+<tbody><tr>
+<td class="row1"><table><tbody><tr><td class="leftalign"><img src="kw-usb-get-busses_files/nav_m.gif" alt="&gt;" title="&gt;" border="0" height="8" width="8">&nbsp;<b>usb_get_busses() возвращает NULL</b>, usb_get_busses() возвращает NULL&nbsp;<a linkindex="25" href="#look" style="display: none;" id="look_img"></a></td>
+<td class="rightalign">
+<div id="sol_r" style="display: inline;"><img class="solved" style="height: 20px; vertical-align: middle;" src="kw-usb-get-busses_files/icon100.gif" title="вопрос решён!" alt="V"></div>
+&nbsp;&nbsp;&nbsp;
+<script type="text/javascript">
+var menu_for_topic=new Array();
+menu_for_topic[0]='<a href="http://forum.vingrad.ru/act-Track/f-101/t-177237.html">Подписка на тему<\/a>';
+menu_for_topic[1]='<a href="http://forum.vingrad.ru/act-Forward/f-101/t-177237.html">Сообщить другу<\/a>';
+menu_for_topic[2]='<a href="http://forum.vingrad.ru/act-Print/client/printer/f-101/t-177237.html">Версия для печати<\/a>';
+menu_for_topic[3]='<a href="http://forum.vingrad.ru/act-fav/topic_id-177237.html">Добавить/Удалить из избранных <\/a>';
+</script>
+<span style="cursor: pointer;" onclick="dropdownmenu(this, event, menu_for_topic, '350px', 0)" onmouseout="delayhidemenu()">Опции темы</span>
+</td></tr></tbody></table></td>
+</tr>
+<tr>
+<td class="mesrow2">
+<table>
+<tbody><tr>
+<td class="leftalign">        			
+Теги:
+<span id="tags_field">нет</span>
+</td>
+<td class="rightalign">
+<div id="ajax_tag_load"></div>
+</td>
+</tr>			
+</tbody></table>       	
+</td>
+</tr>
+</tbody></table>
+<div id="p_all" style="display: inline;">
+<table class="posttable" id="d1287972" cellspacing="0">
+<tbody><tr>
+<td class="post-row1l"><a name="entry1287972" href="#" onclick="ubbc_addAfterQuote('[B]Yoreck[/B], '); return false;" title="Вставить ник в поле ввода">Yoreck</a> </td>
+<td class="post-row1r">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<b>Дата</b> 15.10.2007,  14:06 (<a href="#" onclick="link_to_post(1287972); return false;" title="Нажмите, чтобы скопировать в буфер обмена ссылку на данное сообщение"><b>ссылка</b></a>)
+<span id="post-ratings-1287972" class="post-ratings"><img id="rating_1287972_-3" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-3 " onmouseover="current_rating(1287972, -3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1287972_-2" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-2 " onmouseover="current_rating(1287972, -2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1287972_-1" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-1 " onmouseover="current_rating(1287972, -1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> | <img id="rating_1287972_1" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+1 " onmouseover="current_rating(1287972, 1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1287972_2" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+2 " onmouseover="current_rating(1287972, 2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1287972_3" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+3 " onmouseover="current_rating(1287972, 3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> (нет голосов)</span>
+<span id="post-ratings-1287972-loading" class="post-ratings-loading"><img src="kw-usb-get-busses_files/loading.gif" alt="Загрузка ..." title="Загрузка ..." class="post-ratings-image" height="16" width="16">&nbsp;Загрузка ...</span>
+</td>
+<td class="subtable_r">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a href="javascript:void(0);" onmouseover="InsertQuote.prepare();return true;" onclick="InsertQuote('Yoreck', '15.10.2007,  14:06', 1287972);"><img src="kw-usb-get-busses_files/p_quick_quote-off.gif" alt="Быстрая цитата " class="preload4" title="Скопировать выделение в поле ввода"></a>
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a linkindex="26" href="http://forum.vingrad.ru/act-Post/CODE-06/f-101/t-177237/p-1287972.html"><img src="kw-usb-get-busses_files/p_quote-off.gif" alt="Цитата " class="preload5" title="Ответить в тему с цитированием участника" border="0"></a>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td class="post-row2l color1l">
+<br>
+<br>
+Новичок<br>
+<br>
+<br><br>
+<a linkindex="27" href="http://vingrad.ru/@Yoreck">Профиль</a><br>
+Группа: Участник<br>
+Сообщений: 7<br>
+Друзей: <a linkindex="28" href="http://my.vingrad.ru/index.php?module=friends&amp;user_id=11423&amp;action=friends_list_as_table">0</a>; Групп: <a linkindex="29" href="http://vingrad.ru/Yoreck">0</a><br>
+Регистрация: 20.6.2005<br>
+<br>
+Репутация: нет <br>Всего: нет<br><br>
+<br>
+<div class="post-setwidth"></div>
+<br>
+</td>
+<td class="post-row2r color1r post" id="post1287972" onmouseup="post_mup(1287972);" onmousedown="post_mdown(1287972);">
+<div class="postcolor">Доброго времени суток, уважаемые.<br><br>Пытаюсь написать программу для ощения с устройством через USB, застрял на стадии поиска устройств.<br>ОС - FreeBSD 6.1 usblib-0.1.12<br><br><div class="postcolor"><table class="code" cellspacing="0"><tbody><tr><td><b>Код</b></td></tr><tr><td class="code"><script language="javascript" type="text/javascript">includeSyntax('cpp');</script><code id="cpp_I1NzUy"><br>// собственно код ---------------------------------------------------------------------------------<br><br>#ifdef HAVE_CONFIG_H<br>#include&nbsp;&lt;config.h&gt;<br>#endif<br><br>#include&nbsp;&lt;iostream&gt;<br>#include&nbsp;&lt;cstdlib&gt;<br>#include&nbsp;&lt;sys/time.h&gt;<br>#include&nbsp;&lt;/usr/local/include/usb.h&gt;<br><br>using namespace std;<br><br>int main(int argc, char *argv[])<br>{<br>struct usb_bus *busses;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usb_init();<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usb_find_busses();<br>&nbsp;&nbsp;&nbsp;&nbsp;usb_find_devices();<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;busses = usb_get_busses();<br>&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(busses == NULL)&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{cout&lt;&lt;"busses
+= NULL!&nbsp;\n";};<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(bus
+= busses;&nbsp;bus;&nbsp;bus = bus-&gt;next)&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;struct usb_device *dev;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;"цикл
+по
+шинам&nbsp;\n";&nbsp;//&nbsp;&lt;-----------------------------------------
+это уже не обрабатывается<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(dev = bus-&gt;devices;&nbsp;dev;&nbsp;dev = dev-&gt;next)&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;"цикл по устройсвам&nbsp;\n"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;....<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;};};<br><br>&nbsp;&nbsp;return EXIT_SUCCESS;<br>}<br><br>// ---------------------------------------------------------------------------------------<br></code></td></tr></tbody></table></div><script language="javascript" type="text/javascript">highlightSyntax('cpp_I1NzUy','cpp');</script><br><br>Не смотря на то, что подключенно и определяется usb-daemon-ом два usb устройства,&nbsp;<br>usb_get_busses() возвращает NULL и как следствие (?) мы не попадаем даже в цикл по шинам.<br><br><br>Заранее благодарен за любые идеи&nbsp;<img src="kw-usb-get-busses_files/pioneer.gif" alt="smile"><br><br><span class="edit">Это сообщение отредактировал(а) <b>MAKCim</b> - 15.10.2007,  16:58</span> <br></div>
+<div class="signature"><br><br>--------------------<br>
+<div class="signature">Рубашку скроил он из дохлых мышей, и не было ткани теплей и нежней!<br>(с)Эдвард Лир</div></div>
+</td>
+</tr>
+<tr>
+<td class="post-row3"><table class="subtable" cellspacing="0"><tbody><tr><td class="centeralign"></td></tr></tbody></table></td>
+<td class="post-row3">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<a linkindex="30" href="http://forum.vingrad.ru/act-Msg/CODE-04/MID-11423/p-1287972/t-177237.html"><img src="kw-usb-get-busses_files/p_pm-off.gif" alt="PM " class="preload6" title="Отправить персональное сообщение"></a><a linkindex="31" href="http://forum.vingrad.ru/act-Mail/CODE-00/MID-11423.html"><img src="kw-usb-get-busses_files/p_email-off.gif" alt="MAIL " class="preload7" title="Письмо на e-mail пользователю"></a>&nbsp;
+</td>
+<td class="subtable_r1"><a onclick="scroll(0,0); return false;" href="javascript:scroll(0,0);"><img src="kw-usb-get-busses_files/p_up.gif" alt="Вверх" title="Вверх"></a></td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td colspan="2" class="post-row4"><table cellspacing="0"><tbody><tr><td></td></tr></tbody></table></td>
+</tr>
+</tbody></table>        
+<table class="posttable" id="d1288172" cellspacing="0">
+<tbody><tr>
+<td class="post-row1l"><a name="entry1288172" href="#" onclick="ubbc_addAfterQuote('[B]MAKCim[/B], '); return false;" title="Вставить ник в поле ввода">MAKCim</a> <span>(<span>Online</span>)</span></td>
+<td class="post-row1r">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<b>Дата</b> 15.10.2007,  16:57 (<a href="#" onclick="link_to_post(1288172); return false;" title="Нажмите, чтобы скопировать в буфер обмена ссылку на данное сообщение"><b>ссылка</b></a>)
+<span id="post-ratings-1288172" class="post-ratings"><img id="rating_1288172_-3" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-3 " onmouseover="current_rating(1288172, -3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288172_-2" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-2 " onmouseover="current_rating(1288172, -2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288172_-1" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-1 " onmouseover="current_rating(1288172, -1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> | <img id="rating_1288172_1" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+1 " onmouseover="current_rating(1288172, 1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288172_2" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+2 " onmouseover="current_rating(1288172, 2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288172_3" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+3 " onmouseover="current_rating(1288172, 3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> (нет голосов)</span>
+<span id="post-ratings-1288172-loading" class="post-ratings-loading"><img src="kw-usb-get-busses_files/loading.gif" alt="Загрузка ..." title="Загрузка ..." class="post-ratings-image" height="16" width="16">&nbsp;Загрузка ...</span>
+</td>
+<td class="subtable_r">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a href="javascript:void(0);" onmouseover="InsertQuote.prepare();return true;" onclick="InsertQuote('MAKCim', '15.10.2007,  16:57', 1288172);"><img src="kw-usb-get-busses_files/p_quick_quote-off.gif" alt="Быстрая цитата " class="preload4" title="Скопировать выделение в поле ввода"></a>
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a linkindex="32" href="http://forum.vingrad.ru/act-Post/CODE-06/f-101/t-177237/p-1288172.html"><img src="kw-usb-get-busses_files/p_quote-off.gif" alt="Цитата " class="preload5" title="Ответить в тему с цитированием участника" border="0"></a>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td class="post-row2l color2l">
+<img src="kw-usb-get-busses_files/linuxmm.png" alt="" border="0" height="74" width="60"><br>
+<br>
+Воин дзена<br>
+<img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><br>
+<br><br>
+<a linkindex="33" href="http://vingrad.ru/@MAKCim">Профиль</a><br>
+Группа: Комодератор<br>
+Сообщений: 3456<br>
+Друзей: <a linkindex="34" href="http://my.vingrad.ru/index.php?module=friends&amp;user_id=15898&amp;action=friends_list_as_table">12</a>; Групп: <a linkindex="35" href="http://vingrad.ru/MAKCim">4</a><br>
+Регистрация: 10.12.2005<br>
+Где: Минск, Беларусь<br><br>
+Репутация: 25  <br>Всего: 114<br><br>
+<br>
+<div class="post-setwidth"></div>
+<br>
+</td>
+<td class="post-row2r color2r post" id="post1288172" onmouseup="post_mup(1288172);" onmousedown="post_mdown(1288172);">
+<div class="postcolor"><b>Yoreck</b>,&nbsp;<br><br><table class="modtag" cellspacing="0"><tbody><tr><td class="modtag"><span title="Сообщение от модератора: MAKCim">M</span><br><span class="modtag_author">MAKCim</span></td><td><span style="font-size: 9pt; line-height: 100%;"><span style="color: red;"><b>Модератор:&nbsp;используйте тег код</b></span></span></td></tr></tbody></table><br><br><br><span class="edit">Это сообщение отредактировал(а) <b>MAKCim</b> - 15.10.2007,  16:58</span> <br></div>
+<div class="signature"><br><br>--------------------<br>
+<div class="signature">My transcript on&nbsp;<a linkindex="36" href="http://brainbench.com/" target="_blank">brainbench</a>&nbsp;is 5790897<br>Если все настолько плохо, что хуже быть не может - то это уже хорошо, потому как дальше может быть только лучше<br><a linkindex="37" href="http://www.userbars.com/" target="_blank"><img src="kw-usb-get-busses_files/GentooLinux.png" alt="user posted image" border="0"></a></div></div>
+</td>
+</tr>
+<tr>
+<td class="post-row3"><table class="subtable" cellspacing="0"><tbody><tr><td class="centeralign"></td></tr></tbody></table></td>
+<td class="post-row3">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<a linkindex="38" href="http://forum.vingrad.ru/act-Msg/CODE-04/MID-15898/p-1288172/t-177237.html"><img src="kw-usb-get-busses_files/p_pm-off.gif" alt="PM " class="preload6" title="Отправить персональное сообщение"></a><a linkindex="39" href="http://forum.vingrad.ru/act-Mail/CODE-00/MID-15898.html"><img src="kw-usb-get-busses_files/p_email-off.gif" alt="MAIL " class="preload7" title="Письмо на e-mail пользователю"></a>&nbsp;
+</td>
+<td class="subtable_r1"><a onclick="scroll(0,0); return false;" href="javascript:scroll(0,0);"><img src="kw-usb-get-busses_files/p_up.gif" alt="Вверх" title="Вверх"></a></td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td colspan="2" class="post-row4"><table cellspacing="0"><tbody><tr><td></td></tr></tbody></table></td>
+</tr>
+</tbody></table>        
+<table class="posttable" id="d1288546" cellspacing="0">
+<tbody><tr>
+<td class="post-row1l"><a name="entry1288546" href="#" onclick="ubbc_addAfterQuote('[B]GrayCardinal[/B], '); return false;" title="Вставить ник в поле ввода">GrayCardinal</a> </td>
+<td class="post-row1r">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<b>Дата</b> 16.10.2007,  06:48 (<a href="#" onclick="link_to_post(1288546); return false;" title="Нажмите, чтобы скопировать в буфер обмена ссылку на данное сообщение"><b>ссылка</b></a>)
+<span id="post-ratings-1288546" class="post-ratings"><img id="rating_1288546_-3" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-3 " onmouseover="current_rating(1288546, -3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288546_-2" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-2 " onmouseover="current_rating(1288546, -2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288546_-1" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-1 " onmouseover="current_rating(1288546, -1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> | <img id="rating_1288546_1" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+1 " onmouseover="current_rating(1288546, 1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288546_2" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+2 " onmouseover="current_rating(1288546, 2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288546_3" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+3 " onmouseover="current_rating(1288546, 3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> (нет голосов)</span>
+<span id="post-ratings-1288546-loading" class="post-ratings-loading"><img src="kw-usb-get-busses_files/loading.gif" alt="Загрузка ..." title="Загрузка ..." class="post-ratings-image" height="16" width="16">&nbsp;Загрузка ...</span>
+</td>
+<td class="subtable_r">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a href="javascript:void(0);" onmouseover="InsertQuote.prepare();return true;" onclick="InsertQuote('GrayCardinal', '16.10.2007,  06:48', 1288546);"><img src="kw-usb-get-busses_files/p_quick_quote-off.gif" alt="Быстрая цитата " class="preload4" title="Скопировать выделение в поле ввода"></a>
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a linkindex="40" href="http://forum.vingrad.ru/act-Post/CODE-06/f-101/t-177237/p-1288546.html"><img src="kw-usb-get-busses_files/p_quote-off.gif" alt="Цитата " class="preload5" title="Ответить в тему с цитированием участника" border="0"></a>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td class="post-row2l color1l">
+<br>
+<br>
+Эксперт<br>
+<img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><br>
+<br><br>
+<a linkindex="41" href="http://vingrad.ru/@GrayCardinal">Профиль</a><br>
+Группа: Участник<br>
+Сообщений: 1758<br>
+Друзей: <a linkindex="42" href="http://my.vingrad.ru/index.php?module=friends&amp;user_id=2943&amp;action=friends_list_as_table">0</a>; Групп: <a linkindex="43" href="http://vingrad.ru/GrayCardinal">0</a><br>
+Регистрация: 9.11.2003<br>
+<br>
+Репутация: 5  <br>Всего: 35<br><br>
+<br>
+<div class="post-setwidth"></div>
+<br>
+</td>
+<td class="post-row2r color1r post" id="post1288546" onmouseup="post_mup(1288546);" onmousedown="post_mdown(1288546);">
+<div class="postcolor">У меня код пашет... (Linux Debian)<br>Попробуйте заменить<br><div class="postcolor"><table class="code" cellspacing="0"><tbody><tr><td><b>Код</b></td></tr><tr><td class="code"><script language="javascript" type="text/javascript">includeSyntax('cpp');</script><code id="cpp_BlOGIw"><br>cout&lt;&lt;"busses = NULL!&nbsp;\n";<br></code></td></tr></tbody></table></div><script language="javascript" type="text/javascript">highlightSyntax('cpp_BlOGIw','cpp');</script><br>на<br><div class="postcolor"><table class="code" cellspacing="0"><tbody><tr><td><b>Код</b></td></tr><tr><td class="code"><script language="javascript" type="text/javascript">includeSyntax('cpp');</script><code id="cpp_NiODFi"><br>perror&nbsp;("usb");<br></code></td></tr></tbody></table></div><script language="javascript" type="text/javascript">highlightSyntax('cpp_NiODFi','cpp');</script><br>а результат - в студию.<br><br><b>Добавлено через 2 минуты и 36 секунд</b><br>Да, у меня libusb-0.1-4 <br></div>
+<div class="signature"><br><br>--------------------<br>
+<div class="signature"><a linkindex="44" href="http://silentbob.sf.net/" target="_blank">http://silentbob.sf.net</a>&nbsp;- достанет из сырцов все до бита.</div></div>
+</td>
+</tr>
+<tr>
+<td class="post-row3"><table class="subtable" cellspacing="0"><tbody><tr><td class="centeralign"></td></tr></tbody></table></td>
+<td class="post-row3">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<a linkindex="45" href="http://forum.vingrad.ru/act-Msg/CODE-04/MID-2943/p-1288546/t-177237.html"><img src="kw-usb-get-busses_files/p_pm-off.gif" alt="PM " class="preload6" title="Отправить персональное сообщение"></a><a linkindex="46" href="http://forum.vingrad.ru/act-Mail/CODE-00/MID-2943.html"><img src="kw-usb-get-busses_files/p_email-off.gif" alt="MAIL " class="preload7" title="Письмо на e-mail пользователю"></a>&nbsp;
+</td>
+<td class="subtable_r1"><a onclick="scroll(0,0); return false;" href="javascript:scroll(0,0);"><img src="kw-usb-get-busses_files/p_up.gif" alt="Вверх" title="Вверх"></a></td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td colspan="2" class="post-row4"><table cellspacing="0"><tbody><tr><td></td></tr></tbody></table></td>
+</tr>
+</tbody></table>        
+<table class="posttable" id="d1288645" cellspacing="0">
+<tbody><tr>
+<td class="post-row1l"><a name="entry1288645" href="#" onclick="ubbc_addAfterQuote('[B]Yoreck[/B], '); return false;" title="Вставить ник в поле ввода">Yoreck</a> </td>
+<td class="post-row1r">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<b>Дата</b> 16.10.2007,  09:13 (<a href="#" onclick="link_to_post(1288645); return false;" title="Нажмите, чтобы скопировать в буфер обмена ссылку на данное сообщение"><b>ссылка</b></a>)
+<span id="post-ratings-1288645" class="post-ratings"><img id="rating_1288645_-3" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-3 " onmouseover="current_rating(1288645, -3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288645_-2" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-2 " onmouseover="current_rating(1288645, -2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288645_-1" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-1 " onmouseover="current_rating(1288645, -1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> | <img id="rating_1288645_1" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+1 " onmouseover="current_rating(1288645, 1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288645_2" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+2 " onmouseover="current_rating(1288645, 2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288645_3" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+3 " onmouseover="current_rating(1288645, 3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> (нет голосов)</span>
+<span id="post-ratings-1288645-loading" class="post-ratings-loading"><img src="kw-usb-get-busses_files/loading.gif" alt="Загрузка ..." title="Загрузка ..." class="post-ratings-image" height="16" width="16">&nbsp;Загрузка ...</span>
+</td>
+<td class="subtable_r">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a href="javascript:void(0);" onmouseover="InsertQuote.prepare();return true;" onclick="InsertQuote('Yoreck', '16.10.2007,  09:13', 1288645);"><img src="kw-usb-get-busses_files/p_quick_quote-off.gif" alt="Быстрая цитата " class="preload4" title="Скопировать выделение в поле ввода"></a>
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a linkindex="47" href="http://forum.vingrad.ru/act-Post/CODE-06/f-101/t-177237/p-1288645.html"><img src="kw-usb-get-busses_files/p_quote-off.gif" alt="Цитата " class="preload5" title="Ответить в тему с цитированием участника" border="0"></a>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td class="post-row2l color2l">
+<br>
+<br>
+Новичок<br>
+<br>
+<br><br>
+<a linkindex="48" href="http://vingrad.ru/@Yoreck">Профиль</a><br>
+Группа: Участник<br>
+Сообщений: 7<br>
+Друзей: <a linkindex="49" href="http://my.vingrad.ru/index.php?module=friends&amp;user_id=11423&amp;action=friends_list_as_table">0</a>; Групп: <a linkindex="50" href="http://vingrad.ru/Yoreck">0</a><br>
+Регистрация: 20.6.2005<br>
+<br>
+Репутация: нет <br>Всего: нет<br><br>
+<br>
+<div class="post-setwidth"></div>
+<br>
+</td>
+<td class="post-row2r color2r post" id="post1288645" onmouseup="post_mup(1288645);" onmousedown="post_mdown(1288645);">
+<div class="postcolor">Пишет:<br><br>usb: No such file or directory <br></div>
+<div class="signature"><br><br>--------------------<br>
+<div class="signature">Рубашку скроил он из дохлых мышей, и не было ткани теплей и нежней!<br>(с)Эдвард Лир</div></div>
+</td>
+</tr>
+<tr>
+<td class="post-row3"><table class="subtable" cellspacing="0"><tbody><tr><td class="centeralign"></td></tr></tbody></table></td>
+<td class="post-row3">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<a linkindex="51" href="http://forum.vingrad.ru/act-Msg/CODE-04/MID-11423/p-1288645/t-177237.html"><img src="kw-usb-get-busses_files/p_pm-off.gif" alt="PM " class="preload6" title="Отправить персональное сообщение"></a><a linkindex="52" href="http://forum.vingrad.ru/act-Mail/CODE-00/MID-11423.html"><img src="kw-usb-get-busses_files/p_email-off.gif" alt="MAIL " class="preload7" title="Письмо на e-mail пользователю"></a>&nbsp;
+</td>
+<td class="subtable_r1"><a onclick="scroll(0,0); return false;" href="javascript:scroll(0,0);"><img src="kw-usb-get-busses_files/p_up.gif" alt="Вверх" title="Вверх"></a></td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td colspan="2" class="post-row4"><table cellspacing="0"><tbody><tr><td></td></tr></tbody></table></td>
+</tr>
+</tbody></table>        
+<table class="posttable" id="d1288842" cellspacing="0">
+<tbody><tr>
+<td class="post-row1l"><a name="entry1288842" href="#" onclick="ubbc_addAfterQuote('[B]GrayCardinal[/B], '); return false;" title="Вставить ник в поле ввода">GrayCardinal</a> </td>
+<td class="post-row1r">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<b>Дата</b> 16.10.2007,  11:39 (<a href="#" onclick="link_to_post(1288842); return false;" title="Нажмите, чтобы скопировать в буфер обмена ссылку на данное сообщение"><b>ссылка</b></a>)
+<span id="post-ratings-1288842" class="post-ratings"><img id="rating_1288842_-3" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-3 " onmouseover="current_rating(1288842, -3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288842_-2" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-2 " onmouseover="current_rating(1288842, -2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288842_-1" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-1 " onmouseover="current_rating(1288842, -1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> | <img id="rating_1288842_1" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+1 " onmouseover="current_rating(1288842, 1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288842_2" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+2 " onmouseover="current_rating(1288842, 2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1288842_3" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+3 " onmouseover="current_rating(1288842, 3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> (нет голосов)</span>
+<span id="post-ratings-1288842-loading" class="post-ratings-loading"><img src="kw-usb-get-busses_files/loading.gif" alt="Загрузка ..." title="Загрузка ..." class="post-ratings-image" height="16" width="16">&nbsp;Загрузка ...</span>
+</td>
+<td class="subtable_r">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a href="javascript:void(0);" onmouseover="InsertQuote.prepare();return true;" onclick="InsertQuote('GrayCardinal', '16.10.2007,  11:39', 1288842);"><img src="kw-usb-get-busses_files/p_quick_quote-off.gif" alt="Быстрая цитата " class="preload4" title="Скопировать выделение в поле ввода"></a>
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a linkindex="53" href="http://forum.vingrad.ru/act-Post/CODE-06/f-101/t-177237/p-1288842.html"><img src="kw-usb-get-busses_files/p_quote-off.gif" alt="Цитата " class="preload5" title="Ответить в тему с цитированием участника" border="0"></a>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td class="post-row2l color1l">
+<br>
+<br>
+Эксперт<br>
+<img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><br>
+<br><br>
+<a linkindex="54" href="http://vingrad.ru/@GrayCardinal">Профиль</a><br>
+Группа: Участник<br>
+Сообщений: 1758<br>
+Друзей: <a linkindex="55" href="http://my.vingrad.ru/index.php?module=friends&amp;user_id=2943&amp;action=friends_list_as_table">0</a>; Групп: <a linkindex="56" href="http://vingrad.ru/GrayCardinal">0</a><br>
+Регистрация: 9.11.2003<br>
+<br>
+Репутация: 5  <br>Всего: 35<br><br>
+<br>
+<div class="post-setwidth"></div>
+<br>
+</td>
+<td class="post-row2r color1r post" id="post1288842" onmouseup="post_mup(1288842);" onmousedown="post_mdown(1288842);">
+<div class="postcolor">Угу. А /dev/usb* присутствуют ? <br></div>
+<div class="signature"><br><br>--------------------<br>
+<div class="signature"><a linkindex="57" href="http://silentbob.sf.net/" target="_blank">http://silentbob.sf.net</a>&nbsp;- достанет из сырцов все до бита.</div></div>
+</td>
+</tr>
+<tr>
+<td class="post-row3"><table class="subtable" cellspacing="0"><tbody><tr><td class="centeralign"></td></tr></tbody></table></td>
+<td class="post-row3">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<a linkindex="58" href="http://forum.vingrad.ru/act-Msg/CODE-04/MID-2943/p-1288842/t-177237.html"><img src="kw-usb-get-busses_files/p_pm-off.gif" alt="PM " class="preload6" title="Отправить персональное сообщение"></a><a linkindex="59" href="http://forum.vingrad.ru/act-Mail/CODE-00/MID-2943.html"><img src="kw-usb-get-busses_files/p_email-off.gif" alt="MAIL " class="preload7" title="Письмо на e-mail пользователю"></a>&nbsp;
+</td>
+<td class="subtable_r1"><a onclick="scroll(0,0); return false;" href="javascript:scroll(0,0);"><img src="kw-usb-get-busses_files/p_up.gif" alt="Вверх" title="Вверх"></a></td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td colspan="2" class="post-row4"><table cellspacing="0"><tbody><tr><td></td></tr></tbody></table></td>
+</tr>
+</tbody></table>        
+<table class="posttable" id="d1289202" cellspacing="0">
+<tbody><tr>
+<td class="post-row1l"><a name="entry1289202" href="#" onclick="ubbc_addAfterQuote('[B]GrayCardinal[/B], '); return false;" title="Вставить ник в поле ввода">GrayCardinal</a> </td>
+<td class="post-row1r">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<b>Дата</b> 16.10.2007,  15:30 (<a href="#" onclick="link_to_post(1289202); return false;" title="Нажмите, чтобы скопировать в буфер обмена ссылку на данное сообщение"><b>ссылка</b></a>)
+<span id="post-ratings-1289202" class="post-ratings"><img id="rating_1289202_-3" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-3 " onmouseover="current_rating(1289202, -3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1289202_-2" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-2 " onmouseover="current_rating(1289202, -2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1289202_-1" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-1 " onmouseover="current_rating(1289202, -1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> | <img id="rating_1289202_1" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+1 " onmouseover="current_rating(1289202, 1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1289202_2" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+2 " onmouseover="current_rating(1289202, 2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1289202_3" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+3 " onmouseover="current_rating(1289202, 3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> (нет голосов)</span>
+<span id="post-ratings-1289202-loading" class="post-ratings-loading"><img src="kw-usb-get-busses_files/loading.gif" alt="Загрузка ..." title="Загрузка ..." class="post-ratings-image" height="16" width="16">&nbsp;Загрузка ...</span>
+</td>
+<td class="subtable_r">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a href="javascript:void(0);" onmouseover="InsertQuote.prepare();return true;" onclick="InsertQuote('GrayCardinal', '16.10.2007,  15:30', 1289202);"><img src="kw-usb-get-busses_files/p_quick_quote-off.gif" alt="Быстрая цитата " class="preload4" title="Скопировать выделение в поле ввода"></a>
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a linkindex="60" href="http://forum.vingrad.ru/act-Post/CODE-06/f-101/t-177237/p-1289202.html"><img src="kw-usb-get-busses_files/p_quote-off.gif" alt="Цитата " class="preload5" title="Ответить в тему с цитированием участника" border="0"></a>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td class="post-row2l color2l">
+<br>
+<br>
+Эксперт<br>
+<img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><br>
+<br><br>
+<a linkindex="61" href="http://vingrad.ru/@GrayCardinal">Профиль</a><br>
+Группа: Участник<br>
+Сообщений: 1758<br>
+Друзей: <a linkindex="62" href="http://my.vingrad.ru/index.php?module=friends&amp;user_id=2943&amp;action=friends_list_as_table">0</a>; Групп: <a linkindex="63" href="http://vingrad.ru/GrayCardinal">0</a><br>
+Регистрация: 9.11.2003<br>
+<br>
+Репутация: 5  <br>Всего: 35<br><br>
+<br>
+<div class="post-setwidth"></div>
+<br>
+</td>
+<td class="post-row2r color2r post" id="post1289202" onmouseup="post_mup(1289202);" onmousedown="post_mdown(1289202);">
+<div class="postcolor">В Лине такая вещь - usbfs, подгружается автоматически, во фре, может, надо ручками... <br></div>
+<div class="signature"><br><br>--------------------<br>
+<div class="signature"><a linkindex="64" href="http://silentbob.sf.net/" target="_blank">http://silentbob.sf.net</a>&nbsp;- достанет из сырцов все до бита.</div></div>
+</td>
+</tr>
+<tr>
+<td class="post-row3"><table class="subtable" cellspacing="0"><tbody><tr><td class="centeralign"></td></tr></tbody></table></td>
+<td class="post-row3">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<a linkindex="65" href="http://forum.vingrad.ru/act-Msg/CODE-04/MID-2943/p-1289202/t-177237.html"><img src="kw-usb-get-busses_files/p_pm-off.gif" alt="PM " class="preload6" title="Отправить персональное сообщение"></a><a linkindex="66" href="http://forum.vingrad.ru/act-Mail/CODE-00/MID-2943.html"><img src="kw-usb-get-busses_files/p_email-off.gif" alt="MAIL " class="preload7" title="Письмо на e-mail пользователю"></a>&nbsp;
+</td>
+<td class="subtable_r1"><a onclick="scroll(0,0); return false;" href="javascript:scroll(0,0);"><img src="kw-usb-get-busses_files/p_up.gif" alt="Вверх" title="Вверх"></a></td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td colspan="2" class="post-row4"><table cellspacing="0"><tbody><tr><td></td></tr></tbody></table></td>
+</tr>
+</tbody></table>        
+<table class="posttable" id="d1289678" cellspacing="0">
+<tbody><tr>
+<td class="post-row1l"><a name="entry1289678" href="#" onclick="ubbc_addAfterQuote('[B]Yoreck[/B], '); return false;" title="Вставить ник в поле ввода">Yoreck</a> </td>
+<td class="post-row1r">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<b>Дата</b> 17.10.2007,  06:35 (<a href="#" onclick="link_to_post(1289678); return false;" title="Нажмите, чтобы скопировать в буфер обмена ссылку на данное сообщение"><b>ссылка</b></a>)
+<span id="post-ratings-1289678" class="post-ratings"><img id="rating_1289678_-3" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-3 " onmouseover="current_rating(1289678, -3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1289678_-2" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-2 " onmouseover="current_rating(1289678, -2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1289678_-1" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-1 " onmouseover="current_rating(1289678, -1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> | <img id="rating_1289678_1" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+1 " onmouseover="current_rating(1289678, 1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1289678_2" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+2 " onmouseover="current_rating(1289678, 2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1289678_3" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+3 " onmouseover="current_rating(1289678, 3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> (нет голосов)</span>
+<span id="post-ratings-1289678-loading" class="post-ratings-loading"><img src="kw-usb-get-busses_files/loading.gif" alt="Загрузка ..." title="Загрузка ..." class="post-ratings-image" height="16" width="16">&nbsp;Загрузка ...</span>
+</td>
+<td class="subtable_r">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a href="javascript:void(0);" onmouseover="InsertQuote.prepare();return true;" onclick="InsertQuote('Yoreck', '17.10.2007,  06:35', 1289678);"><img src="kw-usb-get-busses_files/p_quick_quote-off.gif" alt="Быстрая цитата " class="preload4" title="Скопировать выделение в поле ввода"></a>
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a linkindex="67" href="http://forum.vingrad.ru/act-Post/CODE-06/f-101/t-177237/p-1289678.html"><img src="kw-usb-get-busses_files/p_quote-off.gif" alt="Цитата " class="preload5" title="Ответить в тему с цитированием участника" border="0"></a>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td class="post-row2l color1l">
+<br>
+<br>
+Новичок<br>
+<br>
+<br><br>
+<a linkindex="68" href="http://vingrad.ru/@Yoreck">Профиль</a><br>
+Группа: Участник<br>
+Сообщений: 7<br>
+Друзей: <a linkindex="69" href="http://my.vingrad.ru/index.php?module=friends&amp;user_id=11423&amp;action=friends_list_as_table">0</a>; Групп: <a linkindex="70" href="http://vingrad.ru/Yoreck">0</a><br>
+Регистрация: 20.6.2005<br>
+<br>
+Репутация: нет <br>Всего: нет<br><br>
+<br>
+<div class="post-setwidth"></div>
+<br>
+</td>
+<td class="post-row2r color1r post" id="post1289678" onmouseup="post_mup(1289678);" onmousedown="post_mdown(1289678);">
+<div class="postcolor"><div class="postcolor"><table class="quote" cellspacing="0"><tbody><tr><td><b>Цитата</b>(GrayCardinal&nbsp;@&nbsp;16.10.2007,&nbsp;&nbsp;11:39)</td></tr><tr><td class="quote">Угу. А /dev/usb* присутствуют ?</td></tr></tbody></table></div><br><br>Да, если подробнне то присутствуют:<br><br>/dev/usb<br>/dev/usb0<br>/dev/ums0<br><br>/dev/ugen0 - нужное мне устройство (адаптер для 1wire)<br>/dev/ugen0.1<br>/dev/ugen0.2<br>/dev/ugen0.3 - конечные точки (endpoint)<br><br>При подключении на первую текствую консоль usbd выводит&nbsp;<br>product.id и venodor.id - все правильно<br><br>Возможно, я её недоподключил? libusb то есть.<br>Пользуюсь KDevelop 3.3.1<br>подключал так:&nbsp;<br>вProject -&gt;&nbsp;Project Options -&gt;&nbsp;Configure options -&gt;&nbsp;Linker flags(LDFLAGS) прописал<br>-L/usr/local/lib (сюда установленна библиотека)<br>в AutomakeManager -&gt;&nbsp;(правый клик на ветке проекта)-&gt;Options-&gt;<br>Libraries-&gt;&nbsp;Link libraries outside progect(LDADD) добавил -lusb<br>После этого все откомпилировалось и слинковалось. Может еще что-то надо?&nbsp;<img src="kw-usb-get-busses_files/dash1.gif" alt="smile">&nbsp;<br><br><span class="edit">Это сообщение отредактировал(а) <b>Yoreck</b> - 17.10.2007,  06:36</span> <br></div>
+<div class="signature"><br><br>--------------------<br>
+<div class="signature">Рубашку скроил он из дохлых мышей, и не было ткани теплей и нежней!<br>(с)Эдвард Лир</div></div>
+</td>
+</tr>
+<tr>
+<td class="post-row3"><table class="subtable" cellspacing="0"><tbody><tr><td class="centeralign"></td></tr></tbody></table></td>
+<td class="post-row3">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<a linkindex="71" href="http://forum.vingrad.ru/act-Msg/CODE-04/MID-11423/p-1289678/t-177237.html"><img src="kw-usb-get-busses_files/p_pm-off.gif" alt="PM " class="preload6" title="Отправить персональное сообщение"></a><a linkindex="72" href="http://forum.vingrad.ru/act-Mail/CODE-00/MID-11423.html"><img src="kw-usb-get-busses_files/p_email-off.gif" alt="MAIL " class="preload7" title="Письмо на e-mail пользователю"></a>&nbsp;
+</td>
+<td class="subtable_r1"><a onclick="scroll(0,0); return false;" href="javascript:scroll(0,0);"><img src="kw-usb-get-busses_files/p_up.gif" alt="Вверх" title="Вверх"></a></td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td colspan="2" class="post-row4"><table cellspacing="0"><tbody><tr><td></td></tr></tbody></table></td>
+</tr>
+</tbody></table>        
+<table class="posttable" id="d1291480" cellspacing="0">
+<tbody><tr>
+<td class="post-row1l"><a name="entry1291480" href="#" onclick="ubbc_addAfterQuote('[B]Yoreck[/B], '); return false;" title="Вставить ник в поле ввода">Yoreck</a> </td>
+<td class="post-row1r">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<b>Дата</b> 18.10.2007,  16:52 (<a href="#" onclick="link_to_post(1291480); return false;" title="Нажмите, чтобы скопировать в буфер обмена ссылку на данное сообщение"><b>ссылка</b></a>)
+<span id="post-ratings-1291480" class="post-ratings"><img id="rating_1291480_-3" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-3 " onmouseover="current_rating(1291480, -3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1291480_-2" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-2 " onmouseover="current_rating(1291480, -2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1291480_-1" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-1 " onmouseover="current_rating(1291480, -1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> | <img id="rating_1291480_1" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+1 " onmouseover="current_rating(1291480, 1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1291480_2" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+2 " onmouseover="current_rating(1291480, 2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1291480_3" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+3 " onmouseover="current_rating(1291480, 3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> (нет голосов)</span>
+<span id="post-ratings-1291480-loading" class="post-ratings-loading"><img src="kw-usb-get-busses_files/loading.gif" alt="Загрузка ..." title="Загрузка ..." class="post-ratings-image" height="16" width="16">&nbsp;Загрузка ...</span>
+</td>
+<td class="subtable_r">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a href="javascript:void(0);" onmouseover="InsertQuote.prepare();return true;" onclick="InsertQuote('Yoreck', '18.10.2007,  16:52', 1291480);"><img src="kw-usb-get-busses_files/p_quick_quote-off.gif" alt="Быстрая цитата " class="preload4" title="Скопировать выделение в поле ввода"></a>
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a linkindex="73" href="http://forum.vingrad.ru/act-Post/CODE-06/f-101/t-177237/p-1291480.html"><img src="kw-usb-get-busses_files/p_quote-off.gif" alt="Цитата " class="preload5" title="Ответить в тему с цитированием участника" border="0"></a>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td class="post-row2l color2l">
+<br>
+<br>
+Новичок<br>
+<br>
+<br><br>
+<a linkindex="74" href="http://vingrad.ru/@Yoreck">Профиль</a><br>
+Группа: Участник<br>
+Сообщений: 7<br>
+Друзей: <a linkindex="75" href="http://my.vingrad.ru/index.php?module=friends&amp;user_id=11423&amp;action=friends_list_as_table">0</a>; Групп: <a linkindex="76" href="http://vingrad.ru/Yoreck">0</a><br>
+Регистрация: 20.6.2005<br>
+<br>
+Репутация: нет <br>Всего: нет<br><br>
+<br>
+<div class="post-setwidth"></div>
+<br>
+</td>
+<td class="post-row2r color2r post" id="post1291480" onmouseup="post_mup(1291480);" onmousedown="post_mdown(1291480);">
+<div class="postcolor">Проблема разрешилась открытием доступа на запись для всех /dev/usb*<br>&nbsp;<img src="kw-usb-get-busses_files/smile.gif" alt="smile">&nbsp; <br></div>
+<div class="signature"><br><br>--------------------<br>
+<div class="signature">Рубашку скроил он из дохлых мышей, и не было ткани теплей и нежней!<br>(с)Эдвард Лир</div></div>
+</td>
+</tr>
+<tr>
+<td class="post-row3"><table class="subtable" cellspacing="0"><tbody><tr><td class="centeralign"></td></tr></tbody></table></td>
+<td class="post-row3">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<a linkindex="77" href="http://forum.vingrad.ru/act-Msg/CODE-04/MID-11423/p-1291480/t-177237.html"><img src="kw-usb-get-busses_files/p_pm-off.gif" alt="PM " class="preload6" title="Отправить персональное сообщение"></a><a linkindex="78" href="http://forum.vingrad.ru/act-Mail/CODE-00/MID-11423.html"><img src="kw-usb-get-busses_files/p_email-off.gif" alt="MAIL " class="preload7" title="Письмо на e-mail пользователю"></a>&nbsp;
+</td>
+<td class="subtable_r1"><a onclick="scroll(0,0); return false;" href="javascript:scroll(0,0);"><img src="kw-usb-get-busses_files/p_up.gif" alt="Вверх" title="Вверх"></a></td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td colspan="2" class="post-row4"><table cellspacing="0"><tbody><tr><td></td></tr></tbody></table></td>
+</tr>
+</tbody></table>        
+<table class="posttable" id="d1291486" cellspacing="0">
+<tbody><tr>
+<td class="post-row1l"><a name="entry1291486" href="#" onclick="ubbc_addAfterQuote('[B]GrayCardinal[/B], '); return false;" title="Вставить ник в поле ввода">GrayCardinal</a> </td>
+<td class="post-row1r">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<b>Дата</b> 18.10.2007,  16:55 (<a href="#" onclick="link_to_post(1291486); return false;" title="Нажмите, чтобы скопировать в буфер обмена ссылку на данное сообщение"><b>ссылка</b></a>)
+<span id="post-ratings-1291486" class="post-ratings"><img id="rating_1291486_-3" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-3 " onmouseover="current_rating(1291486, -3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1291486_-2" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-2 " onmouseover="current_rating(1291486, -2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1291486_-1" src="kw-usb-get-busses_files/minus_rating_off.gif" alt="" title="-1 " onmouseover="current_rating(1291486, -1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> | <img id="rating_1291486_1" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+1 " onmouseover="current_rating(1291486, 1, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1291486_2" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+2 " onmouseover="current_rating(1291486, 2, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"><img id="rating_1291486_3" src="kw-usb-get-busses_files/rating_off.gif" alt="" title="+3 " onmouseover="current_rating(1291486, 3, 101);" onmouseout="ratings_off(0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="border: 0px none ; cursor: pointer;"> (нет голосов)</span>
+<span id="post-ratings-1291486-loading" class="post-ratings-loading"><img src="kw-usb-get-busses_files/loading.gif" alt="Загрузка ..." title="Загрузка ..." class="post-ratings-image" height="16" width="16">&nbsp;Загрузка ...</span>
+</td>
+<td class="subtable_r">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a href="javascript:void(0);" onmouseover="InsertQuote.prepare();return true;" onclick="InsertQuote('GrayCardinal', '18.10.2007,  16:55', 1291486);"><img src="kw-usb-get-busses_files/p_quick_quote-off.gif" alt="Быстрая цитата " class="preload4" title="Скопировать выделение в поле ввода"></a>
+<img src="kw-usb-get-busses_files/none.gif" class="imgsep" alt="">
+<a linkindex="79" href="http://forum.vingrad.ru/act-Post/CODE-06/f-101/t-177237/p-1291486.html"><img src="kw-usb-get-busses_files/p_quote-off.gif" alt="Цитата " class="preload5" title="Ответить в тему с цитированием участника" border="0"></a>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td class="post-row2l color1l">
+<br>
+<br>
+Эксперт<br>
+<img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><img src="kw-usb-get-busses_files/pip.gif" alt="*" title="*" border="0"><br>
+<br><br>
+<a linkindex="80" href="http://vingrad.ru/@GrayCardinal">Профиль</a><br>
+Группа: Участник<br>
+Сообщений: 1758<br>
+Друзей: <a linkindex="81" href="http://my.vingrad.ru/index.php?module=friends&amp;user_id=2943&amp;action=friends_list_as_table">0</a>; Групп: <a linkindex="82" href="http://vingrad.ru/GrayCardinal">0</a><br>
+Регистрация: 9.11.2003<br>
+<br>
+Репутация: 5  <br>Всего: 35<br><br>
+<br>
+<div class="post-setwidth"></div>
+<br>
+</td>
+<td class="post-row2r color1r post" id="post1291486" onmouseup="post_mup(1291486);" onmousedown="post_mdown(1291486);">
+<div class="postcolor">Галку поставьте&nbsp;&nbsp;<img src="kw-usb-get-busses_files/blum3.gif" alt="smile">&nbsp; <br></div>
+<div class="signature"><br><br>--------------------<br>
+<div class="signature"><a linkindex="83" href="http://silentbob.sf.net/" target="_blank">http://silentbob.sf.net</a>&nbsp;- достанет из сырцов все до бита.</div></div>
+</td>
+</tr>
+<tr>
+<td class="post-row3"><table class="subtable" cellspacing="0"><tbody><tr><td class="centeralign"></td></tr></tbody></table></td>
+<td class="post-row3">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<a linkindex="84" href="http://forum.vingrad.ru/act-Msg/CODE-04/MID-2943/p-1291486/t-177237.html"><img src="kw-usb-get-busses_files/p_pm-off.gif" alt="PM " class="preload6" title="Отправить персональное сообщение"></a><a linkindex="85" href="http://forum.vingrad.ru/act-Mail/CODE-00/MID-2943.html"><img src="kw-usb-get-busses_files/p_email-off.gif" alt="MAIL " class="preload7" title="Письмо на e-mail пользователю"></a>&nbsp;
+</td>
+<td class="subtable_r1"><a onclick="scroll(0,0); return false;" href="javascript:scroll(0,0);"><img src="kw-usb-get-busses_files/p_up.gif" alt="Вверх" title="Вверх"></a></td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td colspan="2" class="post-row4"><table cellspacing="0"><tbody><tr><td></td></tr></tbody></table></td>
+</tr>
+</tbody></table>        
+<table class="posttable" cellspacing="0">
+<tbody><tr>
+<td class="post-row1l"><span><a name="entry0" href="#" onclick="ubbc_addAfterQuote('[B]Google[/B], '); return false;" title="Вставить ник в поле ввода">Google</a> </span></td>
+<td class="post-row1r">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+<img src="kw-usb-get-busses_files/icon1.gif" alt="">&nbsp;&nbsp;<b>Дата</b> 6.2.2008,  00:11 (<a href="#" onclick="link_to_post(0); return false;" title="Нажмите, чтобы скопировать в буфер обмена ссылку на данное сообщение"><b>ссылка</b></a>)                    	
+</td>
+<td class="subtable_r">
+&nbsp;
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td class="post-row2l color2l">
+<br>
+<br><br>
+<div class="post-setwidth"></div>
+<br>
+</td>
+<td class="post-row2r color2r post">
+<div class="postcolor"><script type="text/javascript"><!--
+google_ad_client = "pub-2195614373928501";
+google_alternate_color = "FFFFFF";
+google_ad_width = 300;
+google_ad_height = 250;
+google_ad_format = "300x250_as";
+google_ad_type = "text";
+//2007-10-19: внизу топика
+google_ad_channel = "7865729875";
+google_color_border = "F5FCED";
+google_color_bg = "F5FCED";
+google_color_link = "000000";
+google_color_text = "000000";
+google_color_url = "E8E8E8";
+//-->
+</script>
+<script type="text/javascript" src="kw-usb-get-busses_files/show_ads.js"></script><br></div>
+</td>
+</tr>
+<tr>
+<td class="post-row3"><table class="subtable" cellspacing="0"><tbody><tr><td class="centeralign"></td></tr></tbody></table></td>
+<td class="post-row3">
+<table class="subtable" cellspacing="0">
+<tbody><tr>
+<td class="subtable_l">
+</td>
+<td class="subtable_r1"><a onclick="scroll(0,0); return false;" href="javascript:scroll(0,0);"><img src="kw-usb-get-busses_files/p_up.gif" alt="Вверх" title="Вверх"></a></td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td colspan="2" class="post-row4"><table cellspacing="0"><tbody><tr><td></td></tr></tbody></table></td>
+</tr>
+</tbody></table>
+</div>
+<img src="kw-usb-get-busses_files/p_pm-on.gif" id="img6" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_email-on.gif" id="img7" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_www-on.gif" id="img8" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_im-on.gif" id="img9" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_icq-on.gif" id="img10" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_aim-on.gif" id="img11" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_yim-on.gif" id="img12" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_msn-on.gif" id="img13" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_skype-on.gif" id="img20" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_gtalk-on.gif" id="img21" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_jabber-on.gif" id="img22" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_report-on.gif" id="img1" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_delete-on.gif" id="img2" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_edit-on.gif" id="img3" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_quick_quote-on.gif" id="img4" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_quote-on.gif" id="img5" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_show-on.gif" id="img23" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_hide-on.gif" id="img24" class="preload" alt="">
+<img src="kw-usb-get-busses_files/p_tofaq-on.gif" id="img25" class="preload" alt="">
+<table cellspacing="0">
+<tbody><tr>
+<td class="leftalign"><div id="s_pages_2" style="display: inline;">&nbsp;&nbsp;</div></td>
+<td class="rightalign_ch3">
+<a linkindex="86" href="http://forum.vingrad.ru/act-Post/CODE-02/f-101/t-177237/syntax-cpp.html"><img src="kw-usb-get-busses_files/t_reply.gif" alt="Ответ в тему" title="Ответ в тему" border="0"></a><a linkindex="87" href="http://forum.vingrad.ru/forum/act-Post/CODE-00/f-101/syntax-cpp.html" title="Создание новой темы"><img src="kw-usb-get-busses_files/t_new.gif" alt="Создание новой темы" title="Создание новой темы" border="0"></a>
+<a linkindex="88" href="http://forum.vingrad.ru/forum/act-Post/CODE-10/f-101.html"><img src="kw-usb-get-busses_files/t_poll.gif" alt="Создание опроса" title="Создание опроса" border="0"></a>
+<a linkindex="89" href="http://forum.vingrad.ru/news/act-Post/CODE-00/syntax-cpp.html" title="Добавить новость "><img src="kw-usb-get-busses_files/t_add_news.gif" alt="Добавить новость " title="Добавить новость" border="0"></a>
+</td>
+</tr>
+</tbody></table>
+<script type="text/javascript">
+function show_hide_forum_rules() {
+if (document.getElementById('forum_rules').style.display == 'block') {
+document.getElementById('forum_rules').style.display = 'none';
+} else {
+document.getElementById('forum_rules').style.display = 'block';
+}
+}
+</script>	
+<div id="forum_rules" align="left">
+<div id="forum_rules" align="left">
+<div class="sep"></div>
+<table class="maintable" cellspacing="1">
+<tbody><tr class="info">
+<td colspan="2">Правила форума "С/С++: Программирование под Unix/Linux"</td>
+</tr>
+<tr>
+<td class="forumrules_left">
+<a linkindex="90" href="http://vingrad.ru/@MAKCim"><img src="kw-usb-get-busses_files/button.png" alt="MAKCim"></a><br></td>
+<td class="forumrules_right">
+<ul>
+<li>Проставьте несколько <b>ключевых слов</b> темы, чтобы её можно было легче найти.</li>
+<li>Не забывайте пользоваться кнопкой <b>"Код"</b>.</li>
+<li><b>Телепатов на форуме нет!</b> Задавайте чёткий, конкретный и полный вопрос. <b>Указывайте полностью ошибки компилятора и компоновщика</b>.</li>
+<li>Новое сообщение должно иметь прямое отношение к разделу форума. Флуд, флейм, оффтопик запрещены.</li>
+<li>Категорически запрещается обсуждение вареза, "кряков", <b>взлома</b> программ и т.д.</li>
+</ul>
+<hr>
+<p>Если Вам понравилась атмосфера форума, заходите к нам чаще! С уважением, <a linkindex="91" href="http://vingrad.ru/@MAKCim">MAKCim</a>.</p>
+</td>
+</tr>
+</tbody></table>
+</div>&nbsp;<br>
+</div>&nbsp;<br>
+<table class="maintable" cellspacing="1">
+<tbody><tr>
+<td class="threelines_bottom_1" colspan="2">
+1 Пользователей читают эту тему (1 Гостей и 0 Скрытых Пользователей)
+</td>
+</tr>
+<tr>
+<td class="threelines_bottom_2" colspan="2">
+0 Пользователей: 
+</td>
+</tr>
+<tr>
+<td class="threelines_bottom_3 centeralign" colspan="2">
+« <a linkindex="92" href="http://forum.vingrad.ru/topic-177237/view-old.html">Предыдущая тема</a> | <strong><a linkindex="93" href="http://forum.vingrad.ru/c-c++programming-under-Unix-Linux.html">C/C++: Программирование под Unix/Linux</a></strong> | <a linkindex="94" href="http://forum.vingrad.ru/topic-177237/view-new.html">Следующая тема</a> »
+</td>
+</tr>
+</tbody></table>
+<script type="text/javascript">
+<!--
+MessageMax = 30000;
+post_A = 1;
+v_t=false;
+s_t=0;
+tid=177237;
+auth_key='880ea6a14ea49e853634fbdc5015a024';
+show_type='forum';
+del_q = 'Вы действительно хотите удалить это сообщение?';
+del_no = 'Не хотите, как хотите :)';
+of_postcolor();
+ToolMenu_init();
+var flash_w = '200'; var flash_h = '400';
+var ubbc_dir = 'html/UBBC';
+var emoticon_dir = 'html/emoticons';
+ToolMenu_loadData('cpp');
+addTranslitListener(post.target, document.getElementById("fa_cb_translate"));
+//-->
+</script>
+<br>
+<div class="rightalign">
+<a linkindex="95" href="http://forum.vingrad.ru/act-Track/f-101/t-177237.html" title="Уведомление на e-mail об ответах в тему">Подписаться на тему</a> |
+<a linkindex="96" href="http://forum.vingrad.ru/act-Track/f-101/type/forum_id/index.html" title="Уведомление на e-mail о новых темах на форуме">Подписка на этот форум</a> |
+<a linkindex="97" href="http://forum.vingrad.ru/act-Print/client/choose/f-101/t-177237.html" title="Скачивание темы в различных форматах или просмотр версии для печати">Скачать/Распечатать тему</a><br><br>
+</div>
+<br>
+<div align="right"><form onsubmit="if(document.jumpmenu.f.value == -1){return false;}" action="http://forum.vingrad.ru/index.php?act=SF" method="get" name="jumpmenu">
+<input name="act" value="SF" type="hidden">
+<input name="s" value="" type="hidden">
+<select name="f" onchange="if(this.options[this.selectedIndex].value != -1){ document.jumpmenu.submit() }" class="forminput">
+<optgroup label="Перейти на сайт">
+<option value="sj_home">Главная страница форума</option>
+<option value="sj_search">Поиск</option>
+<option value="sj_help">Помощь</option>
+</optgroup>
+<optgroup label="Переход по форумам"><option value="-1">Программирование</option>
+<option value="1">&nbsp;&nbsp;- C++</option>
+<option value="2">&nbsp;&nbsp;- Delphi, Kylix and Pascal</option>
+<option value="9">&nbsp;&nbsp;- Java</option>
+<option value="47">&nbsp;&nbsp;- .NET</option>
+<option value="3">&nbsp;&nbsp;- Visual Basic</option>
+<option value="4">&nbsp;&nbsp;- ASM</option>
+<option value="116">&nbsp;&nbsp;- Python</option>
+<option value="12">&nbsp;&nbsp;- Базы данных</option>
+<option value="115">&nbsp;&nbsp;- Красная книга</option>
+<option value="-1">Разработка систем для Web</option>
+<option value="6">&nbsp;&nbsp;- PHP</option>
+<option value="5">&nbsp;&nbsp;- Perl  (+2 подфорумы)</option>
+<option value="118">&nbsp;&nbsp;- Ruby</option>
+<option value="15">&nbsp;&nbsp;- Flash platform</option>
+<option value="7">&nbsp;&nbsp;- ASP </option>
+<option value="10">&nbsp;&nbsp;- JavaScript</option>
+<option value="16">&nbsp;&nbsp;- Теория веб-дизайна </option>
+<option value="64">&nbsp;&nbsp;- Вёрстка веб-сайтов </option>
+<option value="41">&nbsp;&nbsp;- Хостинг и доменные имена </option>
+<option value="121">&nbsp;&nbsp;- Администрирование Web серверов и Web служб  (+1 подфорумы)</option>
+<option value="122">&nbsp;&nbsp;- XML, XSL </option>
+<option value="18">&nbsp;&nbsp;- Интернет-бизнес и продвижение сайтов</option>
+<option value="177">&nbsp;&nbsp;- Работа с готовыми скриптами и поиск движков</option>
+<option value="-1">Технологии и алгоритмы</option>
+<option value="13">&nbsp;&nbsp;- Алгоритмы </option>
+<option value="11">&nbsp;&nbsp;- Технологии</option>
+<option value="123">&nbsp;&nbsp;- Репортинговые системы </option>
+<option value="36">&nbsp;&nbsp;- Программирование контроллеров </option>
+<option value="128">&nbsp;&nbsp;- Программирование мобильных устройств </option>
+<option value="129">&nbsp;&nbsp;- Программирование игр, графики и искусственного интеллекта </option>
+<option value="-1">Компьютерные системы</option>
+<option value="28">&nbsp;&nbsp;- MS Windows </option>
+<option value="29">&nbsp;&nbsp;- Linux/Unix</option>
+<option value="75">&nbsp;&nbsp;- 1C: Предприятие, SAP, ERP и учётные системы </option>
+<option value="38">&nbsp;&nbsp;- Сетевые технологии </option>
+<option value="21">&nbsp;&nbsp;- Программное обеспечение </option>
+<option value="22">&nbsp;&nbsp;- Компьютерное железо</option>
+<option value="60">&nbsp;&nbsp;- MS Office</option>
+<option value="132">&nbsp;&nbsp;- Звук, графика и видео</option>
+<option value="-1">Разное</option>
+<option value="25">&nbsp;&nbsp;- Работа в офисе</option>
+<option value="42">&nbsp;&nbsp;- Совместные проекты/поиск партнёров </option>
+<option value="20">&nbsp;&nbsp;- Готовые и разрабатываемые проекты</option>
+<option value="272">&nbsp;&nbsp;- Управление проектами</option>
+<option value="214">&nbsp;&nbsp;- Наши тесты  (+1 подфорумы)</option>
+<option value="150">&nbsp;&nbsp;- Компьютерная литература  (+1 подфорумы)</option>
+<option value="293">&nbsp;&nbsp;- Игры </option>
+<option value="193">&nbsp;&nbsp;- Флейм </option>
+<option value="24">&nbsp;&nbsp;- Разные вопросы</option>
+<option value="-1">Vingrad</option>
+<option value="141">&nbsp;&nbsp;- Vingrad - Колледж</option>
+<option value="27">&nbsp;&nbsp;- Vingrad</option>
+<option value="197">&nbsp;&nbsp;- Наши встречи  (+1 подфорумы)</option>
+<option value="52">&nbsp;&nbsp;- Наши проекты</option>
+<option value="43">&nbsp;&nbsp;- Форум для админов и модераторов</option>
+</optgroup>
+</select>&nbsp;<input value="ок!" class="forminput" type="submit"></form></div>
+<br>
+<div id="l_table" style="display: inline;"></div> 
+<br>
+<div align="center">
+<script type="text/javascript"><!--
+document.write('<a href="http://www.liveinternet.ru/click" '+
+'target="_blank"><img src="http://counter.yadro.ru/hit?t14.6;r'+
+escape(document.referrer)+((typeof(screen)=='undefined')?'':
+';s'+screen.width+'*'+screen.height+'*'+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+';u'+escape(document.URL)+
+';i'+escape('Жж'+document.title.substring(0,80))+';'+Math.random()+
+'" alt=" " title="LiveInternet: показано число просмотров за 24 часа, посетителей за 24 часа и за сегодня " '+
+'border="0" width="88" height="31" /><\/a>')//--></script>
+<script type="text/javascript">
+<!--
+d=document;a='';a+=';r='+escape(d.referrer)
+js=10//--></script>
+<script type="text/javascript">
+<!--
+a+=';j='+navigator.javaEnabled()
+js=11//--></script>
+<script type="text/javascript"><!--
+s=screen;a+=';s='+s.width+'*'+s.height
+a+=';d='+(s.colorDepth?s.colorDepth:s.pixelDepth)
+js=12
+//--></script>
+<script type="text/javascript"><!--
+js=13//--></script>
+<script type="text/javascript"><!--
+d.write('<a href="http://top.mail.ru/jump?from=97025"'+
+' target=_top><img src="http://top.list.ru/counter'+
+'?id=97025;t=210;js='+js+a+';rand='+Math.random()+
+'" alt="Рейтинг@Mail.ru"'+' border="0" height="31" width="88" /><\/a>');
+//-->
+</script>
+<noscript>
+<a linkindex="98" target="_top" href="http://top.mail.ru/jump?from=97025"><img src="kw-usb-get-busses_files/counter.gif" alt="Рейтинг@Mail.ru" border="0" height="31" width="88"></a>
+</noscript>
+<script type="text/javascript">
+<!--
+-->
+</script>
+<img src="kw-usb-get-busses_files/top100.gif" alt="" border="0" height="1" width="1">
+<a linkindex="99" href="http://top100.rambler.ru/top100/">
+<img src="kw-usb-get-busses_files/banner-88x31-rambler-blue3.gif" alt="Rambler's Top100" border="0" height="31" width="88"></a>
+<br><br>
+<div id="techinfo">[ Время генерации скрипта: 3.4816 ] &nbsp; [ Использовано запросов: 25 ] &nbsp; [ GZIP включён ] <br><br></div>
+<!--557926083-->  <br>
+<a linkindex="100" href="http://forum.vingrad.ru/act-Help/CODE-01/HID-21.html">Реклама на сайте</a>
+<br><br>
+</div>
+</div> 
+<div class="div_fullwidth">
+<table id="copyrights" cellspacing="0">
+<tbody><tr>
+<td class="set88width">
+<div>&nbsp;</div>
+</td>
+<td>
+По вопросам размещения рекламы пишите на vladimir(sobaka)vingrad.ru
+<br>
+Хостинг: <a linkindex="101" href="http://hosting.vingrad.ru/">Vingrad Hosting</a>
+&nbsp;&nbsp;&nbsp;
+<a linkindex="102" href="http://forum.vingrad.ru/act-Help/CODE-01/HID-25.html">Отказ от ответственности</a>
+&nbsp;&nbsp;&nbsp;
+Powered by <a linkindex="103" rel="nofollow" href="http://www.invisionboard.com/" target="_blank">Invision Power Board</a>(R) 1.3 © 2003 &nbsp;<a linkindex="104" rel="nofollow" href="http://www.invisionpower.com/" target="_blank">IPS, Inc.</a></td>
+<td class="set88width"><a linkindex="105" href="http://validator.w3.org/check?uri=referer"><img src="kw-usb-get-busses_files/valid-xhtml10.png" alt="Valid XHTML 1.0!"></a></td>
+</tr>
+</tbody></table>
+</div> 
+<script type="text/javascript">
+<!--
+setTimeout(setAnchorDef,200);
+RollOver_init();
+//-->
+</script>
+<script src="kw-usb-get-busses_files/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-1729441-1";
+urchinTracker();
+</script>
+</div>
+</div>
+</div>
+
+</body></html>

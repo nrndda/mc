@@ -1,0 +1,1643 @@
+   1               		.file	"RF443_Transmitter_with_rs232_to_usb.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.global __do_copy_data
+   8               		.global __do_clear_bss
+  10               		.text
+  11               	.Ltext0:
+  81               	.global	strobe
+  83               	strobe:
+  85               	.Ltext1:
+   1:./lcd.c       **** #include <avr/io.h>
+   2:./lcd.c       **** #include <util/delay.h>
+   3:./lcd.c       **** #include <stdlib.h>
+   4:./lcd.c       **** 
+   5:./lcd.c       **** #define	LCD_RS_PORT 0
+   6:./lcd.c       **** #define	LCD_RW_PORT 1
+   7:./lcd.c       **** #define	LCD_E_PORT  2
+   8:./lcd.c       **** // LCD Data ports: PORTA[3:6]
+   9:./lcd.c       **** #define	LCD_DATA_PORT PORTA
+  10:./lcd.c       **** #define	LCD_DATA_PORT_SHIFT 3
+  11:./lcd.c       **** #define	LCD_DATA_TEMPLATE (0x0f << LCD_DATA_PORT_SHIFT)
+  12:./lcd.c       **** #define	LCD_DATA_DDR DDRA
+  13:./lcd.c       **** //Display's string size
+  14:./lcd.c       **** #define	LCD_X_SIZE 12
+  15:./lcd.c       **** //Display's number of strings
+  16:./lcd.c       **** #define	LCD_Y_SIZE 2
+  17:./lcd.c       **** // First four bits
+  18:./lcd.c       **** #define LCD_MINOR_4_DATA_BITS_WRITE(data) LCD_DATA_PORT = ((LCD_DATA_PORT & (~LCD_DATA_TEMPLATE)) |
+  19:./lcd.c       **** 
+  20:./lcd.c       **** #define BIT_INVERSE(value,bit) ((value) ^= (1 << (bit)))
+  21:./lcd.c       **** #define BIT_SET(value,bit) ((value) |= (1 << (bit)))
+  22:./lcd.c       **** #define BIT_CLEAR(value,bit) ((value) &= (~(1 << (bit))))
+  23:./lcd.c       **** #define IS_BIT_SET(value,bit) ((((value) & (1 << (bit))) != 0) ? 1 : 0)
+  24:./lcd.c       **** 
+  25:./lcd.c       **** //Запас по времени на задержки 20%
+  26:./lcd.c       **** #define LCD_TIME_MARGIN 1.2
+  27:./lcd.c       **** 
+  28:./lcd.c       **** void strobe(void);
+  29:./lcd.c       **** unsigned char lcd_write(unsigned char, unsigned char);
+  30:./lcd.c       **** void lcd_clear(void);
+  31:./lcd.c       **** void lcd_return_home(void);
+  32:./lcd.c       **** void lcd_goto(unsigned char);
+  33:./lcd.c       **** void lcd_write_string(unsigned char, unsigned char, char *);
+  34:./lcd.c       **** void lcd_init(void);
+  35:./lcd.c       **** 
+  36:./lcd.c       **** void strobe(void)
+  37:./lcd.c       **** {
+  87               	.LM0:
+  88               	.LFBB1:
+  89               	/* prologue: function */
+  90               	/* frame size = 0 */
+  91               	/* stack size = 0 */
+  92               	.L__stack_usage = 0
+  93               	.LBB95:
+  94               	.LBB96:
+  95               	.LBB97:
+  96               	.LBB98:
+  98               	.Ltext2:
+   1:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** /* Copyright (c) 2002, Marek Michalkiewicz
+   2:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****    Copyright (c) 2007 Joerg Wunsch
+   3:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****    All rights reserved.
+   4:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+   5:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****    Redistribution and use in source and binary forms, with or without
+   6:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****    modification, are permitted provided that the following conditions are met:
+   7:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+   8:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****    * Redistributions of source code must retain the above copyright
+   9:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****      notice, this list of conditions and the following disclaimer.
+  10:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  11:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****    * Redistributions in binary form must reproduce the above copyright
+  12:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****      notice, this list of conditions and the following disclaimer in
+  13:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****      the documentation and/or other materials provided with the
+  14:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****      distribution.
+  15:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  16:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****    * Neither the name of the copyright holders nor the names of
+  17:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****      contributors may be used to endorse or promote products derived
+  18:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****      from this software without specific prior written permission.
+  19:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  20:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  21:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  22:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  23:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  24:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  25:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  26:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  27:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  28:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  29:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  30:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   POSSIBILITY OF SUCH DAMAGE. */
+  31:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  32:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** /* $Id: delay_basic.h 2143 2010-06-08 21:19:51Z joerg_wunsch $ */
+  33:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  34:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** #ifndef _UTIL_DELAY_BASIC_H_
+  35:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** #define _UTIL_DELAY_BASIC_H_ 1
+  36:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  37:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** #include <inttypes.h>
+  38:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  39:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** #if !defined(__DOXYGEN__)
+  40:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** static inline void _delay_loop_1(uint8_t __count) __attribute__((always_inline));
+  41:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** static inline void _delay_loop_2(uint16_t __count) __attribute__((always_inline));
+  42:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** #endif
+  43:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  44:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** /** \file */
+  45:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** /** \defgroup util_delay_basic <util/delay_basic.h>: Basic busy-wait delay loops
+  46:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     \code
+  47:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     #include <util/delay_basic.h>
+  48:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     \endcode
+  49:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  50:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     The functions in this header file implement simple delay loops
+  51:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     that perform a busy-waiting.  They are typically used to
+  52:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     facilitate short delays in the program execution.  They are
+  53:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     implemented as count-down loops with a well-known CPU cycle
+  54:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     count per loop iteration.  As such, no other processing can
+  55:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     occur simultaneously.  It should be kept in mind that the
+  56:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     functions described here do not disable interrupts.
+  57:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  58:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     In general, for long delays, the use of hardware timers is
+  59:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     much preferrable, as they free the CPU, and allow for
+  60:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     concurrent processing of other events while the timer is
+  61:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     running.  However, in particular for very short delays, the
+  62:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     overhead of setting up a hardware timer is too much compared
+  63:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     to the overall delay time.
+  64:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  65:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     Two inline functions are provided for the actual delay algorithms.
+  66:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  67:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** */
+  68:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  69:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** /** \ingroup util_delay_basic
+  70:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  71:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     Delay loop using an 8-bit counter \c __count, so up to 256
+  72:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     iterations are possible.  (The value 256 would have to be passed
+  73:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     as 0.)  The loop executes three CPU cycles per iteration, not
+  74:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     including the overhead the compiler needs to setup the counter
+  75:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     register.
+  76:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  77:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     Thus, at a CPU speed of 1 MHz, delays of up to 768 microseconds
+  78:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     can be achieved.
+  79:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** */
+  80:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** void
+  81:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** _delay_loop_1(uint8_t __count)
+  82:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** {
+  83:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 	__asm__ volatile (
+  84:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 		"1: dec %0" "\n\t"
+  85:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 		"brne 1b"
+  86:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 		: "=r" (__count)
+  87:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 		: "0" (__count)
+  88:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 	);
+  89:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** }
+  90:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  91:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** /** \ingroup util_delay_basic
+  92:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  93:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     Delay loop using a 16-bit counter \c __count, so up to 65536
+  94:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     iterations are possible.  (The value 65536 would have to be
+  95:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     passed as 0.)  The loop executes four CPU cycles per iteration,
+  96:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     not including the overhead the compiler requires to setup the
+  97:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     counter register pair.
+  98:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  99:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     Thus, at a CPU speed of 1 MHz, delays of up to about 262.1
+ 100:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     milliseconds can be achieved.
+ 101:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****  */
+ 102:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** void
+ 103:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** _delay_loop_2(uint16_t __count)
+ 104:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** {
+ 105:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 	__asm__ volatile (
+ 100               	.LM1:
+ 101 0000 80E2      		ldi r24,lo8(288)
+ 102 0002 91E0      		ldi r25,hi8(288)
+ 103               	/* #APP */
+ 104               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 105 0004 0197      		1: sbiw r24,1
+ 106 0006 01F4      		brne 1b
+ 107               	 ;  0 "" 2
+ 108               	/* #NOAPP */
+ 109               	.LBE98:
+ 110               	.LBE97:
+ 111               	.LBE96:
+ 112               	.LBE95:
+ 114               	.Ltext3:
+  38:./lcd.c       **** 	_delay_ms(0.06 * LCD_TIME_MARGIN * TIME_SCALE);
+  39:./lcd.c       **** 	BIT_SET(LCD_DATA_PORT,LCD_E_PORT);
+ 116               	.LM2:
+ 117 0008 DA9A      		sbi 59-0x20,2
+ 118               	.LBB99:
+ 119               	.LBB100:
+ 120               	.LBB101:
+ 121               	.LBB102:
+ 123               	.Ltext4:
+ 125               	.LM3:
+ 126 000a 80E7      		ldi r24,lo8(2160)
+ 127 000c 98E0      		ldi r25,hi8(2160)
+ 128               	/* #APP */
+ 129               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 130 000e 0197      		1: sbiw r24,1
+ 131 0010 01F4      		brne 1b
+ 132               	 ;  0 "" 2
+ 133               	/* #NOAPP */
+ 134               	.LBE102:
+ 135               	.LBE101:
+ 136               	.LBE100:
+ 137               	.LBE99:
+ 139               	.Ltext5:
+  40:./lcd.c       **** 	_delay_ms(0.45 * LCD_TIME_MARGIN * TIME_SCALE);
+  41:./lcd.c       **** 	BIT_CLEAR(LCD_DATA_PORT,LCD_E_PORT);
+ 141               	.LM4:
+ 142 0012 DA98      		cbi 59-0x20,2
+ 143               	.LBB103:
+ 144               	.LBB104:
+ 145               	.LBB105:
+ 146               	.LBB106:
+ 148               	.Ltext6:
+ 150               	.LM5:
+ 151 0014 80E6      		ldi r24,lo8(96)
+ 152 0016 90E0      		ldi r25,hi8(96)
+ 153               	/* #APP */
+ 154               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 155 0018 0197      		1: sbiw r24,1
+ 156 001a 01F4      		brne 1b
+ 157               	 ;  0 "" 2
+ 158               	/* epilogue start */
+ 159               	/* #NOAPP */
+ 160               	.LBE106:
+ 161               	.LBE105:
+ 162               	.LBE104:
+ 163               	.LBE103:
+ 165               	.Ltext7:
+  42:./lcd.c       **** 	_delay_ms(0.02 * LCD_TIME_MARGIN * TIME_SCALE);
+  43:./lcd.c       **** }
+ 167               	.LM6:
+ 168 001c 0895      		ret
+ 170               	.Lscope1:
+ 173               	.global	lcd_port_state
+ 175               	lcd_port_state:
+  44:./lcd.c       **** 
+  45:./lcd.c       **** void lcd_port_state(char state)//Режим работы портов lcd
+  46:./lcd.c       **** {
+ 177               	.LM7:
+ 178               	.LFBB2:
+ 179               	/* prologue: function */
+ 180               	/* frame size = 0 */
+ 181               	/* stack size = 0 */
+ 182               	.L__stack_usage = 0
+  47:./lcd.c       **** 	int ddr_temp = LCD_DATA_TEMPLATE | (0x01 << LCD_RS_PORT) |
+  48:./lcd.c       **** 				(0x01 << LCD_RW_PORT) | (0x01 << LCD_E_PORT);// На все управляющие пины п�
+  49:./lcd.c       **** 	switch (state)
+ 184               	.LM8:
+ 185 001e 8934      		cpi r24,lo8(73)
+ 186 0020 01F0      		breq .L5
+ 187 0022 8A34      		cpi r24,lo8(74)
+ 188 0024 00F0      		brlo .L9
+ 189 0026 8936      		cpi r24,lo8(105)
+ 190 0028 01F0      		breq .L5
+ 191 002a 8F36      		cpi r24,lo8(111)
+ 192 002c 01F0      		breq .L4
+ 193 002e 8F34      		cpi r24,lo8(79)
+ 194 0030 01F0      		breq .L4
+ 195               	.L3:
+  50:./lcd.c       **** 	{
+  51:./lcd.c       **** 		case 'o':
+  52:./lcd.c       **** 		case 'O':
+  53:./lcd.c       **** 		case '0':
+  54:./lcd.c       **** 		{
+  55:./lcd.c       **** 			LCD_DATA_DDR = (LCD_DATA_DDR | ddr_temp);
+  56:./lcd.c       **** 			LCD_DATA_PORT = LCD_DATA_PORT & 0x80;
+  57:./lcd.c       **** 		}; break;
+  58:./lcd.c       **** 
+  59:./lcd.c       **** 		case 'i':
+  60:./lcd.c       **** 		case 'I':
+  61:./lcd.c       **** 		case '1':
+  62:./lcd.c       **** 		{
+  63:./lcd.c       **** 			LCD_DATA_DDR = (LCD_DATA_DDR & (~ddr_temp));
+  64:./lcd.c       **** 			LCD_DATA_PORT = LCD_DATA_PORT | 0x7f;
+  65:./lcd.c       **** 		}; break;
+  66:./lcd.c       **** 
+  67:./lcd.c       **** 		case 'z':
+  68:./lcd.c       **** 		case 'Z':
+  69:./lcd.c       **** 		case '2':
+  70:./lcd.c       **** 		default:
+  71:./lcd.c       **** 		{
+  72:./lcd.c       **** 			LCD_DATA_DDR = (LCD_DATA_DDR & (~ddr_temp));
+ 197               	.LM9:
+ 198 0032 8AB3      		in r24,58-0x20
+ 199 0034 8078      		andi r24,lo8(-128)
+ 200 0036 8ABB      		out 58-0x20,r24
+  73:./lcd.c       **** 			LCD_DATA_PORT = LCD_DATA_PORT & 0x80;
+ 202               	.LM10:
+ 203 0038 8BB3      		in r24,59-0x20
+ 204 003a 8078      		andi r24,lo8(-128)
+ 205 003c 8BBB      		out 59-0x20,r24
+ 206 003e 0895      		ret
+ 207               	.L9:
+  49:./lcd.c       **** 	switch (state)
+ 209               	.LM11:
+ 210 0040 8033      		cpi r24,lo8(48)
+ 211 0042 01F0      		breq .L4
+ 212 0044 8133      		cpi r24,lo8(49)
+ 213 0046 01F4      		brne .L3
+ 214               	.L5:
+  63:./lcd.c       **** 			LCD_DATA_DDR = (LCD_DATA_DDR & (~ddr_temp));
+ 216               	.LM12:
+ 217 0048 8AB3      		in r24,58-0x20
+ 218 004a 8078      		andi r24,lo8(-128)
+ 219 004c 8ABB      		out 58-0x20,r24
+  64:./lcd.c       **** 			LCD_DATA_PORT = LCD_DATA_PORT | 0x7f;
+ 221               	.LM13:
+ 222 004e 8BB3      		in r24,59-0x20
+ 223 0050 8F67      		ori r24,lo8(127)
+ 224 0052 8BBB      		out 59-0x20,r24
+  65:./lcd.c       **** 		}; break;
+ 226               	.LM14:
+ 227 0054 0895      		ret
+ 228               	.L4:
+  55:./lcd.c       **** 			LCD_DATA_DDR = (LCD_DATA_DDR | ddr_temp);
+ 230               	.LM15:
+ 231 0056 8AB3      		in r24,58-0x20
+ 232 0058 8F67      		ori r24,lo8(127)
+ 233 005a 8ABB      		out 58-0x20,r24
+  56:./lcd.c       **** 			LCD_DATA_PORT = LCD_DATA_PORT & 0x80;
+ 235               	.LM16:
+ 236 005c 8BB3      		in r24,59-0x20
+ 237 005e 8078      		andi r24,lo8(-128)
+ 238 0060 8BBB      		out 59-0x20,r24
+  57:./lcd.c       **** 		}; break;
+ 240               	.LM17:
+ 241 0062 0895      		ret
+ 243               	.Lscope2:
+ 247               	.global	lcd_write
+ 249               	lcd_write:
+  74:./lcd.c       **** 		}; break;
+  75:./lcd.c       **** 	}
+  76:./lcd.c       **** 
+  77:./lcd.c       **** }
+  78:./lcd.c       **** 
+  79:./lcd.c       **** unsigned char lcd_write(unsigned char data, unsigned char command_or_data) //запись 1-го б
+  80:./lcd.c       **** {
+ 251               	.LM18:
+ 252               	.LFBB3:
+ 253 0064 1F93      		push r17
+ 254 0066 DF93      		push r29
+ 255 0068 CF93      		push r28
+ 256 006a 0F92      		push __tmp_reg__
+ 257 006c CDB7      		in r28,__SP_L__
+ 258 006e DEB7      		in r29,__SP_H__
+ 259               	/* prologue: function */
+ 260               	/* frame size = 1 */
+ 261               	/* stack size = 4 */
+ 262               	.L__stack_usage = 4
+ 263 0070 182F      		mov r17,r24
+  81:./lcd.c       **** 	lcd_port_state('o');
+ 265               	.LM19:
+ 266 0072 8FE6      		ldi r24,lo8(111)
+ 267 0074 6983      		std Y+1,r22
+ 268 0076 00D0      		rcall lcd_port_state
+  82:./lcd.c       **** 	if (command_or_data) BIT_SET(LCD_DATA_PORT,LCD_RS_PORT);
+ 270               	.LM20:
+ 271 0078 6981      		ldd r22,Y+1
+ 272 007a 6623      		tst r22
+ 273 007c 01F4      		brne .L13
+  83:./lcd.c       **** 	else BIT_CLEAR(LCD_DATA_PORT,LCD_RS_PORT);
+ 275               	.LM21:
+ 276 007e D898      		cbi 59-0x20,0
+ 277               	.L12:
+  84:./lcd.c       **** 	BIT_CLEAR(LCD_DATA_PORT,LCD_RW_PORT);
+ 279               	.LM22:
+ 280 0080 D998      		cbi 59-0x20,1
+  85:./lcd.c       **** 
+  86:./lcd.c       **** 	LCD_MINOR_4_DATA_BITS_WRITE(data >> 4);
+ 282               	.LM23:
+ 283 0082 9BB3      		in r25,59-0x20
+ 284 0084 812F      		mov r24,r17
+ 285 0086 8295      		swap r24
+ 286 0088 8F70      		andi r24,lo8(15)
+ 287 008a 880F      		lsl r24
+ 288 008c 880F      		lsl r24
+ 289 008e 880F      		lsl r24
+ 290 0090 9778      		andi r25,lo8(-121)
+ 291 0092 892B      		or r24,r25
+ 292 0094 8BBB      		out 59-0x20,r24
+  87:./lcd.c       **** 	strobe();
+ 294               	.LM24:
+ 295 0096 00D0      		rcall strobe
+ 296               	.LBB107:
+ 297               	.LBB108:
+ 298               	.LBB109:
+ 299               	.LBB110:
+ 301               	.Ltext8:
+ 303               	.LM25:
+ 304 0098 E0EC      		ldi r30,lo8(4800)
+ 305 009a F2E1      		ldi r31,hi8(4800)
+ 306               	/* #APP */
+ 307               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 308 009c 3197      		1: sbiw r30,1
+ 309 009e 01F4      		brne 1b
+ 310               	 ;  0 "" 2
+ 311               	/* #NOAPP */
+ 312               	.LBE110:
+ 313               	.LBE109:
+ 314               	.LBE108:
+ 315               	.LBE107:
+ 317               	.Ltext9:
+  88:./lcd.c       **** 	_delay_ms(1 * LCD_TIME_MARGIN * TIME_SCALE);
+  89:./lcd.c       **** 	LCD_MINOR_4_DATA_BITS_WRITE(data);
+ 319               	.LM26:
+ 320 00a0 2BB3      		in r18,59-0x20
+ 321 00a2 812F      		mov r24,r17
+ 322 00a4 90E0      		ldi r25,lo8(0)
+ 323 00a6 8F70      		andi r24,lo8(15)
+ 324 00a8 9070      		andi r25,hi8(15)
+ 325 00aa 880F      		lsl r24
+ 326 00ac 991F      		rol r25
+ 327 00ae 880F      		lsl r24
+ 328 00b0 991F      		rol r25
+ 329 00b2 880F      		lsl r24
+ 330 00b4 991F      		rol r25
+ 331 00b6 2778      		andi r18,lo8(-121)
+ 332 00b8 282B      		or r18,r24
+ 333 00ba 2BBB      		out 59-0x20,r18
+  90:./lcd.c       **** 	strobe();
+ 335               	.LM27:
+ 336 00bc 00D0      		rcall strobe
+  91:./lcd.c       **** 
+  92:./lcd.c       **** 	unsigned char addr_temp = 0;
+  93:./lcd.c       **** /*	lcd_port_state('i');
+  94:./lcd.c       **** 	BIT_SET(LCD_DATA_PORT,LCD_RW_PORT);
+  95:./lcd.c       **** 	BIT_CLEAR(LCD_DATA_PORT,LCD_RS_PORT);
+  96:./lcd.c       **** 	_delay_ms(0.07 * TIME_SCALE);
+  97:./lcd.c       **** 	BIT_SET(LCD_DATA_PORT,LCD_E_PORT);
+  98:./lcd.c       **** 	_delay_ms(0.5 * TIME_SCALE);
+  99:./lcd.c       **** 	unsigned char busy = IS_BIT_SET(LCD_DATA_PORT,6); // DB7
+ 100:./lcd.c       **** 	addr_temp = LCD_DATA_PORT;
+ 101:./lcd.c       **** 	BIT_CLEAR(LCD_DATA_PORT,LCD_E_PORT);
+ 102:./lcd.c       **** 	_delay_ms(0.03 * TIME_SCALE);
+ 103:./lcd.c       **** 
+ 104:./lcd.c       **** 	_delay_ms(0.07 * TIME_SCALE);
+ 105:./lcd.c       **** 	BIT_SET(LCD_DATA_PORT,LCD_E_PORT);
+ 106:./lcd.c       **** 	_delay_ms(0.5 * TIME_SCALE);
+ 107:./lcd.c       **** 	addr_temp = ((addr_temp & 011110111) << 4) | LCD_DATA_PORT; // & убираем Busy flag из а�
+ 108:./lcd.c       **** 	BIT_CLEAR(LCD_DATA_PORT,LCD_E_PORT);
+ 109:./lcd.c       **** 	_delay_ms(0.03 * TIME_SCALE);
+ 110:./lcd.c       **** 	if (busy) _delay_ms(0.1 * TIME_SCALE);*/
+ 111:./lcd.c       **** 	lcd_port_state('z');
+ 338               	.LM28:
+ 339 00be 8AE7      		ldi r24,lo8(122)
+ 340 00c0 00D0      		rcall lcd_port_state
+ 112:./lcd.c       **** 	return addr_temp;
+ 113:./lcd.c       **** }
+ 342               	.LM29:
+ 343 00c2 80E0      		ldi r24,lo8(0)
+ 344               	/* epilogue start */
+ 345 00c4 0F90      		pop __tmp_reg__
+ 346 00c6 CF91      		pop r28
+ 347 00c8 DF91      		pop r29
+ 348 00ca 1F91      		pop r17
+ 349 00cc 0895      		ret
+ 350               	.L13:
+  82:./lcd.c       **** 	if (command_or_data) BIT_SET(LCD_DATA_PORT,LCD_RS_PORT);
+ 352               	.LM30:
+ 353 00ce D89A      		sbi 59-0x20,0
+ 354 00d0 00C0      		rjmp .L12
+ 356               	.Lscope3:
+ 358               	.global	lcd_clear
+ 360               	lcd_clear:
+ 114:./lcd.c       **** 
+ 115:./lcd.c       **** void lcd_clear(void)
+ 116:./lcd.c       **** { // Очищаем экран
+ 362               	.LM31:
+ 363               	.LFBB4:
+ 364               	/* prologue: function */
+ 365               	/* frame size = 0 */
+ 366               	/* stack size = 0 */
+ 367               	.L__stack_usage = 0
+ 117:./lcd.c       **** 	lcd_write(0x01,0);
+ 369               	.LM32:
+ 370 00d2 81E0      		ldi r24,lo8(1)
+ 371 00d4 60E0      		ldi r22,lo8(0)
+ 372 00d6 00D0      		rcall lcd_write
+ 373               	/* epilogue start */
+ 118:./lcd.c       **** }
+ 375               	.LM33:
+ 376 00d8 0895      		ret
+ 378               	.Lscope4:
+ 380               	.global	lcd_return_home
+ 382               	lcd_return_home:
+ 119:./lcd.c       **** 
+ 120:./lcd.c       **** void lcd_return_home(void)
+ 121:./lcd.c       **** { // Возвращает курсор в начало
+ 384               	.LM34:
+ 385               	.LFBB5:
+ 386               	/* prologue: function */
+ 387               	/* frame size = 0 */
+ 388               	/* stack size = 0 */
+ 389               	.L__stack_usage = 0
+ 122:./lcd.c       **** 	lcd_write(0x02,0);
+ 391               	.LM35:
+ 392 00da 82E0      		ldi r24,lo8(2)
+ 393 00dc 60E0      		ldi r22,lo8(0)
+ 394 00de 00D0      		rcall lcd_write
+ 395               	/* epilogue start */
+ 123:./lcd.c       **** }
+ 397               	.LM36:
+ 398 00e0 0895      		ret
+ 400               	.Lscope5:
+ 403               	.global	lcd_goto
+ 405               	lcd_goto:
+ 124:./lcd.c       **** 
+ 125:./lcd.c       **** void lcd_goto(unsigned char address)
+ 126:./lcd.c       **** { // Переводит указатель текущей ячейки памяти в lcd по н�
+ 407               	.LM37:
+ 408               	.LFBB6:
+ 409               	/* prologue: function */
+ 410               	/* frame size = 0 */
+ 411               	/* stack size = 0 */
+ 412               	.L__stack_usage = 0
+ 127:./lcd.c       **** 	lcd_write((0x80+address),0);
+ 414               	.LM38:
+ 415 00e2 8058      		subi r24,lo8(-(-128))
+ 416 00e4 60E0      		ldi r22,lo8(0)
+ 417 00e6 00D0      		rcall lcd_write
+ 418               	/* epilogue start */
+ 128:./lcd.c       **** }
+ 420               	.LM39:
+ 421 00e8 0895      		ret
+ 423               	.Lscope6:
+ 427               	.global	lcd_write_string
+ 429               	lcd_write_string:
+ 129:./lcd.c       **** 
+ 130:./lcd.c       **** void lcd_write_string(unsigned char start_position, unsigned char view_str_length, char * string)
+ 131:./lcd.c       **** {
+ 431               	.LM40:
+ 432               	.LFBB7:
+ 433 00ea CF92      		push r12
+ 434 00ec DF92      		push r13
+ 435 00ee EF92      		push r14
+ 436 00f0 FF92      		push r15
+ 437 00f2 0F93      		push r16
+ 438 00f4 1F93      		push r17
+ 439 00f6 DF93      		push r29
+ 440 00f8 CF93      		push r28
+ 441 00fa 00D0      		rcall .
+ 442 00fc CDB7      		in r28,__SP_L__
+ 443 00fe DEB7      		in r29,__SP_H__
+ 444               	/* prologue: function */
+ 445               	/* frame size = 2 */
+ 446               	/* stack size = 10 */
+ 447               	.L__stack_usage = 10
+ 448 0100 F42E      		mov r15,r20
+ 132:./lcd.c       **** 	lcd_goto(start_position);//lcd_write(0x80 + start_position,0);
+ 450               	.LM41:
+ 451 0102 5A83      		std Y+2,r21
+ 452 0104 6983      		std Y+1,r22
+ 453 0106 00D0      		rcall lcd_goto
+ 133:./lcd.c       **** 	unsigned char temp = strlen(string);
+ 455               	.LM42:
+ 456 0108 EF2D      		mov r30,r15
+ 457 010a 5A81      		ldd r21,Y+2
+ 458 010c F52F      		mov r31,r21
+ 459 010e DF01      		movw r26,r30
+ 460 0110 0D90      		ld __tmp_reg__,X+
+ 461 0112 0020      		tst __tmp_reg__
+ 462 0114 01F4      		brne .-6
+ 463 0116 8D01      		movw r16,r26
+ 464 0118 0150      		subi r16,lo8(-(-1))
+ 465 011a 1040      		sbci r17,hi8(-(-1))
+ 466 011c 0E1B      		sub r16,r30
+ 467 011e 1F0B      		sbc r17,r31
+ 134:./lcd.c       **** 	unsigned char size = (view_str_length > LCD_X_SIZE) ? LCD_X_SIZE : view_str_length;
+ 469               	.LM43:
+ 470 0120 6981      		ldd r22,Y+1
+ 471 0122 E62E      		mov r14,r22
+ 472 0124 6D30      		cpi r22,lo8(13)
+ 473 0126 00F0      		brlo .L18
+ 474 0128 4CE0      		ldi r20,lo8(12)
+ 475 012a E42E      		mov r14,r20
+ 476               	.L25:
+ 477               	.LBB111:
+ 135:./lcd.c       **** 	for (unsigned char i=0;i<size;i++)
+ 479               	.LM44:
+ 480 012c 4F2D      		mov r20,r15
+ 481 012e 6A01      		movw r12,r20
+ 482               	.L20:
+ 136:./lcd.c       **** 	{
+ 137:./lcd.c       **** 		lcd_write(*(string + i),1);
+ 484               	.LM45:
+ 485 0130 F601      		movw r30,r12
+ 486 0132 8191      		ld r24,Z+
+ 487 0134 6F01      		movw r12,r30
+ 488 0136 61E0      		ldi r22,lo8(1)
+ 489 0138 00D0      		rcall lcd_write
+ 135:./lcd.c       **** 	for (unsigned char i=0;i<size;i++)
+ 491               	.LM46:
+ 492 013a 8C2D      		mov r24,r12
+ 493 013c 8F19      		sub r24,r15
+ 494 013e 8E15      		cp r24,r14
+ 495 0140 00F0      		brlo .L20
+ 496               	.LBE111:
+ 138:./lcd.c       **** 	}
+ 139:./lcd.c       **** 	if (temp < size)
+ 498               	.LM47:
+ 499 0142 0E15      		cp r16,r14
+ 500 0144 00F4      		brsh .L17
+ 501               	.LBB112:
+ 140:./lcd.c       **** 		for (unsigned char i = (size - temp); i>0;i--)
+ 503               	.LM48:
+ 504 0146 E01A      		sub r14,r16
+ 505 0148 0E2D      		mov r16,r14
+ 506 014a 01F0      		breq .L17
+ 507               	.L22:
+ 141:./lcd.c       **** 		{
+ 142:./lcd.c       **** 			lcd_write(0x20,1); //0x20 - ' '
+ 509               	.LM49:
+ 510 014c 80E2      		ldi r24,lo8(32)
+ 511 014e 61E0      		ldi r22,lo8(1)
+ 512 0150 00D0      		rcall lcd_write
+ 140:./lcd.c       **** 		for (unsigned char i = (size - temp); i>0;i--)
+ 514               	.LM50:
+ 515 0152 0150      		subi r16,lo8(-(-1))
+ 516 0154 01F4      		brne .L22
+ 517               	.L17:
+ 518               	/* epilogue start */
+ 519               	.LBE112:
+ 143:./lcd.c       **** 		}
+ 144:./lcd.c       **** }
+ 521               	.LM51:
+ 522 0156 0F90      		pop __tmp_reg__
+ 523 0158 0F90      		pop __tmp_reg__
+ 524 015a CF91      		pop r28
+ 525 015c DF91      		pop r29
+ 526 015e 1F91      		pop r17
+ 527 0160 0F91      		pop r16
+ 528 0162 FF90      		pop r15
+ 529 0164 EF90      		pop r14
+ 530 0166 DF90      		pop r13
+ 531 0168 CF90      		pop r12
+ 532 016a 0895      		ret
+ 533               	.L18:
+ 534               	.LBB113:
+ 135:./lcd.c       **** 	for (unsigned char i=0;i<size;i++)
+ 536               	.LM52:
+ 537 016c 6623      		tst r22
+ 538 016e 01F4      		brne .L25
+ 539 0170 00C0      		rjmp .L17
+ 540               	.LBE113:
+ 549               	.Lscope7:
+ 551               	.global	lcd_init
+ 553               	lcd_init:
+ 145:./lcd.c       **** 
+ 146:./lcd.c       **** void lcd_init(void)
+ 147:./lcd.c       **** {
+ 555               	.LM53:
+ 556               	.LFBB8:
+ 557 0172 CF93      		push r28
+ 558 0174 DF93      		push r29
+ 559               	/* prologue: function */
+ 560               	/* frame size = 0 */
+ 561               	/* stack size = 2 */
+ 562               	.L__stack_usage = 2
+ 148:./lcd.c       **** 	LCD_DATA_DDR = 0x00;/* Порты для управления LCD-дисплеем. Сначала
+ 564               	.LM54:
+ 565 0176 1ABA      		out 58-0x20,__zero_reg__
+ 149:./lcd.c       **** 	LCD_DATA_PORT = 0x00;
+ 567               	.LM55:
+ 568 0178 1BBA      		out 59-0x20,__zero_reg__
+ 569 017a 80EF      		ldi r24,lo8(240)
+ 570 017c 90E0      		ldi r25,hi8(240)
+ 571               	.LBB114:
+ 572               	.LBB115:
+ 573               	.LBB116:
+ 574               	.LBB117:
+ 576               	.Ltext10:
+ 578               	.LM56:
+ 579 017e 20E9      		ldi r18,lo8(400)
+ 580 0180 31E0      		ldi r19,hi8(400)
+ 581               	.L27:
+ 582 0182 F901      		movw r30,r18
+ 583               	/* #APP */
+ 584               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 585 0184 3197      		1: sbiw r30,1
+ 586 0186 01F4      		brne 1b
+ 587               	 ;  0 "" 2
+ 588               	/* #NOAPP */
+ 589 0188 0197      		sbiw r24,1
+ 590               	.LBE117:
+ 591               	.LBE116:
+ 593               	.Ltext11:
+   1:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** /* Copyright (c) 2002, Marek Michalkiewicz
+   2:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Copyright (c) 2004,2005,2007 Joerg Wunsch
+   3:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Copyright (c) 2007  Florin-Viorel Petrov
+   4:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    All rights reserved.
+   5:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+   6:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Redistribution and use in source and binary forms, with or without
+   7:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    modification, are permitted provided that the following conditions are met:
+   8:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+   9:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    * Redistributions of source code must retain the above copyright
+  10:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer.
+  11:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  12:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    * Redistributions in binary form must reproduce the above copyright
+  13:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer in
+  14:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****      the documentation and/or other materials provided with the
+  15:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****      distribution.
+  16:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  17:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    * Neither the name of the copyright holders nor the names of
+  18:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****      contributors may be used to endorse or promote products derived
+  19:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****      from this software without specific prior written permission.
+  20:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  21:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  22:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  23:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  24:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  25:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  26:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  27:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  28:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  29:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  30:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  31:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   POSSIBILITY OF SUCH DAMAGE. */
+  32:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  33:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** /* $Id: delay.h.in 2251 2011-09-14 08:20:33Z joerg_wunsch $ */
+  34:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  35:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #ifndef _UTIL_DELAY_H_
+  36:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #define _UTIL_DELAY_H_ 1
+  37:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  38:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #ifndef __HAS_DELAY_CYCLES
+  39:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #define __HAS_DELAY_CYCLES 0
+  40:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #endif
+  41:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  42:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #include <inttypes.h>
+  43:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #include <util/delay_basic.h>
+  44:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #include <math.h>
+  45:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  46:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** /** \file */
+  47:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** /** \defgroup util_delay <util/delay.h>: Convenience functions for busy-wait delay loops
+  48:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     \code
+  49:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     #define F_CPU 1000000UL  // 1 MHz
+  50:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     //#define F_CPU 14.7456E6
+  51:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     #include <util/delay.h>
+  52:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     \endcode
+  53:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  54:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     \note As an alternative method, it is possible to pass the
+  55:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     F_CPU macro down to the compiler from the Makefile.
+  56:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     Obviously, in that case, no \c \#define statement should be
+  57:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     used.
+  58:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  59:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     The functions in this header file are wrappers around the basic
+  60:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     busy-wait functions from <util/delay_basic.h>.  They are meant as
+  61:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     convenience functions where actual time values can be specified
+  62:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     rather than a number of cycles to wait for.  The idea behind is
+  63:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     that compile-time constant expressions will be eliminated by
+  64:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     compiler optimization so floating-point expressions can be used
+  65:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     to calculate the number of delay cycles needed based on the CPU
+  66:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     frequency passed by the macro F_CPU.
+  67:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  68:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     \note In order for these functions to work as intended, compiler
+  69:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     optimizations <em>must</em> be enabled, and the delay time
+  70:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     <em>must</em> be an expression that is a known constant at
+  71:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     compile-time.  If these requirements are not met, the resulting
+  72:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     delay will be much longer (and basically unpredictable), and
+  73:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     applications that otherwise do not use floating-point calculations
+  74:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     will experience severe code bloat by the floating-point library
+  75:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     routines linked into the application.
+  76:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  77:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     The functions available allow the specification of microsecond, and
+  78:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     millisecond delays directly, using the application-supplied macro
+  79:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     F_CPU as the CPU clock frequency (in Hertz).
+  80:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  81:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** */
+  82:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  83:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #if !defined(__DOXYGEN__)
+  84:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** static inline void _delay_us(double __us) __attribute__((always_inline));
+  85:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** static inline void _delay_ms(double __ms) __attribute__((always_inline));
+  86:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #endif
+  87:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  88:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #ifndef F_CPU
+  89:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** /* prevent compiler error by supplying a default */
+  90:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** # warning "F_CPU not defined for <util/delay.h>"
+  91:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** # define F_CPU 1000000UL
+  92:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #endif
+  93:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  94:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #ifndef __OPTIMIZE__
+  95:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** # warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+  96:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #endif
+  97:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  98:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
+  99:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
+ 100:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   __STDC_HOSTED__
+ 101:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #  include <math.h>
+ 102:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #endif
+ 103:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 104:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** /**
+ 105:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    \ingroup util_delay
+ 106:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 107:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Perform a delay of \c __ms milliseconds, using _delay_loop_2().
+ 108:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 109:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    The macro F_CPU is supposed to be defined to a
+ 110:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    constant defining the CPU clock frequency (in Hertz).
+ 111:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 112:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    The maximal possible delay is 262.14 ms / F_CPU in MHz.
+ 113:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 114:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    When the user request delay which exceed the maximum possible one,
+ 115:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    _delay_ms() provides a decreased resolution functionality. In this
+ 116:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    mode _delay_ms() will work with a resolution of 1/10 ms, providing
+ 117:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    delays up to 6.5535 seconds (independent from CPU frequency).  The
+ 118:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    user will not be informed about decreased resolution.
+ 119:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 120:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    If the avr-gcc toolchain has __builtin_avr_delay_cycles(unsigned long)
+ 121:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    support, maximal possible delay is 4294967.295 ms/ F_CPU in MHz. For
+ 122:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    values greater than the maximal possible delay, overflows results in
+ 123:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    no delay i.e., 0ms.
+ 124:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 125:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Conversion of __us into clock cycles may not always result in integer.
+ 126:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    By default, the clock cycles rounded up to next integer. This ensures that
+ 127:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    the user gets atleast __us microseconds of delay.
+ 128:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 129:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Alternatively, user can define __DELAY_ROUND_DOWN__ and __DELAY_ROUND_CLOSEST__
+ 130:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    to round down and round to closest integer.
+ 131:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 132:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Note: The new implementation of _delay_ms(double __ms) with 
+ 133:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     __builtin_avr_delay_cycles(unsigned long) support is not backward compatible. 
+ 134:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    User can define __DELAY_BACKWARD_COMPATIBLE__ to get a backward compatible delay.
+ 135:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Also, the backward compatible
+ 136:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    algorithm will be chosen if the code is compiled in a <em>freestanding
+ 137:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    environment</em> (GCC option \c -ffreestanding), as the math functions
+ 138:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    required for rounding are not available to the compiler then.
+ 139:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 140:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****  */
+ 141:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** void
+ 142:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** _delay_ms(double __ms)
+ 143:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** {
+ 144:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	uint16_t __ticks;
+ 145:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	double __tmp ; 
+ 146:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
+ 147:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
+ 148:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   __STDC_HOSTED__
+ 149:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	uint32_t __ticks_dc;
+ 150:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	extern void __builtin_avr_delay_cycles(unsigned long);
+ 151:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	__tmp = ((F_CPU) / 1e3) * __ms;
+ 152:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 153:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	#if defined(__DELAY_ROUND_DOWN__)
+ 154:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)fabs(__tmp);
+ 155:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 156:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	#elif defined(__DELAY_ROUND_CLOSEST__)
+ 157:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(fabs(__tmp)+0.5);
+ 158:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 159:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	#else
+ 160:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		//round up by default
+ 161:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+ 162:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	#endif
+ 163:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 164:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	__builtin_avr_delay_cycles(__ticks_dc);
+ 165:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 166:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #else
+ 167:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	__tmp = ((F_CPU) / 4e3) * __ms;
+ 168:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	if (__tmp < 1.0)
+ 169:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		__ticks = 1;
+ 170:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	else if (__tmp > 65535)
+ 171:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	{
+ 172:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		//	__ticks = requested delay in 1/10 ms
+ 173:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		__ticks = (uint16_t) (__ms * 10.0);
+ 174:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		while(__ticks)
+ 595               	.LM57:
+ 596 018a 01F4      		brne .L27
+ 597               	.LBE115:
+ 598               	.LBE114:
+ 600               	.Ltext12:
+ 150:./lcd.c       **** 
+ 151:./lcd.c       **** 	// Закоментированное только для 8-битного режима перед
+ 152:./lcd.c       **** 	//	  _delay_ms(40);
+ 153:./lcd.c       **** 	//	  lcd_write(0x30,0);
+ 154:./lcd.c       **** 	//	  _delay_ms(20);
+ 155:./lcd.c       **** 	//	  lcd_write(0x30,0);
+ 156:./lcd.c       **** 	//	  _delay_ms(20);
+ 157:./lcd.c       **** 	//	  lcd_write(0x30,0);
+ 158:./lcd.c       **** 	//	  _delay_ms(20);
+ 159:./lcd.c       **** 	//	  lcd_write(0x38,0);
+ 160:./lcd.c       **** 	_delay_ms(20 * LCD_TIME_MARGIN * TIME_SCALE);
+ 161:./lcd.c       **** 	lcd_port_state('o');
+ 602               	.LM58:
+ 603 018c 8FE6      		ldi r24,lo8(111)
+ 604 018e 00D0      		rcall lcd_port_state
+ 162:./lcd.c       **** 	BIT_CLEAR(LCD_DATA_PORT,LCD_RS_PORT);
+ 606               	.LM59:
+ 607 0190 D898      		cbi 59-0x20,0
+ 163:./lcd.c       **** 	BIT_CLEAR(LCD_DATA_PORT,LCD_RW_PORT);
+ 609               	.LM60:
+ 610 0192 D998      		cbi 59-0x20,1
+ 164:./lcd.c       **** 	BIT_CLEAR(LCD_DATA_PORT,LCD_E_PORT);
+ 612               	.LM61:
+ 613 0194 DA98      		cbi 59-0x20,2
+ 165:./lcd.c       **** 
+ 166:./lcd.c       **** 	LCD_MINOR_4_DATA_BITS_WRITE(0b00000011);// Передаю только младшие четыре
+ 615               	.LM62:
+ 616 0196 8BB3      		in r24,59-0x20
+ 617 0198 8778      		andi r24,lo8(-121)
+ 618 019a 8861      		ori r24,lo8(24)
+ 619 019c 8BBB      		out 59-0x20,r24
+ 620               	.LBB118:
+ 167:./lcd.c       **** 	for (unsigned char i=0;i<3;i++)
+ 168:./lcd.c       **** 	{
+ 169:./lcd.c       **** 		strobe();
+ 622               	.LM63:
+ 623 019e 00D0      		rcall strobe
+ 624               	.LBB119:
+ 625               	.LBB121:
+ 626               	.LBB123:
+ 627               	.LBB125:
+ 629               	.Ltext13:
+ 631               	.LM64:
+ 632 01a0 C0EC      		ldi r28,lo8(4800)
+ 633 01a2 D2E1      		ldi r29,hi8(4800)
+ 634 01a4 CE01      		movw r24,r28
+ 635               	/* #APP */
+ 636               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 637 01a6 0197      		1: sbiw r24,1
+ 638 01a8 01F4      		brne 1b
+ 639               	 ;  0 "" 2
+ 640               	/* #NOAPP */
+ 641               	.LBE125:
+ 642               	.LBE123:
+ 643               	.LBE121:
+ 644               	.LBE119:
+ 646               	.Ltext14:
+ 648               	.LM65:
+ 649 01aa 00D0      		rcall strobe
+ 650               	.LBB129:
+ 651               	.LBB120:
+ 652               	.LBB122:
+ 653               	.LBB124:
+ 655               	.Ltext15:
+ 657               	.LM66:
+ 658 01ac CE01      		movw r24,r28
+ 659               	/* #APP */
+ 660               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 661 01ae 0197      		1: sbiw r24,1
+ 662 01b0 01F4      		brne 1b
+ 663               	 ;  0 "" 2
+ 664               	/* #NOAPP */
+ 665               	.LBE124:
+ 666               	.LBE122:
+ 667               	.LBE120:
+ 668               	.LBE129:
+ 670               	.Ltext16:
+ 672               	.LM67:
+ 673 01b2 00D0      		rcall strobe
+ 674               	.LBB130:
+ 675               	.LBB128:
+ 676               	.LBB127:
+ 677               	.LBB126:
+ 679               	.Ltext17:
+ 681               	.LM68:
+ 682 01b4 CE01      		movw r24,r28
+ 683               	/* #APP */
+ 684               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 685 01b6 0197      		1: sbiw r24,1
+ 686 01b8 01F4      		brne 1b
+ 687               	 ;  0 "" 2
+ 688               	/* #NOAPP */
+ 689               	.LBE126:
+ 690               	.LBE127:
+ 691               	.LBE128:
+ 692               	.LBE130:
+ 693               	.LBE118:
+ 695               	.Ltext18:
+ 170:./lcd.c       **** 		_delay_ms(1 * LCD_TIME_MARGIN * TIME_SCALE);
+ 171:./lcd.c       **** 	}
+ 172:./lcd.c       **** 
+ 173:./lcd.c       **** 	LCD_MINOR_4_DATA_BITS_WRITE(0b00000010);//0b00100000
+ 697               	.LM69:
+ 698 01ba 8BB3      		in r24,59-0x20
+ 699 01bc 8778      		andi r24,lo8(-121)
+ 700 01be 8061      		ori r24,lo8(16)
+ 701 01c0 8BBB      		out 59-0x20,r24
+ 174:./lcd.c       **** 	strobe();
+ 703               	.LM70:
+ 704 01c2 00D0      		rcall strobe
+ 705               	.LBB131:
+ 706               	.LBB132:
+ 707               	.LBB133:
+ 708               	.LBB134:
+ 710               	.Ltext19:
+ 712               	.LM71:
+ 713               	/* #APP */
+ 714               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 715 01c4 2197      		1: sbiw r28,1
+ 716 01c6 01F4      		brne 1b
+ 717               	 ;  0 "" 2
+ 718               	/* #NOAPP */
+ 719               	.LBE134:
+ 720               	.LBE133:
+ 721               	.LBE132:
+ 722               	.LBE131:
+ 724               	.Ltext20:
+ 175:./lcd.c       **** 	_delay_ms(1 * LCD_TIME_MARGIN * TIME_SCALE);
+ 176:./lcd.c       **** 
+ 177:./lcd.c       **** // 	BIT_SET(LCD_DATA_PORT,LCD_RW_PORT);
+ 178:./lcd.c       **** 	lcd_port_state('z');
+ 726               	.LM72:
+ 727 01c8 8AE7      		ldi r24,lo8(122)
+ 728 01ca 00D0      		rcall lcd_port_state
+ 179:./lcd.c       **** 
+ 180:./lcd.c       **** 	lcd_write(0x28,0); //0b0010_1000
+ 730               	.LM73:
+ 731 01cc 88E2      		ldi r24,lo8(40)
+ 732 01ce 60E0      		ldi r22,lo8(0)
+ 733 01d0 00D0      		rcall lcd_write
+ 181:./lcd.c       **** 	lcd_write(0x0C,0); // Включение дисплея без курсора, ничего не �
+ 735               	.LM74:
+ 736 01d2 8CE0      		ldi r24,lo8(12)
+ 737 01d4 60E0      		ldi r22,lo8(0)
+ 738 01d6 00D0      		rcall lcd_write
+ 182:./lcd.c       **** 	lcd_write(0x01,0); // Очищаем экран
+ 740               	.LM75:
+ 741 01d8 81E0      		ldi r24,lo8(1)
+ 742 01da 60E0      		ldi r22,lo8(0)
+ 743 01dc 00D0      		rcall lcd_write
+ 744               	/* epilogue start */
+ 183:./lcd.c       **** }...
+ 746               	.LM76:
+ 747 01de DF91      		pop r29
+ 748 01e0 CF91      		pop r28
+ 749 01e2 0895      		ret
+ 751               	.Lscope8:
+ 752               		.data
+ 753               	.LC0:
+ 754 0000 5465 7374 		.string	"Test string! Maded by NRNDDA;)"
+ 754      2073 7472 
+ 754      696E 6721 
+ 754      204D 6164 
+ 754      6564 2062 
+ 755               		.text
+ 757               	.global	main
+ 759               	main:
+ 761               	.Ltext21:
+   1:RF443_Transmitter_with_rs232_to_usb.c **** #include <avr/io.h>
+   2:RF443_Transmitter_with_rs232_to_usb.c **** #include <util/delay.h>
+   3:RF443_Transmitter_with_rs232_to_usb.c **** #include <avr/interrupt.h>
+   4:RF443_Transmitter_with_rs232_to_usb.c **** #include <stdlib.h>
+   5:RF443_Transmitter_with_rs232_to_usb.c **** #include <string.h>
+   6:RF443_Transmitter_with_rs232_to_usb.c **** 
+   7:RF443_Transmitter_with_rs232_to_usb.c **** #define BIT_INVERSE(value,bit) ((value) ^= (1 << (bit)))
+   8:RF443_Transmitter_with_rs232_to_usb.c **** #define BIT_SET(value,bit) ((value) |= (1 << (bit)))
+   9:RF443_Transmitter_with_rs232_to_usb.c **** #define BIT_CLEAR(value,bit) ((value) &= (~(1 << (bit))))
+  10:RF443_Transmitter_with_rs232_to_usb.c **** #define IS_BIT_SET(value,bit) ((((value) & (1 << (bit))) != 0) ? 1 : 0)
+  11:RF443_Transmitter_with_rs232_to_usb.c **** // TIME_SCALE=1 - минимальное значение.
+  12:RF443_Transmitter_with_rs232_to_usb.c **** #define TIME_SCALE 1
+  13:RF443_Transmitter_with_rs232_to_usb.c **** 
+  14:RF443_Transmitter_with_rs232_to_usb.c **** #include <lcd.c>
+  15:RF443_Transmitter_with_rs232_to_usb.c **** 
+  16:RF443_Transmitter_with_rs232_to_usb.c **** void strobe(void);
+  17:RF443_Transmitter_with_rs232_to_usb.c **** unsigned char lcd_write(unsigned char, unsigned char);
+  18:RF443_Transmitter_with_rs232_to_usb.c **** void lcd_clear(void);
+  19:RF443_Transmitter_with_rs232_to_usb.c **** void lcd_return_home(void);
+  20:RF443_Transmitter_with_rs232_to_usb.c **** void lcd_goto(unsigned char);
+  21:RF443_Transmitter_with_rs232_to_usb.c **** void lcd_write_string(unsigned char, unsigned char, char *);
+  22:RF443_Transmitter_with_rs232_to_usb.c **** void lcd_init(void);
+  23:RF443_Transmitter_with_rs232_to_usb.c **** unsigned char USART_Receive(void);
+  24:RF443_Transmitter_with_rs232_to_usb.c **** void USART_Transmit(unsigned char);
+  25:RF443_Transmitter_with_rs232_to_usb.c **** int fpower(int, int);
+  26:RF443_Transmitter_with_rs232_to_usb.c **** 
+  27:RF443_Transmitter_with_rs232_to_usb.c **** int main(void)
+  28:RF443_Transmitter_with_rs232_to_usb.c **** {
+ 763               	.LM77:
+ 764               	.LFBB9:
+ 765 01e4 CF92      		push r12
+ 766 01e6 DF92      		push r13
+ 767 01e8 FF92      		push r15
+ 768 01ea 0F93      		push r16
+ 769 01ec 1F93      		push r17
+ 770 01ee DF93      		push r29
+ 771 01f0 CF93      		push r28
+ 772 01f2 00D0      		rcall .
+ 773 01f4 CDB7      		in r28,__SP_L__
+ 774 01f6 DEB7      		in r29,__SP_H__
+ 775               	/* prologue: function */
+ 776               	/* frame size = 2 */
+ 777               	/* stack size = 9 */
+ 778               	.L__stack_usage = 9
+  29:RF443_Transmitter_with_rs232_to_usb.c **** 	LCD_DATA_DDR = 0x00;/* Порты для управления LCD-дисплеем. Сначала
+ 780               	.LM78:
+ 781 01f8 1ABA      		out 58-0x20,__zero_reg__
+  30:RF443_Transmitter_with_rs232_to_usb.c **** //	BIT_SET(LCD_DATA_DDR,7); // Светодиод
+  31:RF443_Transmitter_with_rs232_to_usb.c **** 	LCD_DATA_PORT = 0x00;
+ 783               	.LM79:
+ 784 01fa 1BBA      		out 59-0x20,__zero_reg__
+  32:RF443_Transmitter_with_rs232_to_usb.c **** 
+  33:RF443_Transmitter_with_rs232_to_usb.c **** 	DDRB = 0x00;//tri-sate
+ 786               	.LM80:
+ 787 01fc 17BA      		out 55-0x20,__zero_reg__
+  34:RF443_Transmitter_with_rs232_to_usb.c **** 	PORTB = 0x00;
+ 789               	.LM81:
+ 790 01fe 18BA      		out 56-0x20,__zero_reg__
+  35:RF443_Transmitter_with_rs232_to_usb.c **** 	BIT_SET(DDRB,0); // Светодиод
+ 792               	.LM82:
+ 793 0200 B89A      		sbi 55-0x20,0
+  36:RF443_Transmitter_with_rs232_to_usb.c **** 	BIT_SET(DDRB,1); // Светодиод
+ 795               	.LM83:
+ 796 0202 B99A      		sbi 55-0x20,1
+  37:RF443_Transmitter_with_rs232_to_usb.c **** 	BIT_SET(DDRB,2); // Светодиод
+ 798               	.LM84:
+ 799 0204 BA9A      		sbi 55-0x20,2
+  38:RF443_Transmitter_with_rs232_to_usb.c **** 	BIT_SET(PORTB,0);
+ 801               	.LM85:
+ 802 0206 C09A      		sbi 56-0x20,0
+  39:RF443_Transmitter_with_rs232_to_usb.c **** 
+  40:RF443_Transmitter_with_rs232_to_usb.c **** 	DDRC = 0x00;//tri-sate
+ 804               	.LM86:
+ 805 0208 14BA      		out 52-0x20,__zero_reg__
+  41:RF443_Transmitter_with_rs232_to_usb.c **** 	PORTC = 0x00;
+ 807               	.LM87:
+ 808 020a 15BA      		out 53-0x20,__zero_reg__
+  42:RF443_Transmitter_with_rs232_to_usb.c **** 
+  43:RF443_Transmitter_with_rs232_to_usb.c **** 	DDRD = 0x00;//tri-sate
+ 810               	.LM88:
+ 811 020c 11BA      		out 49-0x20,__zero_reg__
+  44:RF443_Transmitter_with_rs232_to_usb.c **** 	PORTD = 0x00;
+ 813               	.LM89:
+ 814 020e 12BA      		out 50-0x20,__zero_reg__
+  45:RF443_Transmitter_with_rs232_to_usb.c **** 
+  46:RF443_Transmitter_with_rs232_to_usb.c **** 	DDRE = 0x00;//tri-sate
+ 816               	.LM90:
+ 817 0210 16B8      		out 38-0x20,__zero_reg__
+  47:RF443_Transmitter_with_rs232_to_usb.c **** 	PORTE = 0x00;
+ 819               	.LM91:
+ 820 0212 17B8      		out 39-0x20,__zero_reg__
+ 821               	.LBB135:
+ 822               	.LBB136:
+ 823               	.LBB137:
+ 824               	.LBB138:
+ 826               	.Ltext22:
+ 828               	.LM92:
+ 829 0214 80E4      		ldi r24,lo8(-25536)
+ 830 0216 9CE9      		ldi r25,hi8(-25536)
+ 831               	/* #APP */
+ 832               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 833 0218 0197      		1: sbiw r24,1
+ 834 021a 01F4      		brne 1b
+ 835               	 ;  0 "" 2
+ 836               	/* #NOAPP */
+ 837               	.LBE138:
+ 838               	.LBE137:
+ 839               	.LBE136:
+ 840               	.LBE135:
+ 842               	.Ltext23:
+  48:RF443_Transmitter_with_rs232_to_usb.c **** 
+  49:RF443_Transmitter_with_rs232_to_usb.c **** //	UBRRH = 0x06;	// Делитель частоты
+  50:RF443_Transmitter_with_rs232_to_usb.c **** //	UBRRL = 0x07;	// для USART. 0x67 = 103 для 9600bps
+  51:RF443_Transmitter_with_rs232_to_usb.c **** //	UCSRA = (0<<U2X);
+  52:RF443_Transmitter_with_rs232_to_usb.c **** //	UCSRB = (1<<RXEN)|(1<<TXEN);
+  53:RF443_Transmitter_with_rs232_to_usb.c **** //	UCSRC = (1<<URSEL)|(0<<USBS)|(3<<UCSZ0);
+  54:RF443_Transmitter_with_rs232_to_usb.c **** 
+  55:RF443_Transmitter_with_rs232_to_usb.c **** // 	GIMSK = 0x00;
+  56:RF443_Transmitter_with_rs232_to_usb.c **** // 	MCUCR = 0b00000001;	/* Прерывание от INT0 генерируется изменени
+  57:RF443_Transmitter_with_rs232_to_usb.c **** // 	GICR  = 0b01000000;
+  58:RF443_Transmitter_with_rs232_to_usb.c **** // 	sei();
+  59:RF443_Transmitter_with_rs232_to_usb.c **** 	_delay_ms(10 * TIME_SCALE);
+  60:RF443_Transmitter_with_rs232_to_usb.c **** 	lcd_init();
+ 844               	.LM93:
+ 845 021c 00D0      		rcall lcd_init
+  61:RF443_Transmitter_with_rs232_to_usb.c **** 	BIT_SET(PORTB,2);
+ 847               	.LM94:
+ 848 021e C29A      		sbi 56-0x20,2
+ 849 0220 88EE      		ldi r24,lo8(1000)
+ 850 0222 93E0      		ldi r25,hi8(1000)
+ 851               	.LBB139:
+ 852               	.LBB140:
+ 853               	.LBB141:
+ 854               	.LBB142:
+ 856               	.Ltext24:
+ 858               	.LM95:
+ 859 0224 20E9      		ldi r18,lo8(400)
+ 860 0226 31E0      		ldi r19,hi8(400)
+ 861               	.L30:
+ 862 0228 F901      		movw r30,r18
+ 863               	/* #APP */
+ 864               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 865 022a 3197      		1: sbiw r30,1
+ 866 022c 01F4      		brne 1b
+ 867               	 ;  0 "" 2
+ 868               	/* #NOAPP */
+ 869 022e 0197      		sbiw r24,1
+ 870               	.LBE142:
+ 871               	.LBE141:
+ 873               	.Ltext25:
+ 875               	.LM96:
+ 876 0230 01F4      		brne .L30
+ 877               	.LBE140:
+ 878               	.LBE139:
+ 880               	.Ltext26:
+  62:RF443_Transmitter_with_rs232_to_usb.c **** 	_delay_ms(100 * TIME_SCALE);
+  63:RF443_Transmitter_with_rs232_to_usb.c **** 	char * string = (char *)malloc((4*LCD_X_SIZE+1)*sizeof(char));
+ 882               	.LM97:
+ 883 0232 81E3      		ldi r24,lo8(49)
+ 884 0234 90E0      		ldi r25,hi8(49)
+ 885 0236 00D0      		rcall malloc
+ 886 0238 082F      		mov r16,r24
+ 887 023a 192F      		mov r17,r25
+  64:RF443_Transmitter_with_rs232_to_usb.c **** 	char * string_backup = (char *)malloc((4*LCD_X_SIZE+1)*sizeof(char));
+ 889               	.LM98:
+ 890 023c 81E3      		ldi r24,lo8(49)
+ 891 023e 90E0      		ldi r25,hi8(49)
+ 892 0240 00D0      		rcall malloc
+ 893 0242 8983      		std Y+1,r24
+ 894 0244 9A83      		std Y+2,r25
+  65:RF443_Transmitter_with_rs232_to_usb.c **** 	//	char temp;
+  66:RF443_Transmitter_with_rs232_to_usb.c **** 	BIT_CLEAR(PORTB,0);
+ 896               	.LM99:
+ 897 0246 C098      		cbi 56-0x20,0
+ 898               	.LBB143:
+ 899               	.LBB144:
+ 900               	.LBB145:
+ 901               	.LBB146:
+ 902               	.LBB147:
+ 904               	.Ltext27:
+ 906               	.LM100:
+ 907 0248 60E9      		ldi r22,lo8(400)
+ 908 024a C62E      		mov r12,r22
+ 909 024c 61E0      		ldi r22,hi8(400)
+ 910 024e D62E      		mov r13,r22
+ 911               	.L41:
+ 912               	.LBE147:
+ 913               	.LBE146:
+ 914               	.LBE145:
+ 915               	.LBE144:
+ 917               	.Ltext28:
+  67:RF443_Transmitter_with_rs232_to_usb.c **** 	for (;;)
+  68:RF443_Transmitter_with_rs232_to_usb.c **** 	{
+  69:RF443_Transmitter_with_rs232_to_usb.c **** 		*string = *string_backup;
+ 919               	.LM101:
+ 920 0250 E981      		ldd r30,Y+1
+ 921 0252 FA81      		ldd r31,Y+2
+ 922 0254 8081      		ld r24,Z
+ 923 0256 F801      		movw r30,r16
+ 924 0258 8083      		st Z,r24
+  70:RF443_Transmitter_with_rs232_to_usb.c **** 		lcd_clear();
+ 926               	.LM102:
+ 927 025a 00D0      		rcall lcd_clear
+  71:RF443_Transmitter_with_rs232_to_usb.c **** 		lcd_return_home();
+ 929               	.LM103:
+ 930 025c 00D0      		rcall lcd_return_home
+ 931 025e 88EE      		ldi r24,lo8(1000)
+ 932 0260 93E0      		ldi r25,hi8(1000)
+ 933               	.L31:
+ 934               	.LBB151:
+ 935               	.LBB150:
+ 936               	.LBB149:
+ 937               	.LBB148:
+ 939               	.Ltext29:
+ 941               	.LM104:
+ 942 0262 F601      		movw r30,r12
+ 943               	/* #APP */
+ 944               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 945 0264 3197      		1: sbiw r30,1
+ 946 0266 01F4      		brne 1b
+ 947               	 ;  0 "" 2
+ 948               	/* #NOAPP */
+ 949 0268 0197      		sbiw r24,1
+ 950               	.LBE148:
+ 951               	.LBE149:
+ 953               	.Ltext30:
+ 955               	.LM105:
+ 956 026a 01F4      		brne .L31
+ 958               	.LM106:
+ 959 026c 50E3      		ldi r21,lo8(48)
+ 960 026e F52E      		mov r15,r21
+ 961               	.L33:
+ 962               	.LBE150:
+ 963               	.LBE151:
+ 964               	.LBB152:
+ 966               	.Ltext31:
+  72:RF443_Transmitter_with_rs232_to_usb.c **** 		_delay_ms(100 * TIME_SCALE);
+  73:RF443_Transmitter_with_rs232_to_usb.c **** 		//
+  74:RF443_Transmitter_with_rs232_to_usb.c **** 		for (unsigned char i=0;i<LCD_X_SIZE;i++)
+  75:RF443_Transmitter_with_rs232_to_usb.c **** 		{
+  76:RF443_Transmitter_with_rs232_to_usb.c **** 			lcd_write(0x30 + i,1);
+ 968               	.LM107:
+ 969 0270 8F2D      		mov r24,r15
+ 970 0272 61E0      		ldi r22,lo8(1)
+ 971 0274 00D0      		rcall lcd_write
+ 972 0276 24EF      		ldi r18,lo8(500)
+ 973 0278 31E0      		ldi r19,hi8(500)
+ 974               	.L32:
+ 975               	.LBB153:
+ 976               	.LBB154:
+ 977               	.LBB155:
+ 978               	.LBB156:
+ 980               	.Ltext32:
+ 982               	.LM108:
+ 983 027a F601      		movw r30,r12
+ 984               	/* #APP */
+ 985               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 986 027c 3197      		1: sbiw r30,1
+ 987 027e 01F4      		brne 1b
+ 988               	 ;  0 "" 2
+ 989               	/* #NOAPP */
+ 990 0280 2150      		subi r18,lo8(-(-1))
+ 991 0282 3040      		sbci r19,hi8(-(-1))
+ 992               	.LBE156:
+ 993               	.LBE155:
+ 995               	.Ltext33:
+ 997               	.LM109:
+ 998 0284 01F4      		brne .L32
+ 1000               	.LM110:
+ 1001 0286 F394      		inc r15
+ 1002               	.LBE154:
+ 1003               	.LBE153:
+ 1005               	.Ltext34:
+  74:RF443_Transmitter_with_rs232_to_usb.c **** 		for (unsigned char i=0;i<LCD_X_SIZE;i++)
+ 1007               	.LM111:
+ 1008 0288 FF2D      		mov r31,r15
+ 1009 028a FC33      		cpi r31,lo8(60)
+ 1010 028c 01F4      		brne .L33
+ 1011               	.LBE152:
+  77:RF443_Transmitter_with_rs232_to_usb.c **** 			_delay_ms(50 * TIME_SCALE);
+  78:RF443_Transmitter_with_rs232_to_usb.c **** 		}
+  79:RF443_Transmitter_with_rs232_to_usb.c **** //		lcd_write(0xC0,0); //0xC0 = 0x80 + 0x40
+  80:RF443_Transmitter_with_rs232_to_usb.c **** 		strcpy(string,"Test string! Maded by NRNDDA;)");
+ 1013               	.LM112:
+ 1014 028e D801      		movw r26,r16
+ 1015 0290 E0E0      		ldi r30,lo8(.LC0)
+ 1016 0292 F0E0      		ldi r31,hi8(.LC0)
+ 1017 0294 8FE1      		ldi r24,lo8(31)
+ 1018               	.L34:
+ 1019 0296 0190      		ld r0,Z+
+ 1020 0298 0D92      		st X+,r0
+ 1021 029a 8150      		subi r24,lo8(-(-1))
+ 1022 029c 01F4      		brne .L34
+  81:RF443_Transmitter_with_rs232_to_usb.c **** 		lcd_goto(0x40);//lcd_write((0x80+0x40),0);
+ 1024               	.LM113:
+ 1025 029e 80E4      		ldi r24,lo8(64)
+ 1026 02a0 00D0      		rcall lcd_goto
+  82:RF443_Transmitter_with_rs232_to_usb.c **** 		lcd_write(0x85,1);
+ 1028               	.LM114:
+ 1029 02a2 85E8      		ldi r24,lo8(-123)
+ 1030 02a4 61E0      		ldi r22,lo8(1)
+ 1031 02a6 00D0      		rcall lcd_write
+  83:RF443_Transmitter_with_rs232_to_usb.c **** 		lcd_goto(LCD_X_SIZE-2);//lcd_write((0x80+LCD_X_SIZE-2),0);
+ 1033               	.LM115:
+ 1034 02a8 8AE0      		ldi r24,lo8(10)
+ 1035 02aa 00D0      		rcall lcd_goto
+  84:RF443_Transmitter_with_rs232_to_usb.c **** 		lcd_write(0x84,1);
+ 1037               	.LM116:
+ 1038 02ac 84E8      		ldi r24,lo8(-124)
+ 1039 02ae 61E0      		ldi r22,lo8(1)
+ 1040 02b0 00D0      		rcall lcd_write
+ 1041               	.L36:
+  85:RF443_Transmitter_with_rs232_to_usb.c **** 		do
+  86:RF443_Transmitter_with_rs232_to_usb.c **** 		{
+  87:RF443_Transmitter_with_rs232_to_usb.c **** 			lcd_write_string(0x41,LCD_X_SIZE-2,string);
+ 1043               	.LM117:
+ 1044 02b2 81E4      		ldi r24,lo8(65)
+ 1045 02b4 6AE0      		ldi r22,lo8(10)
+ 1046 02b6 A801      		movw r20,r16
+ 1047 02b8 00D0      		rcall lcd_write_string
+ 1048 02ba 84EF      		ldi r24,lo8(500)
+ 1049 02bc 91E0      		ldi r25,hi8(500)
+ 1050               	.L35:
+ 1051               	.LBB157:
+ 1052               	.LBB158:
+ 1053               	.LBB159:
+ 1054               	.LBB160:
+ 1056               	.Ltext35:
+ 1058               	.LM118:
+ 1059 02be F601      		movw r30,r12
+ 1060               	/* #APP */
+ 1061               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 1062 02c0 3197      		1: sbiw r30,1
+ 1063 02c2 01F4      		brne 1b
+ 1064               	 ;  0 "" 2
+ 1065               	/* #NOAPP */
+ 1066 02c4 0197      		sbiw r24,1
+ 1067               	.LBE160:
+ 1068               	.LBE159:
+ 1070               	.Ltext36:
+ 1072               	.LM119:
+ 1073 02c6 01F4      		brne .L35
+ 1074               	.LBE158:
+ 1075               	.LBE157:
+ 1077               	.Ltext37:
+  88:RF443_Transmitter_with_rs232_to_usb.c **** 			_delay_ms(50 * TIME_SCALE);
+  89:RF443_Transmitter_with_rs232_to_usb.c **** 			string++;
+ 1079               	.LM120:
+ 1080 02c8 0F5F      		subi r16,lo8(-(1))
+ 1081 02ca 1F4F      		sbci r17,hi8(-(1))
+  90:RF443_Transmitter_with_rs232_to_usb.c **** 		}
+  91:RF443_Transmitter_with_rs232_to_usb.c **** 		while (strlen(string) > 0);
+ 1083               	.LM121:
+ 1084 02cc F801      		movw r30,r16
+ 1085 02ce 8081      		ld r24,Z
+ 1086 02d0 8823      		tst r24
+ 1087 02d2 01F4      		brne .L36
+ 1089               	.LM122:
+ 1090 02d4 84EF      		ldi r24,lo8(500)
+ 1091 02d6 91E0      		ldi r25,hi8(500)
+ 1092               	.L37:
+ 1093               	.LBB161:
+ 1094               	.LBB162:
+ 1095               	.LBB163:
+ 1096               	.LBB164:
+ 1098               	.Ltext38:
+ 1100               	.LM123:
+ 1101 02d8 F601      		movw r30,r12
+ 1102               	/* #APP */
+ 1103               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 1104 02da 3197      		1: sbiw r30,1
+ 1105 02dc 01F4      		brne 1b
+ 1106               	 ;  0 "" 2
+ 1107               	/* #NOAPP */
+ 1108 02de 0197      		sbiw r24,1
+ 1109               	.LBE164:
+ 1110               	.LBE163:
+ 1112               	.Ltext39:
+ 1114               	.LM124:
+ 1115 02e0 01F4      		brne .L37
+ 1116               	.L42:
+ 1117               	.LBE162:
+ 1118               	.LBE161:
+ 1119               	.LBB165:
+ 1120               	.LBB166:
+ 1122               	.Ltext40:
+  92:RF443_Transmitter_with_rs232_to_usb.c **** 		_delay_ms(50 * TIME_SCALE);
+  93:RF443_Transmitter_with_rs232_to_usb.c **** 		unsigned char USART_Data = USART_Receive();
+  94:RF443_Transmitter_with_rs232_to_usb.c **** 		lcd_write(USART_Data,1);
+  95:RF443_Transmitter_with_rs232_to_usb.c **** 		unsigned char addr = lcd_write(USART_Data,1);
+  96:RF443_Transmitter_with_rs232_to_usb.c **** 		if ((0x0C < addr) && (addr < 0x40)) lcd_write(0x40,0);
+  97:RF443_Transmitter_with_rs232_to_usb.c **** 		if (0x4C < addr) lcd_write(0x00,0);
+  98:RF443_Transmitter_with_rs232_to_usb.c **** 		_delay_ms(10 * TIME_SCALE);
+  99:RF443_Transmitter_with_rs232_to_usb.c **** 	}
+ 100:RF443_Transmitter_with_rs232_to_usb.c **** 	free(string);
+ 101:RF443_Transmitter_with_rs232_to_usb.c **** 	free(string_backup);
+ 102:RF443_Transmitter_with_rs232_to_usb.c **** 	return 0;
+ 103:RF443_Transmitter_with_rs232_to_usb.c **** }
+ 104:RF443_Transmitter_with_rs232_to_usb.c **** 
+ 105:RF443_Transmitter_with_rs232_to_usb.c **** unsigned char USART_Receive(void)
+ 106:RF443_Transmitter_with_rs232_to_usb.c **** {
+ 107:RF443_Transmitter_with_rs232_to_usb.c **** 	/* Wait for data to be received */
+ 108:RF443_Transmitter_with_rs232_to_usb.c **** 	while ( !(UCSRA & (1<<RXC)) )
+ 1124               	.LM125:
+ 1125 02e2 5F9B      		sbis 43-0x20,7
+ 1126 02e4 00C0      		rjmp .L42
+ 109:RF443_Transmitter_with_rs232_to_usb.c **** 		;
+ 110:RF443_Transmitter_with_rs232_to_usb.c **** 	/* Get and return received data from buffer */
+ 111:RF443_Transmitter_with_rs232_to_usb.c **** 	return UDR;
+ 1128               	.LM126:
+ 1129 02e6 FCB0      		in r15,44-0x20
+ 1130               	.LBE166:
+ 1131               	.LBE165:
+  94:RF443_Transmitter_with_rs232_to_usb.c **** 		lcd_write(USART_Data,1);
+ 1133               	.LM127:
+ 1134 02e8 8F2D      		mov r24,r15
+ 1135 02ea 61E0      		ldi r22,lo8(1)
+ 1136 02ec 00D0      		rcall lcd_write
+  95:RF443_Transmitter_with_rs232_to_usb.c **** 		unsigned char addr = lcd_write(USART_Data,1);
+ 1138               	.LM128:
+ 1139 02ee 8F2D      		mov r24,r15
+ 1140 02f0 61E0      		ldi r22,lo8(1)
+ 1141 02f2 00D0      		rcall lcd_write
+  96:RF443_Transmitter_with_rs232_to_usb.c **** 		if ((0x0C < addr) && (addr < 0x40)) lcd_write(0x40,0);
+ 1143               	.LM129:
+ 1144 02f4 982F      		mov r25,r24
+ 1145 02f6 9D50      		subi r25,lo8(-(-13))
+ 1146 02f8 9333      		cpi r25,lo8(51)
+ 1147 02fa 00F0      		brlo .L52
+  97:RF443_Transmitter_with_rs232_to_usb.c **** 		if (0x4C < addr) lcd_write(0x00,0);
+ 1149               	.LM130:
+ 1150 02fc 8D34      		cpi r24,lo8(77)
+ 1151 02fe 00F0      		brlo .L40
+  97:RF443_Transmitter_with_rs232_to_usb.c **** 		if (0x4C < addr) lcd_write(0x00,0);
+ 1153               	.LM131:
+ 1154 0300 80E0      		ldi r24,lo8(0)
+ 1155 0302 60E0      		ldi r22,lo8(0)
+ 1156 0304 00D0      		rcall lcd_write
+ 1157               	.L40:
+ 1158               	.LBB167:
+ 1159               	.LBB168:
+ 1160               	.LBB169:
+ 1161               	.LBB170:
+ 1163               	.Ltext41:
+ 1165               	.LM132:
+ 1166 0306 80E4      		ldi r24,lo8(-25536)
+ 1167 0308 9CE9      		ldi r25,hi8(-25536)
+ 1168               	/* #APP */
+ 1169               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 1170 030a 0197      		1: sbiw r24,1
+ 1171 030c 01F4      		brne 1b
+ 1172               	 ;  0 "" 2
+ 1173               	/* #NOAPP */
+ 1174 030e 00C0      		rjmp .L41
+ 1175               	.L52:
+ 1176               	.LBE170:
+ 1177               	.LBE169:
+ 1178               	.LBE168:
+ 1179               	.LBE167:
+ 1181               	.Ltext42:
+  96:RF443_Transmitter_with_rs232_to_usb.c **** 		if ((0x0C < addr) && (addr < 0x40)) lcd_write(0x40,0);
+ 1183               	.LM133:
+ 1184 0310 80E4      		ldi r24,lo8(64)
+ 1185 0312 60E0      		ldi r22,lo8(0)
+ 1186 0314 00D0      		rcall lcd_write
+ 1187 0316 00C0      		rjmp .L40
+ 1188               	.LBE143:
+ 1197               	.Lscope9:
+ 1199               	.global	USART_Receive
+ 1201               	USART_Receive:
+ 106:RF443_Transmitter_with_rs232_to_usb.c **** {
+ 1203               	.LM134:
+ 1204               	.LFBB10:
+ 1205               	/* prologue: function */
+ 1206               	/* frame size = 0 */
+ 1207               	/* stack size = 0 */
+ 1208               	.L__stack_usage = 0
+ 1209               	.L54:
+ 108:RF443_Transmitter_with_rs232_to_usb.c **** 	while ( !(UCSRA & (1<<RXC)) )
+ 1211               	.LM135:
+ 1212 0318 5F9B      		sbis 43-0x20,7
+ 1213 031a 00C0      		rjmp .L54
+ 1215               	.LM136:
+ 1216 031c 8CB1      		in r24,44-0x20
+ 1217               	/* epilogue start */
+ 112:RF443_Transmitter_with_rs232_to_usb.c **** }
+ 1219               	.LM137:
+ 1220 031e 0895      		ret
+ 1222               	.Lscope10:
+ 1225               	.global	USART_Transmit
+ 1227               	USART_Transmit:
+ 113:RF443_Transmitter_with_rs232_to_usb.c **** 
+ 114:RF443_Transmitter_with_rs232_to_usb.c **** void USART_Transmit(unsigned char data)
+ 115:RF443_Transmitter_with_rs232_to_usb.c **** {
+ 1229               	.LM138:
+ 1230               	.LFBB11:
+ 1231               	/* prologue: function */
+ 1232               	/* frame size = 0 */
+ 1233               	/* stack size = 0 */
+ 1234               	.L__stack_usage = 0
+ 1235               	.L57:
+ 116:RF443_Transmitter_with_rs232_to_usb.c **** 	/* Wait for empty transmit buffer */
+ 117:RF443_Transmitter_with_rs232_to_usb.c **** 	while ( !( UCSRA & (1<<UDRE)) )
+ 1237               	.LM139:
+ 1238 0320 5D9B      		sbis 43-0x20,5
+ 1239 0322 00C0      		rjmp .L57
+ 118:RF443_Transmitter_with_rs232_to_usb.c **** 		;
+ 119:RF443_Transmitter_with_rs232_to_usb.c **** 	/* Put data into buffer, sends the data */
+ 120:RF443_Transmitter_with_rs232_to_usb.c **** 	UDR = data;
+ 1241               	.LM140:
+ 1242 0324 8CB9      		out 44-0x20,r24
+ 1243               	/* epilogue start */
+ 121:RF443_Transmitter_with_rs232_to_usb.c **** }
+ 1245               	.LM141:
+ 1246 0326 0895      		ret
+ 1248               	.Lscope11:
+ 1252               	.global	fpower
+ 1254               	fpower:
+ 122:RF443_Transmitter_with_rs232_to_usb.c **** 
+ 123:RF443_Transmitter_with_rs232_to_usb.c **** int fpower(int number,int power)
+ 124:RF443_Transmitter_with_rs232_to_usb.c **** {
+ 1256               	.LM142:
+ 1257               	.LFBB12:
+ 1258               	/* prologue: function */
+ 1259               	/* frame size = 0 */
+ 1260               	/* stack size = 0 */
+ 1261               	.L__stack_usage = 0
+ 125:RF443_Transmitter_with_rs232_to_usb.c **** 	int temp = number;
+ 126:RF443_Transmitter_with_rs232_to_usb.c **** 	if (power == 0) return 1;
+ 1263               	.LM143:
+ 1264 0328 6115      		cp r22,__zero_reg__
+ 1265 032a 7105      		cpc r23,__zero_reg__
+ 1266 032c 01F0      		breq .L62
+ 1267               	.LBB171:
+ 127:RF443_Transmitter_with_rs232_to_usb.c **** 	for (int n=2;n<=power;n++)
+ 1269               	.LM144:
+ 1270 032e 6230      		cpi r22,2
+ 1271 0330 7105      		cpc r23,__zero_reg__
+ 1272 0332 04F0      		brlt .L63
+ 1274               	.LM145:
+ 1275 0334 9C01      		movw r18,r24
+ 1276 0336 42E0      		ldi r20,lo8(2)
+ 1277 0338 50E0      		ldi r21,hi8(2)
+ 1278               	.L61:
+ 128:RF443_Transmitter_with_rs232_to_usb.c **** 		temp = temp * number;
+ 1280               	.LM146:
+ 1281 033a F901      		movw r30,r18
+ 1282 033c E89F      		mul r30,r24
+ 1283 033e 9001      		movw r18,r0
+ 1284 0340 E99F      		mul r30,r25
+ 1285 0342 300D      		add r19,r0
+ 1286 0344 F89F      		mul r31,r24
+ 1287 0346 300D      		add r19,r0
+ 1288 0348 1124      		clr r1
+ 127:RF443_Transmitter_with_rs232_to_usb.c **** 	for (int n=2;n<=power;n++)
+ 1290               	.LM147:
+ 1291 034a 4F5F      		subi r20,lo8(-(1))
+ 1292 034c 5F4F      		sbci r21,hi8(-(1))
+ 1293 034e 6417      		cp r22,r20
+ 1294 0350 7507      		cpc r23,r21
+ 1295 0352 04F4      		brge .L61
+ 1296               	.L60:
+ 1297               	.LBE171:
+ 129:RF443_Transmitter_with_rs232_to_usb.c **** 	return temp;
+ 130:RF443_Transmitter_with_rs232_to_usb.c **** }
+ 1299               	.LM148:
+ 1300 0354 C901      		movw r24,r18
+ 1301               	/* epilogue start */
+ 1302 0356 0895      		ret
+ 1303               	.L62:
+ 126:RF443_Transmitter_with_rs232_to_usb.c **** 	if (power == 0) return 1;
+ 1305               	.LM149:
+ 1306 0358 21E0      		ldi r18,lo8(1)
+ 1307 035a 30E0      		ldi r19,hi8(1)
+ 1309               	.LM150:
+ 1310 035c C901      		movw r24,r18
+ 1311               	/* epilogue start */
+ 1312 035e 0895      		ret
+ 1313               	.L63:
+ 1314               	.LBB172:
+ 127:RF443_Transmitter_with_rs232_to_usb.c **** 	for (int n=2;n<=power;n++)
+ 1316               	.LM151:
+ 1317 0360 9C01      		movw r18,r24
+ 1318 0362 00C0      		rjmp .L60
+ 1319               	.LBE172:
+ 1330               	.Lscope12:
+ 1332               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 RF443_Transmitter_with_rs232_to_usb.c
+     /tmp/cccclowa.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/cccclowa.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/cccclowa.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/cccclowa.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cccclowa.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cccclowa.s:83     .text:0000000000000000 strobe
+     /tmp/cccclowa.s:175    .text:000000000000001e lcd_port_state
+     /tmp/cccclowa.s:249    .text:0000000000000064 lcd_write
+     /tmp/cccclowa.s:360    .text:00000000000000d2 lcd_clear
+     /tmp/cccclowa.s:382    .text:00000000000000da lcd_return_home
+     /tmp/cccclowa.s:405    .text:00000000000000e2 lcd_goto
+     /tmp/cccclowa.s:429    .text:00000000000000ea lcd_write_string
+     /tmp/cccclowa.s:553    .text:0000000000000172 lcd_init
+     /tmp/cccclowa.s:759    .text:00000000000001e4 main
+     /tmp/cccclowa.s:1201   .text:0000000000000318 USART_Receive
+     /tmp/cccclowa.s:1227   .text:0000000000000320 USART_Transmit
+     /tmp/cccclowa.s:1254   .text:0000000000000328 fpower
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+malloc

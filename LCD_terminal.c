@@ -1,4 +1,4 @@
-   #include <avr/io.h>   
+   #include <avr/io.h>
    #include <util/delay.h>
    #include <avr/interrupt.h>
    #include <stdlib.h>
@@ -15,7 +15,7 @@
    char min = 0,hour = 0, sec = 0;
    unsigned int time = 0;
    char * string;
-   
+
 	void USART_Init( unsigned int baud )
 	{
 			/* Set baud rate */
@@ -99,9 +99,9 @@
 		RW_1;
 		PORTC = (PORTC & 0b00000111);
 	}
-	
+
 	void WriteString(char position, char * string)
-	{		
+	{
 		WriteCommand(position);
 		for (int i=0;i<=D_SZ;i++)
 		{
@@ -110,7 +110,7 @@
 	}
 
 	void LCD_init(void)
-	{ 
+	{
 		_delay_ms(30);
 		PORTC = 0b00011000;		//DB5=1 DB4=1
  		_delay_ms(1);
@@ -164,7 +164,7 @@
 
 	void My_disp(void)
 	{
-	 	if (sec == 60) 
+	 	if (sec == 60)
 		{
 			min+=1;
 			sec=0;
@@ -217,7 +217,7 @@
 		string = (char *)malloc((D_SZ+1)*sizeof(char));
 		time_position = 0b10000000+1;
  		while(1)
-		{	
+		{
 			strcpy(string," Smax,R:");
 			WriteString(0b11000000,string);
 //			WriteCommand(0b11000000);	// Установка начального адреса на начало второй строки
@@ -225,4 +225,4 @@
 		}
 		free(string);
 		return 0;
-   	} 
+   	}

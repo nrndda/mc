@@ -76,7 +76,7 @@ CSTANDARD = -std=gnu99
 CDEFS =
 
 # Place -I options here
-CINCS =
+CINCS = -I/usr/avr/include/ -I/usr/avr/lib/
 
 
 # Compiler flags.

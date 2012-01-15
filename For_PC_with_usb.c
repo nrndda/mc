@@ -1,4 +1,4 @@
-   #include <avr/io.h>   
+   #include <avr/io.h>
    #include <util/delay.h>
    #include <avr/interrupt.h>
    #include <stdlib.h>
@@ -31,7 +31,7 @@
 
 /*	SIGNAL (SIG_OVERFLOW0)
 	{
-	
+
 	}
 
 	SIGNAL (SIG_INTERRUPT0)
@@ -43,13 +43,13 @@
 	{
 		DDRC = 0xff;
 		PORTC = 0x00;
-		
+
 		DDRD = 0xff;
 		PORTD = 0x00;
-		
+
 		DDRB = 0xff;
 		PORTB = 0x00;
-		
+
 		DDRA = 0xff;
 		PORTA = 0x00;
 		//SFIOR = (SFIOR & !0x04);
@@ -66,7 +66,7 @@
 		//UCSRA = (1<<U2X);
 		UCSRB = (1<<RXEN);//|(1<<TXEN);
 		UCSRC = (1<<URSEL)|(0<<USBS)|(3<<UCSZ0);
-		
+
 		//sei();
 		Put_Pixel(0,0,'g',3);
 		Put_Pixel(0,7,'g',3);
@@ -86,7 +86,7 @@
 		//string = (char *)malloc((D_SZ+1)*sizeof(char));
 		int m = 0;
  		for (;;)
-		{	
+		{
 //		  data = USART_Receive();
 //		  _delay_ms(10);
 //		  Put_Pixel(data, 'r');
@@ -99,7 +99,7 @@
 		  //_delay_ms(200);
 		  //Put_Pixel(3,'o');
 		  //_delay_ms(200);
-		  for (float b=0.2;b<=0.8;b+=0.3) 
+		  for (float b=0.2;b<=0.8;b+=0.3)
 		  {
 		    for (int k=0;k<3;k++)
 		      for (int i=0;i<8;i++)
@@ -143,7 +143,7 @@
 			}
 		    }
 
-		    
+
 		    for (float b=0.005;b<=0.015;b+=0.005)
 		      for (int i=7;i>-1;i--)
 		      {
@@ -159,7 +159,7 @@
 			  }
 		      }
 
-		    for (float b=0.5;b<=1.2;b+=0.3) 
+		    for (float b=0.5;b<=1.2;b+=0.3)
 		    {
 		      for (int i=0;i<4;i++)
 		      {
@@ -186,7 +186,7 @@
 			  for (int j=6-i;j>=i;j--)
 			  {
 			    Put_Pixel(7-j,i,color[j%3],b);
-			  }	
+			  }
 			  for (int j=6-i;j>=i;j--)
 			  {
 			    Put_Pixel(7-i,7-j,color[j%3],b);
@@ -216,7 +216,7 @@
 				Put_Pixel(7-k,7-j,color[i%3],b);
 			      }
 		    }
-		  
+
 		  for (float b=0.001;b<=0.003;b+=0.001)
 		    for (int i=0;i<=15;i++)
 		    {
@@ -246,18 +246,18 @@
 		}
 		//free(string);
 		return 0;
-   	} 
-   	
-   	unsigned char USART_Receive( void )
-   	{
+   	}
+
+unsigned char USART_Receive( void )
+	{
 	  /* Wait for data to be received */
 	  while ( !(UCSRA & (1<<RXC)) )
 	    ;
 	  /* Get and return received data from buffer */
 	  return UDR;
 	}
-	
-	void USART_Transmit( unsigned char data )
+
+void USART_Transmit( unsigned char data )
 	{
 	  /* Wait for empty transmit buffer */
 	  while ( !( UCSRA & (1<<UDRE)) )
@@ -265,18 +265,18 @@
 	  /* Put data into buffer, sends the data */
 	  UDR = data;
 	}
-	
-	
-   	int fpower(int number,int power)
-   	{
+
+
+int fpower(int number,int power)
+	{
 	  int temp = number;
 	  if (power == 0) return 1;
 	  for (int n=2;n<=power;n++)
 	    temp = temp * number;
 	  return temp;
 	}
-	
-	void EEPROM_write(unsigned int uiAddress, unsigned char ucData)
+
+void EEPROM_write(unsigned int uiAddress, unsigned char ucData)
 	{
 	  /* Wait for completion of previous write */
 	  while(EECR & (1<<EEWE));
@@ -291,8 +291,8 @@
 	  EECR |= (1<<EEWE);
 	  SREG=sreg;
 	}
-	
-	unsigned char EEPROM_read(unsigned int uiAddress)
+
+unsigned char EEPROM_read(unsigned int uiAddress)
 	{
 	  /* Wait for completion of previous write */
 	  while(EECR & (1<<EEWE));

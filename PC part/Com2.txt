@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <termios.h>
+#include <sys/ioctl.h>
+
+
+int main(int argc, char *argv[])
+{
+      	int val=0,i,buf=0x00;
+      	int com = open("/dev/ttyS0", O_RDWR | O_NOCTTY | O_NDELAY); //открываешь порт
+	printf("Дескриптор порта: %d \n ", com); 
+
+	struct termios options;
+      	tcgetattr(com, &options);
+	cfsetispeed(&options, B4800);
+      	cfsetospeed(&options, B4800);
+      	options.c_cflag |= CS8 | CLOCAL | CREAD;
+      	tcsetattr(com, TCSANOW, &options);
+	options.c_cflag &= ~CRTSCTS;
+	options.c_iflag &= ~(IXON|IXOFF|IXANY);
+	// fcntl(com, F_SETFL, 0);
+
+      	if (com == -1) 
+		{       
+		  perror("open_port: Unable to open /dev/ttyS0 - ");
+		  exit;
+		}
+      	
+	for(i=0;i!=10;i++)
+		{
+          	  write(com, &buf, 1); //записываем строку в ..
+        	}
+
+      	read(com, &val, 1);
+      	printf("%d",val);
+     	printf("\n");
+
+    	close(com); //закрываем порт
+    	return 0;
+}

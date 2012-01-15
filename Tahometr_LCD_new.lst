@@ -1,0 +1,1088 @@
+   1               		.file	"Tahometr_LCD_new.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.global __do_copy_data
+   8               		.global __do_clear_bss
+  10               		.text
+  11               	.Ltext0:
+  83               	.global	LCD_WRITE
+  85               	LCD_WRITE:
+   1:Tahometr_LCD_new.c ****    #include <avr/io.h>
+   2:Tahometr_LCD_new.c ****    #include <util/delay.h>
+   3:Tahometr_LCD_new.c ****    #include <avr/interrupt.h>
+   4:Tahometr_LCD_new.c ****    #include <stdlib.h>
+   5:Tahometr_LCD_new.c ****    #include <string.h>
+   6:Tahometr_LCD_new.c **** 	#define LCD_RS_PORT 0
+   7:Tahometr_LCD_new.c **** 	#define LCD_RW_PORT 1
+   8:Tahometr_LCD_new.c **** 	#define LCD_E_PORT  2
+   9:Tahometr_LCD_new.c **** 	#define LCD_DATA_PORT PORTC
+  10:Tahometr_LCD_new.c **** 	#define LCD_DATA_DDR DDRC
+  11:Tahometr_LCD_new.c **** 
+  12:Tahometr_LCD_new.c **** 	#define LCD_RS(a)  PORTA = a ? (PORTA | (a<<LCD_RS_PORT)) : (PORTA & ~((!a)<<LCD_RS_PORT))
+  13:Tahometr_LCD_new.c **** 	#define LCD_RW(a) PORTA = a ? (PORTA | (a<<LCD_RW_PORT)) : (PORTA & ~((!a)<<LCD_RW_PORT))
+  14:Tahometr_LCD_new.c **** 	#define LCD_E(a)  PORTA = a ? (PORTA | (a<<LCD_E_PORT)) : (PORTA & ~((!a)<<LCD_E_PORT))
+  15:Tahometr_LCD_new.c **** 	#define LCD_X_SIZE 16				//Display's string size
+  16:Tahometr_LCD_new.c **** 	#define LCD_Y_SIZE 2				//Display's number of strings
+  17:Tahometr_LCD_new.c **** 	#define LCD_Z_STATE(a) (LCD_DATA_DDR = a ? 0x00 : 0xff,LCD_DATA_PORT = 0x00)
+  18:Tahometr_LCD_new.c **** 
+  19:Tahometr_LCD_new.c **** //	char sreg, max_speed = 0,EEPROM_max_speed,EEPROM_range;
+  20:Tahometr_LCD_new.c **** //	char min = 0,hour = 0, sec = 0,flash=0,refresh = 4;
+  21:Tahometr_LCD_new.c **** //	char light=0;
+  22:Tahometr_LCD_new.c **** //	unsigned int time = 0;
+  23:Tahometr_LCD_new.c **** //	double speed=0.0, turn=0.0, range=0.0;
+  24:Tahometr_LCD_new.c **** 	char * string;
+  25:Tahometr_LCD_new.c **** 
+  26:Tahometr_LCD_new.c **** 	void LCD_WRITE(char DATA,char COMMAND_DATA) //запись 1-го байта комманды по
+  27:Tahometr_LCD_new.c **** 	{
+  87               	.LM0:
+  88               	.LFBB1:
+  89               	/* prologue: function */
+  90               	/* frame size = 0 */
+  91               	/* stack size = 0 */
+  92               	.L__stack_usage = 0
+  28:Tahometr_LCD_new.c **** 	  LCD_Z_STATE(0);
+  94               	.LM1:
+  95 0000 9FEF      		ldi r25,lo8(-1)
+  96 0002 94BB      		out 52-0x20,r25
+  97 0004 15BA      		out 53-0x20,__zero_reg__
+  29:Tahometr_LCD_new.c **** 	  LCD_RS(COMMAND_DATA);
+  99               	.LM2:
+ 100 0006 6623      		tst r22
+ 101 0008 01F0      		breq .L2
+ 103               	.LM3:
+ 104 000a 9BB3      		in r25,59-0x20
+ 105 000c 962B      		or r25,r22
+ 106               	.L3:
+ 108               	.LM4:
+ 109 000e 9BBB      		out 59-0x20,r25
+  30:Tahometr_LCD_new.c **** 	  LCD_RW(0);
+ 111               	.LM5:
+ 112 0010 D998      		cbi 59-0x20,1
+ 113               	.LBB96:
+ 114               	.LBB97:
+ 115               	.LBB98:
+ 116               	.LBB99:
+ 118               	.Ltext1:
+   1:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** /* Copyright (c) 2002, Marek Michalkiewicz
+   2:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****    Copyright (c) 2007 Joerg Wunsch
+   3:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****    All rights reserved.
+   4:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+   5:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****    Redistribution and use in source and binary forms, with or without
+   6:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****    modification, are permitted provided that the following conditions are met:
+   7:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+   8:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****    * Redistributions of source code must retain the above copyright
+   9:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****      notice, this list of conditions and the following disclaimer.
+  10:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  11:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****    * Redistributions in binary form must reproduce the above copyright
+  12:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****      notice, this list of conditions and the following disclaimer in
+  13:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****      the documentation and/or other materials provided with the
+  14:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****      distribution.
+  15:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  16:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****    * Neither the name of the copyright holders nor the names of
+  17:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****      contributors may be used to endorse or promote products derived
+  18:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****      from this software without specific prior written permission.
+  19:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  20:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  21:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  22:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  23:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  24:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  25:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  26:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  27:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  28:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  29:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  30:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****   POSSIBILITY OF SUCH DAMAGE. */
+  31:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  32:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** /* $Id: delay_basic.h 2143 2010-06-08 21:19:51Z joerg_wunsch $ */
+  33:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  34:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** #ifndef _UTIL_DELAY_BASIC_H_
+  35:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** #define _UTIL_DELAY_BASIC_H_ 1
+  36:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  37:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** #include <inttypes.h>
+  38:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  39:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** #if !defined(__DOXYGEN__)
+  40:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** static inline void _delay_loop_1(uint8_t __count) __attribute__((always_inline));
+  41:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** static inline void _delay_loop_2(uint16_t __count) __attribute__((always_inline));
+  42:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** #endif
+  43:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  44:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** /** \file */
+  45:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** /** \defgroup util_delay_basic <util/delay_basic.h>: Basic busy-wait delay loops
+  46:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     \code
+  47:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     #include <util/delay_basic.h>
+  48:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     \endcode
+  49:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  50:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     The functions in this header file implement simple delay loops
+  51:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     that perform a busy-waiting.  They are typically used to
+  52:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     facilitate short delays in the program execution.  They are
+  53:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     implemented as count-down loops with a well-known CPU cycle
+  54:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     count per loop iteration.  As such, no other processing can
+  55:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     occur simultaneously.  It should be kept in mind that the
+  56:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     functions described here do not disable interrupts.
+  57:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  58:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     In general, for long delays, the use of hardware timers is
+  59:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     much preferrable, as they free the CPU, and allow for
+  60:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     concurrent processing of other events while the timer is
+  61:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     running.  However, in particular for very short delays, the
+  62:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     overhead of setting up a hardware timer is too much compared
+  63:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     to the overall delay time.
+  64:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  65:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     Two inline functions are provided for the actual delay algorithms.
+  66:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  67:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** */
+  68:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  69:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** /** \ingroup util_delay_basic
+  70:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  71:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     Delay loop using an 8-bit counter \c __count, so up to 256
+  72:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     iterations are possible.  (The value 256 would have to be passed
+  73:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     as 0.)  The loop executes three CPU cycles per iteration, not
+  74:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     including the overhead the compiler needs to setup the counter
+  75:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     register.
+  76:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  77:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     Thus, at a CPU speed of 1 MHz, delays of up to 768 microseconds
+  78:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     can be achieved.
+  79:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** */
+  80:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** void
+  81:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** _delay_loop_1(uint8_t __count)
+  82:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** {
+  83:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 	__asm__ volatile (
+  84:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 		"1: dec %0" "\n\t"
+  85:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 		"brne 1b"
+  86:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 		: "=r" (__count)
+  87:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 		: "0" (__count)
+  88:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 	);
+  89:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** }
+  90:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  91:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** /** \ingroup util_delay_basic
+  92:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  93:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     Delay loop using a 16-bit counter \c __count, so up to 65536
+  94:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     iterations are possible.  (The value 65536 would have to be
+  95:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     passed as 0.)  The loop executes four CPU cycles per iteration,
+  96:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     not including the overhead the compiler requires to setup the
+  97:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     counter register pair.
+  98:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 
+  99:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     Thus, at a CPU speed of 1 MHz, delays of up to about 262.1
+ 100:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****     milliseconds can be achieved.
+ 101:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h ****  */
+ 102:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** void
+ 103:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** _delay_loop_2(uint16_t __count)
+ 104:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** {
+ 105:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h **** 	__asm__ volatile (
+ 120               	.LM6:
+ 121 0012 20E2      		ldi r18,lo8(20000)
+ 122 0014 3EE4      		ldi r19,hi8(20000)
+ 123 0016 F901      		movw r30,r18
+ 124               	/* #APP */
+ 125               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 126 0018 3197      		1: sbiw r30,1
+ 127 001a 01F4      		brne 1b
+ 128               	 ;  0 "" 2
+ 129               	/* #NOAPP */
+ 130               	.LBE99:
+ 131               	.LBE98:
+ 132               	.LBE97:
+ 133               	.LBE96:
+ 135               	.Ltext2:
+  31:Tahometr_LCD_new.c **** 	  _delay_ms(5);
+  32:Tahometr_LCD_new.c **** 	  LCD_DATA_PORT = DATA;
+ 137               	.LM7:
+ 138 001c 85BB      		out 53-0x20,r24
+ 139               	.LBB100:
+ 140               	.LBB101:
+ 141               	.LBB102:
+ 142               	.LBB103:
+ 144               	.Ltext3:
+ 146               	.LM8:
+ 147 001e C901      		movw r24,r18
+ 148               	/* #APP */
+ 149               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 150 0020 0197      		1: sbiw r24,1
+ 151 0022 01F4      		brne 1b
+ 152               	 ;  0 "" 2
+ 153               	/* #NOAPP */
+ 154               	.LBE103:
+ 155               	.LBE102:
+ 156               	.LBE101:
+ 157               	.LBE100:
+ 159               	.Ltext4:
+  33:Tahometr_LCD_new.c **** 	  _delay_ms(5);
+  34:Tahometr_LCD_new.c **** 	  LCD_E(1);
+ 161               	.LM9:
+ 162 0024 DA9A      		sbi 59-0x20,2
+ 163               	.LBB104:
+ 164               	.LBB105:
+ 165               	.LBB106:
+ 166               	.LBB107:
+ 168               	.Ltext5:
+ 170               	.LM10:
+ 171 0026 80E4      		ldi r24,lo8(-25536)
+ 172 0028 9CE9      		ldi r25,hi8(-25536)
+ 173 002a FC01      		movw r30,r24
+ 174               	/* #APP */
+ 175               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 176 002c 3197      		1: sbiw r30,1
+ 177 002e 01F4      		brne 1b
+ 178               	 ;  0 "" 2
+ 179               	/* #NOAPP */
+ 180               	.LBE107:
+ 181               	.LBE106:
+ 182               	.LBE105:
+ 183               	.LBE104:
+ 185               	.Ltext6:
+  35:Tahometr_LCD_new.c **** 	  _delay_ms(10);
+  36:Tahometr_LCD_new.c **** 	  LCD_E(0);
+ 187               	.LM11:
+ 188 0030 DA98      		cbi 59-0x20,2
+ 189               	.LBB108:
+ 190               	.LBB109:
+ 191               	.LBB110:
+ 192               	.LBB111:
+ 194               	.Ltext7:
+ 196               	.LM12:
+ 197               	/* #APP */
+ 198               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 199 0032 0197      		1: sbiw r24,1
+ 200 0034 01F4      		brne 1b
+ 201               	 ;  0 "" 2
+ 202               	/* #NOAPP */
+ 203               	.LBE111:
+ 204               	.LBE110:
+ 205               	.LBE109:
+ 206               	.LBE108:
+ 208               	.Ltext8:
+  37:Tahometr_LCD_new.c **** 	  _delay_ms(10);
+  38:Tahometr_LCD_new.c **** 	  LCD_RW(1);
+ 210               	.LM13:
+ 211 0036 D99A      		sbi 59-0x20,1
+ 212               	.LBB112:
+ 213               	.LBB113:
+ 214               	.LBB114:
+ 215               	.LBB115:
+ 217               	.Ltext9:
+ 219               	.LM14:
+ 220 0038 C901      		movw r24,r18
+ 221               	/* #APP */
+ 222               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 223 003a 0197      		1: sbiw r24,1
+ 224 003c 01F4      		brne 1b
+ 225               	 ;  0 "" 2
+ 226               	/* #NOAPP */
+ 227               	.LBE115:
+ 228               	.LBE114:
+ 229               	.LBE113:
+ 230               	.LBE112:
+ 232               	.Ltext10:
+  39:Tahometr_LCD_new.c **** 	  _delay_ms(5);
+  40:Tahometr_LCD_new.c **** 	  LCD_Z_STATE(1);
+ 234               	.LM15:
+ 235 003e 14BA      		out 52-0x20,__zero_reg__
+ 236 0040 15BA      		out 53-0x20,__zero_reg__
+  41:Tahometr_LCD_new.c **** 	  PORTE = (PORTE & (1<<1)) ? (PORTE & ~(1<<1)) : (PORTE | (1<<1));
+ 238               	.LM16:
+ 239 0042 3999      		sbic 39-0x20,1
+ 240 0044 00C0      		rjmp .L7
+ 242               	.LM17:
+ 243 0046 87B1      		in r24,39-0x20
+ 244 0048 8260      		ori r24,lo8(2)
+ 245 004a 87B9      		out 39-0x20,r24
+ 246               	/* epilogue start */
+  42:Tahometr_LCD_new.c **** 	}
+ 248               	.LM18:
+ 249 004c 0895      		ret
+ 250               	.L2:
+  29:Tahometr_LCD_new.c **** 	  LCD_RS(COMMAND_DATA);
+ 252               	.LM19:
+ 253 004e 9BB3      		in r25,59-0x20
+ 254 0050 9E7F      		andi r25,lo8(-2)
+ 255 0052 00C0      		rjmp .L3
+ 256               	.L7:
+  41:Tahometr_LCD_new.c **** 	  PORTE = (PORTE & (1<<1)) ? (PORTE & ~(1<<1)) : (PORTE | (1<<1));
+ 258               	.LM20:
+ 259 0054 87B1      		in r24,39-0x20
+ 260 0056 8D7F      		andi r24,lo8(-3)
+ 261 0058 87B9      		out 39-0x20,r24
+ 262               	/* epilogue start */
+ 264               	.LM21:
+ 265 005a 0895      		ret
+ 267               	.Lscope1:
+ 270               	.global	LCD_WRITE_STRING
+ 272               	LCD_WRITE_STRING:
+  43:Tahometr_LCD_new.c **** 
+  44:Tahometr_LCD_new.c **** 	void LCD_WRITE_STRING(char POSITION, char * STRING)
+  45:Tahometr_LCD_new.c **** 	{
+ 274               	.LM22:
+ 275               	.LFBB2:
+ 276 005c EF92      		push r14
+ 277 005e FF92      		push r15
+ 278 0060 0F93      		push r16
+ 279 0062 1F93      		push r17
+ 280 0064 DF93      		push r29
+ 281 0066 CF93      		push r28
+ 282 0068 0F92      		push __tmp_reg__
+ 283 006a CDB7      		in r28,__SP_L__
+ 284 006c DEB7      		in r29,__SP_H__
+ 285               	/* prologue: function */
+ 286               	/* frame size = 1 */
+ 287               	/* stack size = 7 */
+ 288               	.L__stack_usage = 7
+ 289 006e 062F      		mov r16,r22
+  46:Tahometr_LCD_new.c **** 	  LCD_WRITE(POSITION,0);
+ 291               	.LM23:
+ 292 0070 60E0      		ldi r22,lo8(0)
+ 293 0072 7983      		std Y+1,r23
+ 294 0074 00D0      		rcall LCD_WRITE
+ 295 0076 7981      		ldd r23,Y+1
+ 296 0078 172F      		mov r17,r23
+  47:Tahometr_LCD_new.c **** 	  for (int i=0;i<LCD_X_SIZE;i++)
+ 298               	.LM24:
+ 299 007a EE24      		clr r14
+ 300 007c FF24      		clr r15
+ 301               	.L9:
+ 302               	.LBB116:
+  48:Tahometr_LCD_new.c **** 	  {
+  49:Tahometr_LCD_new.c **** 	    LCD_WRITE(*(STRING + i),1);
+ 304               	.LM25:
+ 305 007e F801      		movw r30,r16
+ 306 0080 8191      		ld r24,Z+
+ 307 0082 8F01      		movw r16,r30
+ 308 0084 61E0      		ldi r22,lo8(1)
+ 309 0086 00D0      		rcall LCD_WRITE
+  47:Tahometr_LCD_new.c **** 	  for (int i=0;i<LCD_X_SIZE;i++)
+ 311               	.LM26:
+ 312 0088 0894      		sec
+ 313 008a E11C      		adc r14,__zero_reg__
+ 314 008c F11C      		adc r15,__zero_reg__
+ 315 008e F0E1      		ldi r31,lo8(16)
+ 316 0090 EF16      		cp r14,r31
+ 317 0092 F104      		cpc r15,__zero_reg__
+ 318 0094 01F4      		brne .L9
+ 319               	/* epilogue start */
+ 320               	.LBE116:
+  50:Tahometr_LCD_new.c **** 	  }
+  51:Tahometr_LCD_new.c **** 	}
+ 322               	.LM27:
+ 323 0096 0F90      		pop __tmp_reg__
+ 324 0098 CF91      		pop r28
+ 325 009a DF91      		pop r29
+ 326 009c 1F91      		pop r17
+ 327 009e 0F91      		pop r16
+ 328 00a0 FF90      		pop r15
+ 329 00a2 EF90      		pop r14
+ 330 00a4 0895      		ret
+ 335               	.Lscope2:
+ 337               	.global	LCD_INIT
+ 339               	LCD_INIT:
+  52:Tahometr_LCD_new.c **** 
+  53:Tahometr_LCD_new.c **** 	void LCD_INIT(void)
+  54:Tahometr_LCD_new.c **** 	{
+ 341               	.LM28:
+ 342               	.LFBB3:
+ 343               	/* prologue: function */
+ 344               	/* frame size = 0 */
+ 345               	/* stack size = 0 */
+ 346               	.L__stack_usage = 0
+ 348               	.LM29:
+ 349 00a6 80E9      		ldi r24,lo8(400)
+ 350 00a8 91E0      		ldi r25,hi8(400)
+ 351               	.LBB117:
+ 352               	.LBB118:
+ 353               	.LBB119:
+ 354               	.LBB120:
+ 356               	.Ltext11:
+ 358               	.LM30:
+ 359 00aa 20E9      		ldi r18,lo8(400)
+ 360 00ac 31E0      		ldi r19,hi8(400)
+ 361               	.L12:
+ 362 00ae F901      		movw r30,r18
+ 363               	/* #APP */
+ 364               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 365 00b0 3197      		1: sbiw r30,1
+ 366 00b2 01F4      		brne 1b
+ 367               	 ;  0 "" 2
+ 368               	/* #NOAPP */
+ 369 00b4 0197      		sbiw r24,1
+ 370               	.LBE120:
+ 371               	.LBE119:
+ 373               	.Ltext12:
+   1:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** /* Copyright (c) 2002, Marek Michalkiewicz
+   2:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Copyright (c) 2004,2005,2007 Joerg Wunsch
+   3:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Copyright (c) 2007  Florin-Viorel Petrov
+   4:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    All rights reserved.
+   5:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+   6:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Redistribution and use in source and binary forms, with or without
+   7:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    modification, are permitted provided that the following conditions are met:
+   8:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+   9:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    * Redistributions of source code must retain the above copyright
+  10:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer.
+  11:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  12:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    * Redistributions in binary form must reproduce the above copyright
+  13:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer in
+  14:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****      the documentation and/or other materials provided with the
+  15:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****      distribution.
+  16:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  17:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    * Neither the name of the copyright holders nor the names of
+  18:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****      contributors may be used to endorse or promote products derived
+  19:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****      from this software without specific prior written permission.
+  20:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  21:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  22:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  23:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  24:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  25:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  26:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  27:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  28:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  29:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  30:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  31:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   POSSIBILITY OF SUCH DAMAGE. */
+  32:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  33:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** /* $Id: delay.h.in 2251 2011-09-14 08:20:33Z joerg_wunsch $ */
+  34:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  35:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #ifndef _UTIL_DELAY_H_
+  36:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #define _UTIL_DELAY_H_ 1
+  37:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  38:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #ifndef __HAS_DELAY_CYCLES
+  39:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #define __HAS_DELAY_CYCLES 0
+  40:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #endif
+  41:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  42:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #include <inttypes.h>
+  43:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #include <util/delay_basic.h>
+  44:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #include <math.h>
+  45:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  46:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** /** \file */
+  47:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** /** \defgroup util_delay <util/delay.h>: Convenience functions for busy-wait delay loops
+  48:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     \code
+  49:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     #define F_CPU 1000000UL  // 1 MHz
+  50:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     //#define F_CPU 14.7456E6
+  51:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     #include <util/delay.h>
+  52:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     \endcode
+  53:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  54:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     \note As an alternative method, it is possible to pass the
+  55:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     F_CPU macro down to the compiler from the Makefile.
+  56:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     Obviously, in that case, no \c \#define statement should be
+  57:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     used.
+  58:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  59:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     The functions in this header file are wrappers around the basic
+  60:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     busy-wait functions from <util/delay_basic.h>.  They are meant as
+  61:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     convenience functions where actual time values can be specified
+  62:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     rather than a number of cycles to wait for.  The idea behind is
+  63:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     that compile-time constant expressions will be eliminated by
+  64:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     compiler optimization so floating-point expressions can be used
+  65:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     to calculate the number of delay cycles needed based on the CPU
+  66:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     frequency passed by the macro F_CPU.
+  67:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  68:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     \note In order for these functions to work as intended, compiler
+  69:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     optimizations <em>must</em> be enabled, and the delay time
+  70:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     <em>must</em> be an expression that is a known constant at
+  71:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     compile-time.  If these requirements are not met, the resulting
+  72:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     delay will be much longer (and basically unpredictable), and
+  73:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     applications that otherwise do not use floating-point calculations
+  74:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     will experience severe code bloat by the floating-point library
+  75:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     routines linked into the application.
+  76:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  77:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     The functions available allow the specification of microsecond, and
+  78:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     millisecond delays directly, using the application-supplied macro
+  79:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     F_CPU as the CPU clock frequency (in Hertz).
+  80:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  81:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** */
+  82:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  83:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #if !defined(__DOXYGEN__)
+  84:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** static inline void _delay_us(double __us) __attribute__((always_inline));
+  85:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** static inline void _delay_ms(double __ms) __attribute__((always_inline));
+  86:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #endif
+  87:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  88:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #ifndef F_CPU
+  89:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** /* prevent compiler error by supplying a default */
+  90:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** # warning "F_CPU not defined for <util/delay.h>"
+  91:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** # define F_CPU 1000000UL
+  92:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #endif
+  93:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  94:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #ifndef __OPTIMIZE__
+  95:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** # warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+  96:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #endif
+  97:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+  98:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
+  99:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
+ 100:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   __STDC_HOSTED__
+ 101:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #  include <math.h>
+ 102:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #endif
+ 103:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 104:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** /**
+ 105:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    \ingroup util_delay
+ 106:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 107:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Perform a delay of \c __ms milliseconds, using _delay_loop_2().
+ 108:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 109:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    The macro F_CPU is supposed to be defined to a
+ 110:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    constant defining the CPU clock frequency (in Hertz).
+ 111:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 112:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    The maximal possible delay is 262.14 ms / F_CPU in MHz.
+ 113:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 114:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    When the user request delay which exceed the maximum possible one,
+ 115:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    _delay_ms() provides a decreased resolution functionality. In this
+ 116:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    mode _delay_ms() will work with a resolution of 1/10 ms, providing
+ 117:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    delays up to 6.5535 seconds (independent from CPU frequency).  The
+ 118:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    user will not be informed about decreased resolution.
+ 119:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 120:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    If the avr-gcc toolchain has __builtin_avr_delay_cycles(unsigned long)
+ 121:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    support, maximal possible delay is 4294967.295 ms/ F_CPU in MHz. For
+ 122:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    values greater than the maximal possible delay, overflows results in
+ 123:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    no delay i.e., 0ms.
+ 124:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 125:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Conversion of __us into clock cycles may not always result in integer.
+ 126:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    By default, the clock cycles rounded up to next integer. This ensures that
+ 127:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    the user gets atleast __us microseconds of delay.
+ 128:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 129:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Alternatively, user can define __DELAY_ROUND_DOWN__ and __DELAY_ROUND_CLOSEST__
+ 130:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    to round down and round to closest integer.
+ 131:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 132:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Note: The new implementation of _delay_ms(double __ms) with 
+ 133:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****     __builtin_avr_delay_cycles(unsigned long) support is not backward compatible. 
+ 134:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    User can define __DELAY_BACKWARD_COMPATIBLE__ to get a backward compatible delay.
+ 135:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    Also, the backward compatible
+ 136:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    algorithm will be chosen if the code is compiled in a <em>freestanding
+ 137:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    environment</em> (GCC option \c -ffreestanding), as the math functions
+ 138:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****    required for rounding are not available to the compiler then.
+ 139:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 140:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****  */
+ 141:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** void
+ 142:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** _delay_ms(double __ms)
+ 143:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** {
+ 144:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	uint16_t __ticks;
+ 145:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	double __tmp ; 
+ 146:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
+ 147:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
+ 148:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h ****   __STDC_HOSTED__
+ 149:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	uint32_t __ticks_dc;
+ 150:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	extern void __builtin_avr_delay_cycles(unsigned long);
+ 151:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	__tmp = ((F_CPU) / 1e3) * __ms;
+ 152:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 153:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	#if defined(__DELAY_ROUND_DOWN__)
+ 154:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)fabs(__tmp);
+ 155:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 156:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	#elif defined(__DELAY_ROUND_CLOSEST__)
+ 157:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(fabs(__tmp)+0.5);
+ 158:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 159:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	#else
+ 160:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		//round up by default
+ 161:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+ 162:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	#endif
+ 163:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 164:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	__builtin_avr_delay_cycles(__ticks_dc);
+ 165:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 
+ 166:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** #else
+ 167:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	__tmp = ((F_CPU) / 4e3) * __ms;
+ 168:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	if (__tmp < 1.0)
+ 169:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		__ticks = 1;
+ 170:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	else if (__tmp > 65535)
+ 171:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 	{
+ 172:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		//	__ticks = requested delay in 1/10 ms
+ 173:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		__ticks = (uint16_t) (__ms * 10.0);
+ 174:/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay.h **** 		while(__ticks)
+ 375               	.LM31:
+ 376 00b6 01F4      		brne .L12
+ 377               	.LBE118:
+ 378               	.LBE117:
+ 380               	.Ltext13:
+  55:Tahometr_LCD_new.c **** 	  _delay_ms(40);
+  56:Tahometr_LCD_new.c **** 	  LCD_WRITE(0x30,0);
+ 382               	.LM32:
+ 383 00b8 80E3      		ldi r24,lo8(48)
+ 384 00ba 60E0      		ldi r22,lo8(0)
+ 385 00bc 00D0      		rcall LCD_WRITE
+ 386 00be 88EC      		ldi r24,lo8(200)
+ 387 00c0 90E0      		ldi r25,hi8(200)
+ 388               	.LBB121:
+ 389               	.LBB122:
+ 390               	.LBB123:
+ 391               	.LBB124:
+ 393               	.Ltext14:
+ 395               	.LM33:
+ 396 00c2 20E9      		ldi r18,lo8(400)
+ 397 00c4 31E0      		ldi r19,hi8(400)
+ 398               	.L13:
+ 399 00c6 F901      		movw r30,r18
+ 400               	/* #APP */
+ 401               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 402 00c8 3197      		1: sbiw r30,1
+ 403 00ca 01F4      		brne 1b
+ 404               	 ;  0 "" 2
+ 405               	/* #NOAPP */
+ 406 00cc 0197      		sbiw r24,1
+ 407               	.LBE124:
+ 408               	.LBE123:
+ 410               	.Ltext15:
+ 412               	.LM34:
+ 413 00ce 01F4      		brne .L13
+ 414               	.LBE122:
+ 415               	.LBE121:
+ 417               	.Ltext16:
+  57:Tahometr_LCD_new.c **** 	  _delay_ms(20);
+  58:Tahometr_LCD_new.c **** 	  LCD_WRITE(0x30,0);
+ 419               	.LM35:
+ 420 00d0 80E3      		ldi r24,lo8(48)
+ 421 00d2 60E0      		ldi r22,lo8(0)
+ 422 00d4 00D0      		rcall LCD_WRITE
+ 423 00d6 88EC      		ldi r24,lo8(200)
+ 424 00d8 90E0      		ldi r25,hi8(200)
+ 425               	.LBB125:
+ 426               	.LBB126:
+ 427               	.LBB127:
+ 428               	.LBB128:
+ 430               	.Ltext17:
+ 432               	.LM36:
+ 433 00da 20E9      		ldi r18,lo8(400)
+ 434 00dc 31E0      		ldi r19,hi8(400)
+ 435               	.L14:
+ 436 00de F901      		movw r30,r18
+ 437               	/* #APP */
+ 438               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 439 00e0 3197      		1: sbiw r30,1
+ 440 00e2 01F4      		brne 1b
+ 441               	 ;  0 "" 2
+ 442               	/* #NOAPP */
+ 443 00e4 0197      		sbiw r24,1
+ 444               	.LBE128:
+ 445               	.LBE127:
+ 447               	.Ltext18:
+ 449               	.LM37:
+ 450 00e6 01F4      		brne .L14
+ 451               	.LBE126:
+ 452               	.LBE125:
+ 454               	.Ltext19:
+  59:Tahometr_LCD_new.c **** 	  _delay_ms(20);
+  60:Tahometr_LCD_new.c **** 	  LCD_WRITE(0x30,0);
+ 456               	.LM38:
+ 457 00e8 80E3      		ldi r24,lo8(48)
+ 458 00ea 60E0      		ldi r22,lo8(0)
+ 459 00ec 00D0      		rcall LCD_WRITE
+ 460 00ee 88EC      		ldi r24,lo8(200)
+ 461 00f0 90E0      		ldi r25,hi8(200)
+ 462               	.LBB129:
+ 463               	.LBB130:
+ 464               	.LBB131:
+ 465               	.LBB132:
+ 467               	.Ltext20:
+ 469               	.LM39:
+ 470 00f2 20E9      		ldi r18,lo8(400)
+ 471 00f4 31E0      		ldi r19,hi8(400)
+ 472               	.L15:
+ 473 00f6 F901      		movw r30,r18
+ 474               	/* #APP */
+ 475               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 476 00f8 3197      		1: sbiw r30,1
+ 477 00fa 01F4      		brne 1b
+ 478               	 ;  0 "" 2
+ 479               	/* #NOAPP */
+ 480 00fc 0197      		sbiw r24,1
+ 481               	.LBE132:
+ 482               	.LBE131:
+ 484               	.Ltext21:
+ 486               	.LM40:
+ 487 00fe 01F4      		brne .L15
+ 488               	.LBE130:
+ 489               	.LBE129:
+ 491               	.Ltext22:
+  61:Tahometr_LCD_new.c **** 	  _delay_ms(20);
+  62:Tahometr_LCD_new.c **** 	  LCD_WRITE(0x38,0);
+ 493               	.LM41:
+ 494 0100 88E3      		ldi r24,lo8(56)
+ 495 0102 60E0      		ldi r22,lo8(0)
+ 496 0104 00D0      		rcall LCD_WRITE
+  63:Tahometr_LCD_new.c **** 	  LCD_WRITE(0x08,0);
+ 498               	.LM42:
+ 499 0106 88E0      		ldi r24,lo8(8)
+ 500 0108 60E0      		ldi r22,lo8(0)
+ 501 010a 00D0      		rcall LCD_WRITE
+  64:Tahometr_LCD_new.c **** 	  LCD_WRITE(0x01,0);
+ 503               	.LM43:
+ 504 010c 81E0      		ldi r24,lo8(1)
+ 505 010e 60E0      		ldi r22,lo8(0)
+ 506 0110 00D0      		rcall LCD_WRITE
+  65:Tahometr_LCD_new.c **** 	  LCD_WRITE(0x06,0);
+ 508               	.LM44:
+ 509 0112 86E0      		ldi r24,lo8(6)
+ 510 0114 60E0      		ldi r22,lo8(0)
+ 511 0116 00D0      		rcall LCD_WRITE
+ 512               	.LBB133:
+ 513               	.LBB134:
+ 514               	.LBB135:
+ 515               	.LBB136:
+ 517               	.Ltext23:
+ 519               	.LM45:
+ 520 0118 80E4      		ldi r24,lo8(-25536)
+ 521 011a 9CE9      		ldi r25,hi8(-25536)
+ 522               	/* #APP */
+ 523               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 524 011c 0197      		1: sbiw r24,1
+ 525 011e 01F4      		brne 1b
+ 526               	 ;  0 "" 2
+ 527               	/* #NOAPP */
+ 528               	.LBE136:
+ 529               	.LBE135:
+ 530               	.LBE134:
+ 531               	.LBE133:
+ 533               	.Ltext24:
+  66:Tahometr_LCD_new.c **** 	  _delay_ms(10);
+  67:Tahometr_LCD_new.c **** 	  PORTE = 0x01;
+ 535               	.LM46:
+ 536 0120 81E0      		ldi r24,lo8(1)
+ 537 0122 87B9      		out 39-0x20,r24
+ 538               	/* epilogue start */
+  68:Tahometr_LCD_new.c **** 	}
+ 540               	.LM47:
+ 541 0124 0895      		ret
+ 543               	.Lscope3:
+ 544               		.data
+ 545               	.LC0:
+ 546 0000 6E72 6E64 		.string	"nrndda"
+ 546      6461 00
+ 547               		.text
+ 549               	.global	main
+ 551               	main:
+  69:Tahometr_LCD_new.c **** 
+  70:Tahometr_LCD_new.c **** 
+  71:Tahometr_LCD_new.c **** 
+  72:Tahometr_LCD_new.c **** 	int main(void)
+  73:Tahometr_LCD_new.c **** 	{
+ 553               	.LM48:
+ 554               	.LFBB4:
+ 555 0126 1F93      		push r17
+ 556 0128 CF93      		push r28
+ 557 012a DF93      		push r29
+ 558               	/* prologue: function */
+ 559               	/* frame size = 0 */
+ 560               	/* stack size = 3 */
+ 561               	.L__stack_usage = 3
+  74:Tahometr_LCD_new.c **** 		DDRA = 0xff;
+ 563               	.LM49:
+ 564 012c 8FEF      		ldi r24,lo8(-1)
+ 565 012e 8ABB      		out 58-0x20,r24
+  75:Tahometr_LCD_new.c **** 		PORTA = 0x00;
+ 567               	.LM50:
+ 568 0130 1BBA      		out 59-0x20,__zero_reg__
+  76:Tahometr_LCD_new.c **** 
+  77:Tahometr_LCD_new.c **** 		DDRB = 0xff;
+ 570               	.LM51:
+ 571 0132 87BB      		out 55-0x20,r24
+  78:Tahometr_LCD_new.c **** 		PORTB = 0x00;
+ 573               	.LM52:
+ 574 0134 18BA      		out 56-0x20,__zero_reg__
+  79:Tahometr_LCD_new.c **** 
+  80:Tahometr_LCD_new.c **** 		DDRC = 0x00;		/* Порты для управления LCD-дисплеем. Сначала вы
+ 576               	.LM53:
+ 577 0136 14BA      		out 52-0x20,__zero_reg__
+  81:Tahometr_LCD_new.c **** 		PORTC = 0x00;
+ 579               	.LM54:
+ 580 0138 15BA      		out 53-0x20,__zero_reg__
+  82:Tahometr_LCD_new.c **** 
+  83:Tahometr_LCD_new.c **** 		DDRD = 0xff;
+ 582               	.LM55:
+ 583 013a 81BB      		out 49-0x20,r24
+  84:Tahometr_LCD_new.c **** 		PORTD = 0x00;
+ 585               	.LM56:
+ 586 013c 12BA      		out 50-0x20,__zero_reg__
+  85:Tahometr_LCD_new.c **** 
+  86:Tahometr_LCD_new.c **** 		DDRE = 0xff;
+ 588               	.LM57:
+ 589 013e 86B9      		out 38-0x20,r24
+  87:Tahometr_LCD_new.c **** 		PORTE = 0x00;
+ 591               	.LM58:
+ 592 0140 17B8      		out 39-0x20,__zero_reg__
+  88:Tahometr_LCD_new.c **** 
+  89:Tahometr_LCD_new.c **** //		GIMSK = 0x00;
+  90:Tahometr_LCD_new.c **** //		MCUCR = 0b00000001;	/* Прерывание от INT0 генерируется изменени
+  91:Tahometr_LCD_new.c **** //		GICR  = 0b01000000;
+  92:Tahometr_LCD_new.c **** //		sei();
+  93:Tahometr_LCD_new.c **** 		LCD_INIT();
+ 594               	.LM59:
+ 595 0142 00D0      		rcall LCD_INIT
+ 596               	.LBB137:
+ 597               	.LBB138:
+ 598               	.LBB139:
+ 599               	.LBB140:
+ 601               	.Ltext25:
+ 603               	.LM60:
+ 604 0144 80E4      		ldi r24,lo8(-25536)
+ 605 0146 9CE9      		ldi r25,hi8(-25536)
+ 606               	/* #APP */
+ 607               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 608 0148 0197      		1: sbiw r24,1
+ 609 014a 01F4      		brne 1b
+ 610               	 ;  0 "" 2
+ 611               	/* #NOAPP */
+ 612               	.LBE140:
+ 613               	.LBE139:
+ 614               	.LBE138:
+ 615               	.LBE137:
+ 617               	.Ltext26:
+  94:Tahometr_LCD_new.c **** 		_delay_ms(10);
+  95:Tahometr_LCD_new.c **** 		LCD_WRITE(0b00001100,0);	// Включение дисплея без курсора, ничего
+ 619               	.LM61:
+ 620 014c 8CE0      		ldi r24,lo8(12)
+ 621 014e 60E0      		ldi r22,lo8(0)
+ 622 0150 00D0      		rcall LCD_WRITE
+  96:Tahometr_LCD_new.c **** 		string = (char *)malloc((LCD_X_SIZE+1)*sizeof(char));
+ 624               	.LM62:
+ 625 0152 81E1      		ldi r24,lo8(17)
+ 626 0154 90E0      		ldi r25,hi8(17)
+ 627 0156 00D0      		rcall malloc
+ 628 0158 8093 0000 		sts string,r24
+ 629 015c 9093 0000 		sts string+1,r25
+ 630               	.LBB141:
+ 631               	.LBB142:
+ 632               	.LBB143:
+ 633               	.LBB144:
+ 635               	.Ltext27:
+ 637               	.LM63:
+ 638 0160 C0E9      		ldi r28,lo8(400)
+ 639 0162 D1E0      		ldi r29,hi8(400)
+ 640               	.L32:
+ 641               	.LBE144:
+ 642               	.LBE143:
+ 643               	.LBE142:
+ 644               	.LBE141:
+ 646               	.Ltext28:
+  97:Tahometr_LCD_new.c **** //		time_position = 0b10000000+1;
+  98:Tahometr_LCD_new.c **** 		char temp;
+  99:Tahometr_LCD_new.c ****  		for (;;)
+ 100:Tahometr_LCD_new.c **** 		{
+ 101:Tahometr_LCD_new.c **** 			LCD_WRITE(0x01,0);
+ 648               	.LM64:
+ 649 0164 81E0      		ldi r24,lo8(1)
+ 650 0166 60E0      		ldi r22,lo8(0)
+ 651 0168 00D0      		rcall LCD_WRITE
+ 102:Tahometr_LCD_new.c **** 			PORTE = (PORTE & (1<<2)) ? (PORTE & ~(1<<2)) : (PORTE | (1<<2));
+ 653               	.LM65:
+ 654 016a 3A9B      		sbis 39-0x20,2
+ 655 016c 00C0      		rjmp .L21
+ 657               	.LM66:
+ 658 016e 87B1      		in r24,39-0x20
+ 659 0170 8B7F      		andi r24,lo8(-5)
+ 660               	.L22:
+ 662               	.LM67:
+ 663 0172 87B9      		out 39-0x20,r24
+ 103:Tahometr_LCD_new.c **** //			LCD_WRITE(0x40,0);
+ 104:Tahometr_LCD_new.c **** 			for (temp='A';temp<='Z';temp++)
+ 665               	.LM68:
+ 666 0174 11E4      		ldi r17,lo8(65)
+ 667               	.L24:
+ 105:Tahometr_LCD_new.c **** 			{
+ 106:Tahometr_LCD_new.c **** 			  LCD_WRITE(temp,1);
+ 669               	.LM69:
+ 670 0176 812F      		mov r24,r17
+ 671 0178 61E0      		ldi r22,lo8(1)
+ 672 017a 00D0      		rcall LCD_WRITE
+ 673 017c 28EE      		ldi r18,lo8(1000)
+ 674 017e 33E0      		ldi r19,hi8(1000)
+ 675               	.L23:
+ 676               	.LBB148:
+ 677               	.LBB147:
+ 678               	.LBB146:
+ 679               	.LBB145:
+ 681               	.Ltext29:
+ 683               	.LM70:
+ 684 0180 FE01      		movw r30,r28
+ 685               	/* #APP */
+ 686               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 687 0182 3197      		1: sbiw r30,1
+ 688 0184 01F4      		brne 1b
+ 689               	 ;  0 "" 2
+ 690               	/* #NOAPP */
+ 691 0186 2150      		subi r18,lo8(-(-1))
+ 692 0188 3040      		sbci r19,hi8(-(-1))
+ 693               	.LBE145:
+ 694               	.LBE146:
+ 696               	.Ltext30:
+ 698               	.LM71:
+ 699 018a 01F4      		brne .L23
+ 700               	.LBE147:
+ 701               	.LBE148:
+ 703               	.Ltext31:
+ 104:Tahometr_LCD_new.c **** 			for (temp='A';temp<='Z';temp++)
+ 705               	.LM72:
+ 706 018c 1F5F      		subi r17,lo8(-(1))
+ 707 018e 1B35      		cpi r17,lo8(91)
+ 708 0190 01F4      		brne .L24
+ 107:Tahometr_LCD_new.c **** 			  _delay_ms(100);
+ 108:Tahometr_LCD_new.c **** 			}
+ 109:Tahometr_LCD_new.c **** 			LCD_WRITE(0xC0,0);
+ 710               	.LM73:
+ 711 0192 80EC      		ldi r24,lo8(-64)
+ 712 0194 60E0      		ldi r22,lo8(0)
+ 713 0196 00D0      		rcall LCD_WRITE
+ 110:Tahometr_LCD_new.c **** 			for (temp='A';temp<='Z';temp++)
+ 715               	.LM74:
+ 716 0198 11E4      		ldi r17,lo8(65)
+ 717               	.L26:
+ 111:Tahometr_LCD_new.c **** 			{
+ 112:Tahometr_LCD_new.c **** 			  LCD_WRITE(temp,1);
+ 719               	.LM75:
+ 720 019a 812F      		mov r24,r17
+ 721 019c 61E0      		ldi r22,lo8(1)
+ 722 019e 00D0      		rcall LCD_WRITE
+ 723 01a0 28EE      		ldi r18,lo8(1000)
+ 724 01a2 33E0      		ldi r19,hi8(1000)
+ 725               	.L25:
+ 726               	.LBB149:
+ 727               	.LBB150:
+ 728               	.LBB151:
+ 729               	.LBB152:
+ 731               	.Ltext32:
+ 733               	.LM76:
+ 734 01a4 FE01      		movw r30,r28
+ 735               	/* #APP */
+ 736               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 737 01a6 3197      		1: sbiw r30,1
+ 738 01a8 01F4      		brne 1b
+ 739               	 ;  0 "" 2
+ 740               	/* #NOAPP */
+ 741 01aa 2150      		subi r18,lo8(-(-1))
+ 742 01ac 3040      		sbci r19,hi8(-(-1))
+ 743               	.LBE152:
+ 744               	.LBE151:
+ 746               	.Ltext33:
+ 748               	.LM77:
+ 749 01ae 01F4      		brne .L25
+ 750               	.LBE150:
+ 751               	.LBE149:
+ 753               	.Ltext34:
+ 110:Tahometr_LCD_new.c **** 			for (temp='A';temp<='Z';temp++)
+ 755               	.LM78:
+ 756 01b0 1F5F      		subi r17,lo8(-(1))
+ 757 01b2 1B35      		cpi r17,lo8(91)
+ 758 01b4 01F4      		brne .L26
+ 113:Tahometr_LCD_new.c **** 			  _delay_ms(100);
+ 114:Tahometr_LCD_new.c **** 			}
+ 115:Tahometr_LCD_new.c **** 			LCD_WRITE(0x93,1);
+ 760               	.LM79:
+ 761 01b6 83E9      		ldi r24,lo8(-109)
+ 762 01b8 61E0      		ldi r22,lo8(1)
+ 763 01ba 00D0      		rcall LCD_WRITE
+ 116:Tahometr_LCD_new.c **** 			LCD_WRITE(0x3B,1);
+ 765               	.LM80:
+ 766 01bc 8BE3      		ldi r24,lo8(59)
+ 767 01be 61E0      		ldi r22,lo8(1)
+ 768 01c0 00D0      		rcall LCD_WRITE
+ 769 01c2 80E1      		ldi r24,lo8(10000)
+ 770 01c4 97E2      		ldi r25,hi8(10000)
+ 771               	.L27:
+ 772               	.LBB153:
+ 773               	.LBB154:
+ 774               	.LBB155:
+ 775               	.LBB156:
+ 777               	.Ltext35:
+ 779               	.LM81:
+ 780 01c6 FE01      		movw r30,r28
+ 781               	/* #APP */
+ 782               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 783 01c8 3197      		1: sbiw r30,1
+ 784 01ca 01F4      		brne 1b
+ 785               	 ;  0 "" 2
+ 786               	/* #NOAPP */
+ 787 01cc 0197      		sbiw r24,1
+ 788               	.LBE156:
+ 789               	.LBE155:
+ 791               	.Ltext36:
+ 793               	.LM82:
+ 794 01ce 01F4      		brne .L27
+ 795               	.LBE154:
+ 796               	.LBE153:
+ 798               	.Ltext37:
+ 117:Tahometr_LCD_new.c **** 			_delay_ms(1000);
+ 118:Tahometr_LCD_new.c **** 			LCD_WRITE(0x01,0);
+ 800               	.LM83:
+ 801 01d0 81E0      		ldi r24,lo8(1)
+ 802 01d2 60E0      		ldi r22,lo8(0)
+ 803 01d4 00D0      		rcall LCD_WRITE
+ 119:Tahometr_LCD_new.c **** 			PORTE = (PORTE & (1<<2)) ? (PORTE & ~(1<<2)) : (PORTE | (1<<2));
+ 805               	.LM84:
+ 806 01d6 3A9B      		sbis 39-0x20,2
+ 807 01d8 00C0      		rjmp .L28
+ 809               	.LM85:
+ 810 01da 87B1      		in r24,39-0x20
+ 811 01dc 8B7F      		andi r24,lo8(-5)
+ 812               	.L29:
+ 814               	.LM86:
+ 815 01de 87B9      		out 39-0x20,r24
+ 120:Tahometr_LCD_new.c **** 			strcpy(string,"nrndda");
+ 817               	.LM87:
+ 818 01e0 3091 0000 		lds r19,string
+ 819 01e4 2091 0000 		lds r18,string+1
+ 820 01e8 832F      		mov r24,r19
+ 821 01ea 922F      		mov r25,r18
+ 822 01ec DC01      		movw r26,r24
+ 823 01ee E0E0      		ldi r30,lo8(.LC0)
+ 824 01f0 F0E0      		ldi r31,hi8(.LC0)
+ 825 01f2 87E0      		ldi r24,lo8(7)
+ 826               	.L30:
+ 827 01f4 0190      		ld r0,Z+
+ 828 01f6 0D92      		st X+,r0
+ 829 01f8 8150      		subi r24,lo8(-(-1))
+ 830 01fa 01F4      		brne .L30
+ 121:Tahometr_LCD_new.c **** 			LCD_WRITE_STRING(0b11000000,string);
+ 832               	.LM88:
+ 833 01fc 6091 0000 		lds r22,string
+ 834 0200 7091 0000 		lds r23,string+1
+ 835 0204 80EC      		ldi r24,lo8(-64)
+ 836 0206 00D0      		rcall LCD_WRITE_STRING
+ 837 0208 80E1      		ldi r24,lo8(10000)
+ 838 020a 97E2      		ldi r25,hi8(10000)
+ 839               	.L31:
+ 840               	.LBB157:
+ 841               	.LBB158:
+ 842               	.LBB159:
+ 843               	.LBB160:
+ 845               	.Ltext38:
+ 847               	.LM89:
+ 848 020c FE01      		movw r30,r28
+ 849               	/* #APP */
+ 850               	 ;  105 "/usr/lib/gcc/avr/4.5.3/../../../../avr/include/util/delay_basic.h" 1
+ 851 020e 3197      		1: sbiw r30,1
+ 852 0210 01F4      		brne 1b
+ 853               	 ;  0 "" 2
+ 854               	/* #NOAPP */
+ 855 0212 0197      		sbiw r24,1
+ 856               	.LBE160:
+ 857               	.LBE159:
+ 859               	.Ltext39:
+ 861               	.LM90:
+ 862 0214 01F4      		brne .L31
+ 863 0216 00C0      		rjmp .L32
+ 864               	.L28:
+ 865               	.LBE158:
+ 866               	.LBE157:
+ 868               	.Ltext40:
+ 119:Tahometr_LCD_new.c **** 			PORTE = (PORTE & (1<<2)) ? (PORTE & ~(1<<2)) : (PORTE | (1<<2));
+ 870               	.LM91:
+ 871 0218 87B1      		in r24,39-0x20
+ 872 021a 8460      		ori r24,lo8(4)
+ 873 021c 00C0      		rjmp .L29
+ 874               	.L21:
+ 102:Tahometr_LCD_new.c **** 			PORTE = (PORTE & (1<<2)) ? (PORTE & ~(1<<2)) : (PORTE | (1<<2));
+ 876               	.LM92:
+ 877 021e 87B1      		in r24,39-0x20
+ 878 0220 8460      		ori r24,lo8(4)
+ 879 0222 00C0      		rjmp .L22
+ 881               	.Lscope4:
+ 882               		.comm string,2,1
+ 885               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 Tahometr_LCD_new.c
+     /tmp/ccNfD9uU.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccNfD9uU.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccNfD9uU.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccNfD9uU.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccNfD9uU.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccNfD9uU.s:85     .text:0000000000000000 LCD_WRITE
+     /tmp/ccNfD9uU.s:272    .text:000000000000005c LCD_WRITE_STRING
+     /tmp/ccNfD9uU.s:339    .text:00000000000000a6 LCD_INIT
+     /tmp/ccNfD9uU.s:551    .text:0000000000000126 main
+                            *COM*:0000000000000002 string
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+malloc

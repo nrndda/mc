@@ -1,4 +1,4 @@
-   #include <avr/io.h>   
+   #include <avr/io.h>
    #include <util/delay.h>
    #include <avr/interrupt.h>
    #include <stdlib.h>
@@ -90,9 +90,9 @@
 		RW_1;
 		PORTC = (PORTC & 0b00000111);
 	}
-	
+
 	void WriteString(char position, char * string)
-	{		
+	{
 		WriteCommand(position);
 		for (int i=0;i<=D_SZ;i++)
 		{
@@ -101,7 +101,7 @@
 	}
 
 	void LCD_init(void)
-	{ 
+	{
 		_delay_ms(30);
 		PORTC = 0b00011000;		//DB5=1 DB4=1
  		_delay_ms(1);
@@ -160,7 +160,7 @@
 		_delay_ms(20);
 		PORTC = 0b00110000;		//DB6=1 DB5=1
 
-		RS_0;RW_0;E_1;		
+		RS_0;RW_0;E_1;
 		_delay_ms(60);
 		PORTC = 0b00000000;
 		_delay_ms(20);
@@ -262,7 +262,7 @@
 				else	B2Pressed = 1;  //Устанавливает флаг "кнопка нажата"
 			}
 		}
-		
+
 		if ((PIND & 0b00100000) == 0)    //Проверяет нажатие
 		{
 			_delay_ms(10);
@@ -294,12 +294,12 @@
 		}
 
 
-		if ((!light)&(B0Pressed|B1Pressed|B2Pressed|B3Pressed|B0Holded|B1Holded|B2Holded|B3Holded)) 
-		{	
+		if ((!light)&(B0Pressed|B1Pressed|B2Pressed|B3Pressed|B0Holded|B1Holded|B2Holded|B3Holded))
+		{
 			PORTB = 1;
  		}
 
-		if (B0Holded) 
+		if (B0Holded)
 		{
 			B0Holded = 0;
 			if (light)   light = 0;
@@ -307,7 +307,7 @@
 			if (light) PORTB = 1;
 			else PORTB = 0;
 		}
-		
+
 		if (B0Pressed)
 		{
 			B0Pressed = 0;
@@ -316,42 +316,42 @@
 			_delay_ms(150);
 			WriteCommand(time_position-1);
 			WriteByte(0x20);
-			if (!light) PORTB =0; 
+			if (!light) PORTB =0;
 			if (refresh<10)	  refresh++;
 			else refresh = 2;
 		}
-		
+
 		if (B1Pressed)
 		{
 			B1Pressed = 0;
-			if (!light) PORTB =0; 
+			if (!light) PORTB =0;
 		}
-		
+
 		if (B2Pressed)
 		{
 			B2Pressed = 0;
-			if (!light) PORTB =0; 
+			if (!light) PORTB =0;
 		}
-		
+
 		if (B3Pressed)
 		{
 			B3Pressed = 0;
-			if (!light) PORTB =0; 
+			if (!light) PORTB =0;
 		}
-		
+
 		if (B1Holded)
 		{
 			B1Holded = 0;
-			if (!light) PORTB =0; 
+			if (!light) PORTB =0;
 		}
-		
+
 		if (B2Holded)
 		{
 			B2Holded = 0;
-			if (!light) PORTB =0; 
+			if (!light) PORTB =0;
 		}
-		
-		if (B3Holded) 
+
+		if (B3Holded)
 		{
 			B3Holded = 0;
 			tmp=min;
@@ -377,8 +377,8 @@
 						//B2Holded = 1;  //Устанавливает флаг "кнопка нажата"
 						_delay_ms(100);
 						B2Pressed = (PIND & 0b01000000);
-						while ((PIND & 0b01000000) == 0) 
-						{	
+						while ((PIND & 0b01000000) == 0)
+						{
 							Time_adjusting();
 							My_disp();
 							if (hour==0) hour=24;
@@ -386,9 +386,9 @@
 							tmp=min;
 						}
 					}
-					  
+
 				}
-				if (B2Pressed) 
+				if (B2Pressed)
 				{
 					if (hour==0) hour=24;
 					hour--;
@@ -403,11 +403,11 @@
 						//B2Holded = 1;  //Устанавливает флаг "кнопка нажата"
 						_delay_ms(100);
 						B1Pressed = (PIND & 0b00100000);
-						while ((PIND & 0b00100000) == 0) 
+						while ((PIND & 0b00100000) == 0)
 						{
 							Time_adjusting();
 							My_disp();
-							if (hour>=24) 
+							if (hour>=24)
 							{
 								hour=0;
 								continue;
@@ -417,9 +417,9 @@
 						}
 					}
 				}
-				if (B1Pressed) 
+				if (B1Pressed)
 				{
-					if (hour>=24) 
+					if (hour>=24)
 					{
 						hour=0;
 						continue;
@@ -444,7 +444,7 @@
 					if ((PIND & 0b10000000) == 0)    //Проверяет нажатие
 					{
 						B3Holded = 1;  //Устанавливает флаг "кнопка нажата"
-						while ((PIND & 0b10000000) == 0) 
+						while ((PIND & 0b10000000) == 0)
 						{
 						  Time_adjusting();
 						  My_disp();
@@ -461,7 +461,7 @@
 						//B2Holded = 1;  //Устанавливает флаг "кнопка нажата"
 						_delay_ms(100);
 						B2Pressed = (PIND & 0b01000000);
-						while ((PIND & 0b01000000) == 0) 
+						while ((PIND & 0b01000000) == 0)
 						{
 							Time_adjusting();
 							My_disp();
@@ -472,14 +472,14 @@
 					}
 				}
 
-				if (B2Pressed) 
+				if (B2Pressed)
 				{
 					if (min<=0) min=60;
 					min--;
 					tmp=min;
 					B2Pressed=0;
 				}
-				
+
 				if ((PIND & 0b00100000) == 0)    //Проверяет нажатие
 				{
 					_delay_ms(10);
@@ -488,11 +488,11 @@
 						//B2Holded = 1;  //Устанавливает флаг "кнопка нажата"
 						_delay_ms(100);
 						B1Pressed = (PIND & 0b00100000);
-						while ((PIND & 0b00100000) == 0) 
+						while ((PIND & 0b00100000) == 0)
 						{
 							Time_adjusting();
 							My_disp();
-							if (min>=59) 
+							if (min>=59)
 							{
 								min=0;
 								continue;
@@ -502,9 +502,9 @@
 						}
 					}
 				}
-				if (B1Pressed) 
+				if (B1Pressed)
 				{
-					if (min>=59) 
+					if (min>=59)
 					{
 						min=0;
 						continue;
@@ -538,18 +538,18 @@
 				turn = 0;
 			}
 		}
-		if (sec == 60) 
+		if (sec == 60)
 		{
 			min+=1;
 			sec=0;
-			if (min%10 == 0) 
+			if (min%10 == 0)
 			{
 				if (max_speed>EEPROM_read(1))	EEPROM_write(1,max_speed);
 				unsigned char gg=EEPROM_read(5)+(unsigned char)(((unsigned int)(range*100.0))%100);
 				EEPROM_write(5,gg);
 				gg=EEPROM_read(3)+(unsigned char)((( ((unsigned int)(range*100.0) - ((unsigned int)(range*100.0))%100) /100))%100);
 				EEPROM_write(3,gg);
-			}	
+			}
 		}
 		if (min == 60)
 		{
@@ -560,7 +560,7 @@
 		{
 			hour = 0;
 		}
-		
+
 	}
 
 	SIGNAL (SIG_INTERRUPT0)		/* Обработка прерывания от индукционного датчика*/
@@ -592,7 +592,7 @@
 		string = (char *)malloc((D_SZ+1)*sizeof(char));
 		time_position = 0b10000000+1;
  		while(1)
-		{	
+		{
 			Buttons();
 			if ((min == 0)&&(sec == 10))
 			{
@@ -609,5 +609,5 @@
 		}
 		free(string);
 		return 0;
-   	} 
+   	}
 

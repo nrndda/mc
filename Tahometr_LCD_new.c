@@ -1,4 +1,4 @@
-   #include <avr/io.h>   
+   #include <avr/io.h>
    #include <util/delay.h>
    #include <avr/interrupt.h>
    #include <stdlib.h>
@@ -8,14 +8,14 @@
 	#define LCD_E_PORT  2
 	#define LCD_DATA_PORT PORTC
 	#define LCD_DATA_DDR DDRC
-	
+
 	#define LCD_RS(a)  PORTA = a ? (PORTA | (a<<LCD_RS_PORT)) : (PORTA & ~((!a)<<LCD_RS_PORT))
 	#define LCD_RW(a) PORTA = a ? (PORTA | (a<<LCD_RW_PORT)) : (PORTA & ~((!a)<<LCD_RW_PORT))
 	#define LCD_E(a)  PORTA = a ? (PORTA | (a<<LCD_E_PORT)) : (PORTA & ~((!a)<<LCD_E_PORT))
 	#define LCD_X_SIZE 16				//Display's string size
 	#define LCD_Y_SIZE 2				//Display's number of strings
 	#define LCD_Z_STATE(a) (LCD_DATA_DDR = a ? 0x00 : 0xff,LCD_DATA_PORT = 0x00)
-	
+
 //	char sreg, max_speed = 0,EEPROM_max_speed,EEPROM_range;
 //	char min = 0,hour = 0, sec = 0,flash=0,refresh = 4;
 //	char light=0;
@@ -42,7 +42,7 @@
 	}
 
 	void LCD_WRITE_STRING(char POSITION, char * STRING)
-	{		
+	{
 	  LCD_WRITE(POSITION,0);
 	  for (int i=0;i<LCD_X_SIZE;i++)
 	  {
@@ -51,7 +51,7 @@
 	}
 
 	void LCD_INIT(void)
-	{ 
+	{
 	  _delay_ms(40);
 	  LCD_WRITE(0x30,0);
 	  _delay_ms(20);
@@ -73,19 +73,19 @@
 	{
 		DDRA = 0xff;
 		PORTA = 0x00;
-		
+
 		DDRB = 0xff;
 		PORTB = 0x00;
-		
+
 		DDRC = 0x00;		/* Порты для управления LCD-дисплеем. Сначала высокий импеданс!*/
 		PORTC = 0x00;
-		
+
 		DDRD = 0xff;
 		PORTD = 0x00;
-		
+
 		DDRE = 0xff;
 		PORTE = 0x00;
-		
+
 //		GIMSK = 0x00;
 //		MCUCR = 0b00000001;	/* Прерывание от INT0 генерируется изменением напряжения, а на INT1 низким напряжением */
 //		GICR  = 0b01000000;
@@ -97,7 +97,7 @@
 //		time_position = 0b10000000+1;
 		char temp;
  		for (;;)
-		{	
+		{
 			LCD_WRITE(0x01,0);
 			PORTE = (PORTE & (1<<2)) ? (PORTE & ~(1<<2)) : (PORTE | (1<<2));
 //			LCD_WRITE(0x40,0);
@@ -124,5 +124,5 @@
 		}
 		free(string);
 		return 0;
-   	} 
+   	}
 

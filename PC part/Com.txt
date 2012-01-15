@@ -1,0 +1,44 @@
+#include <stdio.h>   /* Стандартные объявления ввода/вывода */
+#include <string.h>  /* Объявления строковых функций */
+#include <unistd.h>  /* Объявления стандартных функций UNIX */
+#include <fcntl.h>   /* Объявления управления файлами */
+#include <errno.h>   /* Объявления кодов ошибок */
+#include <termios.h> /* Объявления управления POSIX-терминалом */
+
+/*
+ * 'open_port()' - Открывает последовательный порт 1.
+ *
+ * Возвращает файловый дескриптор при успехе или -1 при ошибке.
+ */
+
+int open_port(void)
+{
+  int fd; /* Файловый дескриптор для порта */
+
+
+  fd = open("/dev/ttyS0", O_RDWR | O_NOCTTY | O_NDELAY);
+  if (fd == -1)
+  {
+   /*
+    * Could not open the port.
+    */
+
+    perror("open_port: Unable to open /dev/ttyf1 - ");
+  }
+  else
+    fcntl(fd, F_SETFL, 0);
+
+  return (fd);
+}
+
+int main()
+{
+ open_port;
+ n = write(fd, "ATZ\r", 4);
+ if (n < 0)
+  fputs("write() of 4 bytes failed!\n", stderr);
+
+ close(fd);
+
+
+{

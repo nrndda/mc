@@ -1,0 +1,2167 @@
+/*<![CDATA[*/
+/******************************************************************************/
+/* Основные стилевые параметры, общие для всех или почти всех элементов       */
+/******************************************************************************/
+
+body {
+    padding: 0px;
+    margin: 0px;
+    font-family: Verdana, Tahoma, Arial, sans-serif;
+    font-size: 11px;
+    color: #000000;
+    background-color: #FFFFFF;
+    background-image: none;
+    text-align: center;
+    min-width: 950px; /*Girder: Что бы было :) */
+}
+
+body.green {
+    background-color: #F9FFF2;
+}
+
+img {
+    border-width: 0px;
+    vertical-align: middle;
+}
+
+table {
+    width: 100%;
+    border-width: 0px;
+    font-size: 11px;
+}
+
+td {
+    padding: 0px;
+    vertical-align: middle;
+}
+
+a {                                              /* Основной стиль для ссылок */
+    color: #000000;
+    text-decoration: underline;
+}
+
+a:hover {                     /* Основной стиль для ссылок при наведении мыши */
+    color: #428000;
+}
+
+form {
+    display: inline;
+}
+
+hr {
+    margin: 6px 0px;
+    border-style: solid;
+    border-color: #999999;
+    border-width: 1px 0px 0px 0px;
+    height: 1px;
+    width: 100%;
+}
+
+
+
+/******************************************************************************/
+/* Кое-какие вспомогательные стили, использующиеся в разных местах            */
+/******************************************************************************/
+
+div.sep {
+    height: 20px;
+}
+
+.nobr {
+    white-space: nowrap;
+}
+
+span.underline {
+        text-decoration: underline;
+}
+
+a.underline:link, a.underline:visited {
+        text-decoration: underline;
+}
+
+span.strike {
+        text-decoration: line-through;
+}
+
+p.inline_p {  /* Этот блок вставляется между <form> и </form> для того, чтобы */
+              /*  не ругался валидатор и после формы не было пустой строки    */
+    display: inline;
+}
+
+.forminput {                                          /* Стиль элементов форм */
+    font-size: 12px;
+    font-family: Verdana, Tahoma, Arial, sans-serif;
+    vertical-align: middle;
+}
+
+textarea.forminput {
+    width: 99%;
+}
+
+.set99pwidth {                                                                       /* For select */
+    width: 99%;
+}
+
+.leftalign {
+    text-align: left;
+}
+
+.rightalign {
+    text-align: right;
+}
+
+.centeralign {
+    text-align: center;
+}
+
+.topvalign {
+    vertical-align: top;
+}
+
+.middlevalign {
+    vertical-align: middle;
+}
+
+.leftpadding20 {
+    padding-left: 20px;
+}
+
+.redsmall {
+     color: red;
+     font-size: 10px;
+}
+
+.red {
+     color: red;
+}
+
+.gray {
+        color: gray;
+}
+
+.smallerfont {
+    font-size: 11px;
+    line-height: 100%;
+}
+
+#tooltip span {
+    display: none;
+}
+
+#tooltip:hover {
+    position: relative;
+    text-decoration: none;
+}
+
+#tooltip:hover span {
+    display: block;
+    position: absolute;
+    top: 20px;
+    left: -20px;
+    background: #E8E8E8;
+    border: 1px solid #191900;
+    color: #000000;
+    z-index: 101;
+    padding: 5px;
+    font-size: 11px;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.searchlite {
+    color: #F00;
+    background-color: #FF0;
+}
+
+#ajax_w {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background: #E8E8E8;
+    border: 1px solid #191900;
+    color: #000000;
+    z-index: 50;
+    padding: 5px;
+    font-size: 11px;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.post_scroll {
+    border: 1px solid #777;
+    padding: 5px;
+    overflow: scroll;
+    overflow-y: hidden;
+    width: 50px;
+    margin: 0 auto;
+}
+
+.pl_min
+{
+	font-size: 10px;
+	border: 1px solid #777;
+	border-top: 0px;
+	padding: 3px;
+	margin: 0px;
+	background-color: #EEF7E4;
+    width: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+/******************************************************************************/
+/* Пост                                                                       */
+/******************************************************************************/
+
+.post {
+    vertical-align: top;
+    text-align: left;
+    font-size: 12px;
+    line-height: 160%;
+}
+
+.post.smaller {
+        font-size: 11px;
+}
+
+.post td {
+        padding: 0;
+}
+
+.post table tr td {
+        padding: 0;
+        border: 0;
+        font-size: 12px;
+        line-height: 160%;
+}
+
+/* "Сообщение оредактировано" */
+
+.post span.edit {
+        font-size: 11px;
+}
+
+/* Скрытое сообщение */
+
+.post .hiddenpost_message {
+        font-size: 11px;
+        font-weight: bold;
+}
+
+.post .hiddenpost_why {
+        font-size: 11px;
+        margin-bottom: 15px;
+}
+
+/* Модераторские стили - [mod] */
+
+.post table.modtag {
+
+}
+
+.post table.modtag td {
+        padding: 5px;
+        font-size: 12px;
+        width: 99%;
+}
+
+.post table.modtag td.modtag {
+        padding: 0;
+        width: 1%;
+        background: #6060FF;
+        vertical-align: middle;
+        text-align: center;
+        padding: 0px 3px 2px;
+}
+
+.post table.modtag td.modtag span {
+        font-weight: bold;
+        color: #FFF;
+        font-size: 50px;
+        line-height: 55px;
+}
+
+.post table.modtag td.modtag span.modtag_author { /* Авторская метка под знаком "M" */
+        font-weight: bold;
+        color: #FFF;
+        font-size: 10px;
+        line-height: 10px;
+}
+
+/* Модераторские стили - [ex] */
+
+.post table.extag {
+
+}
+
+.post table.extag td {
+        padding: 5px;
+        font-size: 12px;
+        width: 99%;
+}
+
+.post table.extag td.extag {
+        padding: 0;
+        width: 1%;
+        background: #FF6060;
+        vertical-align: middle;
+        text-align: center;
+        padding: 0px 3px 2px;
+}
+
+.post table.extag td.extag span {
+        font-weight: bold;
+        color: #FFF;
+        font-size: 50px;
+        line-height: 55px;
+}
+
+.post table.extag td.extag span.extag_author { /* Авторская метка под знаком "!" */
+        font-weight: bold;
+        color: #FFF;
+        font-size: 10px;
+        line-height: 10px;
+}
+
+/* Списки */
+
+.post ul, ol, li {
+        margin: 0;
+        padding: 0;
+}
+
+.post ul {
+        margin: 15px 0px;
+}
+
+.post ul ul {
+        margin: 0px 0px;
+}
+
+.post li {
+        list-style-type: square;
+        margin-left: 20px;
+}
+
+.post li li {
+        list-style-type: square;
+        margin-left: 30px;
+}
+
+/* Цитата */
+
+.post table.quote {
+        width: 98%;
+        margin: 0 auto;
+}
+
+.post table.quote td.quote {
+        border: 1px solid #777;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 10pt;
+        line-height: 110%;
+        color: #333;
+        padding: 2px;
+        padding-top: 1px;
+        background: #FAFAFA;
+}
+
+/* Скрытый текст [mm] */
+
+.post table.mmtag {
+        width: 98%;
+        margin: 0 auto;
+}
+
+.post table.mmtag td.mmtag_left {
+        width: 10px;
+        background: #FF6060;
+        border-style: solid;
+        border-color: #777;
+        border-width: 1px 0px 1px 1px;
+}
+
+/* Закоментировал Girder
+.post table.mmtag td div {
+        width: 10px;
+}*/
+
+.post table.mmtag td.mmtag {
+/*        width: 100%; Закоментировал Girder */
+        border-style: solid;
+        border-color: #777;
+        border-width: 1px 1px 1px 0px;
+        color: #333;
+        padding: 2px;
+        padding-top: 1px;
+        background: #FAFAFA;
+}
+
+/* Код */
+
+/* Неподсвеченный код */
+.post table.code {
+        width: 98%;
+        margin: 0 auto;
+}
+
+.post table.code td.code {
+        border: 1px solid #777;
+        color: #000;
+        padding: 2px;
+        padding-top: 1px;
+        background: #FAFAFA;
+        text-align: left;
+        vertical-align: top;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 12px;
+        line-height: 16px;
+}
+
+/*
+Используемые обозначения
+БСК - Большой Свёрнутый Код
+БРК - Большой Развёрнутый код
+МК - Маленький код
+*/
+
+/* Главная обёртка */
+.post .hltable { /* БСК */
+        table-layout: fixed;
+        width: 98%;
+        margin: 0 auto;
+}
+
+.post .hltable_full { /* БРК и МК */
+        width: 98%;
+        margin: 0 auto;
+        overflow: auto;
+}
+
+/* Панель для организации скроллинга */
+.post .scrollpane_full { /* БРК */
+        border: 1px solid #777;
+}
+
+.post .scrollpane { /* БСК */
+        border: 1px solid #777;
+        overflow: scroll;
+        height: 300px;
+        background: #f6f6f6;
+        width: expression(parentNode.parentNode.offsetWidth-4); /*Было два*/
+}
+
+.post .simplepane_ie { /* МК, под ИЕ */
+        border: 1px solid #777;
+        overflow-y: hidden;
+        overflow-x: scroll;
+        background: #f6f6f6;
+        width: expression(parentNode.offsetWidth-2);   
+}
+
+.post .simplepane { /* МК, под нормальные браузеры */
+        border: 1px solid #777;
+        overflow: auto;
+        background: #f6f6f6;
+}
+
+/* Табличка с номерами строк и кодом - 1 строка, 2 ячейки */
+.post .codetable { /* МК и БСК */
+    width: 96%;
+}
+
+.post .codetable_full { /* БРК */
+    width: 100%;
+}
+
+.post .codetable td, .post .codetable_full td {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+/* Левый столбец - номера строк */
+.post td.code1 {
+    padding: 2px 0px 2px 4px;
+    width: 0%;
+    border-right: 1px solid #777;
+    background: #E1EED1;
+    text-align: right;
+    vertical-align: top;
+}
+
+/* Правый столбец - исходный код */
+.post td.code2 {
+    padding: 2px 4px 2px 4px;
+    width: 100%;
+    background: #f6f6f6;
+    text-align: left;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+/* Таблица, вложенная для .code2 для построчной разбивки */
+.post .innertable_left {
+    width: 100%;
+}
+
+.post td table.innertable_left td {
+    padding: 0px;
+    width: 100%;
+    height: 16px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Таблица, вложенная для .code1 для построчной разбивки */
+.post .innertable {
+    width: 100%;
+}
+
+.post td table.innertable td {
+    padding: 0px;
+    width: 100%;
+    height: 16px;
+    line-height: 90%;
+    text-align: left;
+    white-space: nowrap;
+}
+
+
+
+/******************************************************************************/
+/* Это дивы, ограничивающие области с одинаковой шириной. Испольуется две     */
+/* ширины - 100% (первая запись) и чуть меньше, например, 98% (вторая).       */
+/* Если ширина меньше 100%, необходимы поля "margin-left: auto;               */
+/* margin-right: auto;" для центрирования содержимого                         */
+/******************************************************************************/
+
+div.div_fullwidth {
+    width: 100%;
+    text-align: center;
+}
+
+div.div_cutwidth {
+    width: 98%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+/******************************************************************************/
+/* Эти стили описывают отображение верхнего баннера                           */
+/******************************************************************************/
+
+table#bnr {
+
+}
+
+td.bnrsep {
+    height: 5px;
+}
+
+td.bnrmid1 {
+                                                /* Оставлено до лучших времён */
+}
+
+td.bnrmid2 {
+    height: 65px;
+    text-align: right;
+    vertical-align: top;
+}
+
+td.bnrmid2 img {
+    width: 468px;
+    height: 60px;
+}
+
+
+
+/******************************************************************************/
+/* Самое верхнее меню (текстовое)                                             */
+/******************************************************************************/
+
+table#menu0 {
+    height: 25px;
+    background-color: #C8C8C8;
+    background-image: url(./style_images/2/gradient1.gif);
+    background-repeat: repeat-x;
+}
+
+table#menu0 td {
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+
+
+/******************************************************************************/
+/* Главное меню, то, которое сделано картинкой                                */
+/******************************************************************************/
+
+td#menu1 {
+    text-align: center;
+    height: 110px;
+}
+
+td#menu1 div {
+     position: relative;
+     width: 100%;
+     z-index: 2;
+}
+
+span#txt_map {
+     position: absolute;
+     width: 100%;
+     z-index: 1;
+     left: 0;
+     top: 120px;
+     min-width: 800px; /*Girder: Что бы было :) */
+}
+
+/******************************************************************************/
+/* Параметры альтернативного меню, появляющегося при отключении картинок      */
+/******************************************************************************/
+
+span#noimg_heading {                 /* Сторока "Форум программистов Vingrad" */
+    font-weight: bold;
+}
+
+span#noimg_menu1_1 {                  /* Сторока "Статьи-Книги-Исходники-FAQ" */
+
+}
+
+span#noimg_menu1_2 {                  /* Сторока "Правила-Помощь-Рейтинг-..." */
+
+}
+
+
+
+/******************************************************************************/
+/* Строка навигации. Например, "Форум программистов -> Дизайн, вёрстка и      */
+/* хостинг"                                                                   */
+/******************************************************************************/
+
+div#nav {
+    text-align: left;
+    font-weight: bold;
+    color: #454545;
+}
+/* Новость + доп. ссылки на главной странице */
+
+table.topnews {
+        margin-top: 18px;
+        margin-bottom: 10px;
+}
+
+td.topnewsLeft {
+        text-align: left;
+        padding-right: 20px;
+}
+
+
+table.table_header_type2 {                                   /* Основной стиль таблицы-заголовка для статей, новостей и т.п. */
+    height: 33px;
+    background-color: #B1D921;    
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+table.table_header_type2 a {
+    color: #000000;
+    text-decoration: none;
+}
+
+table.table_header_type2 a:hover {
+
+	color: #000000;
+  text-decoration: underline;
+
+}
+
+/******************************************************************************/
+/* Таблицы списка форумов, статистики форума, списка тописков и др. -         */
+/* в общем, большинство основных таблиц                                       */
+/******************************************************************************/
+
+table.maintable {                                   /* Основной стиль таблицы */
+    background-color: #999999;
+}
+
+td.row1 {                       /* Стиль первой строки таблицы - её заголовка */
+    height: 29px;
+    background-color: #C8C8C8;
+    background-image: url(./style_images/2/gradient2.gif);
+    background-repeat: repeat-x;
+    padding-left: 6px;
+    padding-right: 6px;
+    text-align: left;
+    font-weight: bold;
+    color: #454545;
+    white-space: nowrap;
+}
+
+td.row1 a {
+    font-weight: bold;
+    color: #454545;
+    text-decoration: none;
+}
+
+td.row1 a:hover {
+    text-decoration: underline;
+}
+
+td.row11 {
+    text-align: left;
+    color: #454545;
+}
+
+td.row12 {
+    text-align: right;
+    font-weight: normal;
+    color: #333333;
+}
+
+td.row12 a {
+    color: #333333;
+    font-weight: normal;
+}
+
+td.row12 a:hover {
+    color: #333333;
+}
+
+.row2 {        /* Вторая строка списка форумов - ячейки с названиями колонок: */
+               /* "Форум", "Тем", "Ответов", "Обновления"                     */
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+tr.row2 td {
+    height: 25px;
+    background-color: #E8E8E8;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+tr.row2_sub {           /* То же, что и ".row2", но для списка подфорумов при */
+                        /* просмотре форума                                   */
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    background-image: url(./style_images/2/gradient4.gif);
+    background-repeat: repeat-x;
+}
+
+tr.row2_sub td {
+    height: 25px;
+    background-color: #D6D6D6;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.row3 td {               /* Третяя строка списка форумов - названия форумов */
+    padding: 4px;
+}
+
+td.row3c {                 /* Третяя строка, ячейки с выравниванием по центру */
+    text-align: center;
+    background-color: #F9FFF2;
+}
+
+td.row3l {            /* Третяя строка, ячейки с выравниванием по левому краю */
+    text-align: left;
+    background-color: #F9FFF2;
+}
+
+td.row3c_dark {       /* Третяя строка, затемнённые ячейки с выравниванием по */
+                      /* центру                                               */
+    text-align: center;
+    background-color: #F5FCED;
+}
+
+td.row3l_dark {       /* Третяя строка, затемнённые ячейки с выравниванием по */
+                      /* левому краю                                          */
+    text-align: left;
+    background-color: #F5FCED;
+}
+
+td.row3c_fav {        /* Выравнивание - центр, избранная ячейка               */
+    text-align: center;
+    background-color: #E8F7D7;
+}
+
+td.row3l_fav {        /* Выравнивание - левый край, избранная ячейка          */
+    text-align: left;
+    background-color: #E8F7D7;
+}
+
+.row3_type2 td {               /* Третяя строка списка форумов - названия форумов */
+    padding: 4px;
+}
+
+td.row3c_type2 {                 /* Третяя строка, ячейки с выравниванием по центру */
+    text-align: center;
+    background-color: #FFFFFF;
+}
+
+td.row3l_type2 {            /* Третяя строка, ячейки с выравниванием по левому краю */
+    text-align: left;
+    background-color: #FFFFFF;
+}
+
+td.row3c_dark_type2 {       /* Третяя строка, затемнённые ячейки с выравниванием по */
+                      /* центру                                               */
+    text-align: center;
+    background-color: #FFFFFF;
+}
+
+td.row3l_dark_type2 {       /* Третяя строка, затемнённые ячейки с выравниванием по */
+                      /* левому краю                                          */
+    text-align: left;
+    background-color: #FFFFFF;
+}
+
+td.row3c_fav_type2 {        /* Выравнивание - центр, избранная ячейка               */
+    text-align: center;
+    background-color: #E8F7D7;
+}
+
+td.row3l_fav_type2 {        /* Выравнивание - левый край, избранная ячейка          */
+    text-align: left;
+    background-color: #E8F7D7;
+}
+
+td.imp_themes_sep {                           /* Отделитель прикреплённых тем */
+    height: 12px;
+    background-color: #E8E8E8;
+}
+
+span.gray10 {       /* Маленький текст в списке формов, не являющийся ссылкой */
+                    /* Например, надпись "модераторы"                         */
+    color: #333333;
+    font-size: 10px;
+}
+
+td.threelines_bottom_1 { /* Нижние строки с отображением количества человек,  */
+                         /* просматривающих форум/топик (1-я строка), список  */
+                         /* этих участников (2-я строка) и доп. опции (3-я    */
+                         /* строка) - 1-я строка из трёх                      */
+    height: 21px;
+    background-color: #E8E8E8;
+    text-align: left;
+    padding: 0px;
+    padding-left: 4px;
+    padding-right: 4px;
+    color: #333333;
+}
+
+td.threelines_bottom_1 a, td.threelines_bottom_1 a:hover {
+    color: #333333;
+}
+
+.threelines_bottom_2 {                         /* Оно же - 2-я строка из трёх */
+    height: 21px;
+    background-color: #F5FCED;
+    text-align: left;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    color: #333333;
+}
+
+td.threelines_bottom_3, td.threelines_bottom_3a {                       /* Оно же - 3-я строка из трёх */
+    height: 21px;
+    background-color: #D4D4D4;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    color: #000000;
+}
+
+td.threelines_bottom_3a {
+    color: #333333;
+}
+
+td.fullanswersubmit {                       /* В расширенной форме ответа эта строка - вместо тех трёх, стили которых описываются выше */
+    height: 21px;
+    background-color: #E8E8E8;
+    padding: 8px;
+    text-align: center;
+}
+
+td.row4 {                                     /* "Дно" таблицы списка форумов */
+    height: 21px;
+    background-color: #D4D4D4;
+}
+
+td.row5 {     /* Строки 100%-й ширины с названиями разделов статистики форума */
+    height: 25px;
+    background-color: #E8E8E8;
+    padding-left: 6px;
+    padding-right: 6px;
+    font-weight: bold;
+    text-align: left;
+    color: #555555;
+}
+
+td.row61 {                /* Строки с содержимым разделов статистики форума - */
+                          /* левая ячейка с фигурной скобкой                  */
+    background-color: #F5FCED;
+    text-align: right;
+    vertical-align: middle;
+    padding: 4px;
+    width: 5%;
+}
+
+img.brace1 {                                           /* 1-я фигурная скобка */
+    width: 19px;
+    height: 72px;
+}
+
+img.brace2 {                                           /* 2-я фигурная скобка */
+    width: 19px;
+    height: 40px;
+}
+
+img.brace3 {                                           /* 3-я фигурная скобка */
+    width: 19px;
+    height: 50px;
+}
+
+td.row62 {                /* Строки с содержимым разделов статистики форума - */
+                          /* правая ячейка с текстом                          */
+    background-color: #F5FCED;
+    text-align: left;
+    vertical-align: middle;
+    padding: 4px;
+}
+
+td.mesrow2 {      /* Строка используется при просмотре топика. Список Тегов.  */
+    height: 25px;
+    background-color: #D8D8D8;
+    text-align: left;
+    padding-left: 4px;
+    padding-right: 4px;
+    white-space: nowrap;
+}
+
+td.votesep {             /* Строки, ограничивающий сверху и снизу голосование */
+    height: 25px;
+    background-color: #E8E8E8;
+    font-weight: bold;
+    color: #555555;
+}
+
+td.vote {                                               /* Ниже - голосование */
+    background-color: #F5FCED;
+    padding: 4px;
+    text-align: center;
+}
+
+td.vote table {
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td.vote table td {
+    font-size: 11px;
+    line-height: 160%;
+    white-space: nowrap;
+}
+
+td.vote td.votetext {
+    height: 40px;
+    font-weight: bold;
+    text-align: center;
+    white-space: normal;
+}
+
+td.vote td.lrpadding {
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+
+
+/******************************************************************************/
+/* Таблица правил форума (момещается модератором над списком топиков)         */
+/******************************************************************************/
+
+tr.info {                                                                 /* Может, эти 2 стиля вынести в отдельную категорию */
+    background-color: #D6D6D6;
+    background-image: url(./style_images/2/gradient4.gif);
+    background-repeat: repeat-x;
+}
+
+tr.info td {
+    height: 25px;
+    padding-left: 6px;
+    padding-right: 6px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: bold;
+    color: #454545;
+    white-space: nowrap;
+}
+
+td.info {
+    padding: 8px;
+    background: #F9FFF2;
+    vertical-align: top;
+    text-align: left;
+    font-size: 12px;
+    line-height: 160%;
+}
+
+td.forumrules_left {
+    padding: 0px;
+    width: 3%;
+    background: #F5FCED;
+    vertical-align: top;
+    text-align: left;
+}
+
+td.forumrules_left img {
+    margin: 4px;
+    width: 88px;
+}
+
+td.forumrules_right {
+    padding: 6px;
+    padding-left: 10px;
+    background: #F9FFF2;
+    vertical-align: top;
+    text-align: left;
+    font-size: 11px;
+}
+
+td.forumrules_right ul {
+    padding: 0px;
+    margin: 0px;
+    list-style-position: inside;
+    list-style-type: disc;
+}
+
+td.forumrules_right li {
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 4px;
+}
+
+td.forumrules_right p {
+    margin: 0px;
+    margin-bottom: 4px;
+}
+
+
+
+/******************************************************************************/
+/* таблица с постом участника                                                 */
+/******************************************************************************/
+
+table.posttable {                               /* Таблица с постом участника */
+    border-style: solid;
+    border-color: #999999;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 1px;
+}
+
+table.posttable td {
+    border-style: solid;
+    border-color: #999999;
+    border-top-width: 0px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-right-width: 0px;
+}
+
+td.post-row1l {                            /* Пост - 1-я строка - левая часть */
+    height: 25px;
+    width: 1%;
+    background-color: #E8E8E8;
+    padding-left: 4px;
+    padding-right: 4px;
+    text-align: left;
+    white-space: nowrap;
+    font-weight: bold;
+    color: #000;
+}
+
+td.post-row1l a {
+    font-weight: bold;
+    font-size: 12px;
+}
+
+td.post-row1l span {
+    font-weight: normal;
+    color: #000;
+}
+
+td.post-row1l span span {
+    color: #008000;
+}
+
+td.post-row1l span a {
+    font-weight: bold;
+    font-size: 11px;
+    color: #BE2323;
+}
+
+div.post-setwidth {                         /* Установка ширины левых ячеек */
+    width: 156px;
+    height: 0px;
+}
+
+table.post-setwidth td {
+    border: 0px;
+}
+
+td.post-row1r {                           /* Пост - 1-я строка - правая часть */
+    background-color: #E8E8E8;
+    padding-left: 4px;
+    padding-right: 4px;
+    width: 99%;
+}
+
+table.subtable {
+	height: 26px;    
+}
+
+table.subtable td {      /* Таблица в таблице - 1-я и 3-я строка поста правая */
+                         /* часть   */
+    border-width: 0px;
+    border-style: solid;
+}
+
+td.subtable_l {      /* Левая часть этой таблицы в таблице (1-я и 3-я строка) */
+    text-align: left;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+td.subtable_l div {
+    width: 10px;
+}
+
+td.subtable_r {           /* Правая часть этой таблицы в таблице (1-я строка) */
+    text-align: right;
+}
+
+td.subtable_r1 {          /* Правая часть этой таблицы в таблице (3-я строка) */
+    width: 50px;
+    text-align: right;
+}
+
+td.post-row2l {                            /* Пост - 2-я строка - левая часть */
+    padding: 6px;                                                                     /* Объединить этот и следующий стиль */
+    vertical-align: top;
+    text-align: left;
+    font-size: 10px;
+    line-height: 120%;
+}
+
+td.post-row2l-middle {                            /* Пост - 2-я строка - левая часть */
+    padding: 6px;
+    vertical-align: middle;
+    text-align: left;
+    font-size: 10px;
+}
+
+td.post-row2r {                           /* Пост - 2-я строка - правая часть */
+    padding: 6px;
+    vertical-align: top;
+    text-align: left;
+    font-size: 12px;
+    line-height: 160%;
+}
+
+                              /* Цвет второй строки - левая часть - вариант 1 */
+td.color1l {
+    background-color: #F2FAE8;
+}
+
+td.color1r {                 /* Цвет второй строки - правая часть - вариант 1 */
+    background-color: #FFFFFF;
+}
+
+td.color2l {                  /* Цвет второй строки - левая часть - вариант 2 */
+    background-color: #FFFFFF;
+}
+
+td.color2r {                 /* Цвет второй строки - правая часть - вариант 2 */
+    background-color: #F5FCED;
+}
+
+div.signature {                                          /* Подпись участника */
+    font-size: 10px;
+    line-height: 140%;
+    color: #428000;
+}
+
+div.signature span {     /* Подпись - цвет отделителя. Отделитель может быть, */
+                         /* например, набором дефисов                         */
+    color: #000000;
+}
+
+td.post-row3 {                                           /* Пост - 3-я строка */
+    height: 25px;
+    background-color: #D8D8D8;
+    padding-left: 4px;
+    padding-right: 4px;
+    text-align: center;
+    font-size: 10px;
+}
+
+td.post-row3 a {                                                   /* Используется с списке сообщений в форме расширенного ответа */
+    color: #222222;
+}
+
+td.post-row3 a:hover {
+    color: #428000;
+}
+
+img.imgsep {                       /* Картинка - разделитель других картинок  */
+                                   /* используется в 1-й и 3-й строках справа */
+    height: 20px;
+    width: 3px;
+}
+
+td.post-row4 {               /* Пост - 4-я строка (тонкий разделитель постов) */
+    height: 5px;
+    background-color: #D0D0D0;
+    text-align: right;
+}
+
+
+
+/******************************************************************************/
+/* Стили для таблицы со смайлами                                              */
+/******************************************************************************/
+
+/*table.smiles {
+    table-layout: fixed;
+} */
+
+table.smiles, td.smileleft {                                            /* Таблица со смайлом (одним) */
+    border-style: solid;
+    border-color: #999999;
+    border-width: 0px 1px 1px 1px;
+}
+
+td.smileleft {
+    border-width: 0px 1px 0px 0px;
+    width: 100px;
+    padding: 4px;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 11px;
+    width: 1%;
+}
+
+td.smileleft div {
+    width: 100px;
+}
+
+td.smileleft a {
+    text-decoration: none;
+}
+
+td.smileright {
+    border: 0px;
+    padding: 4px;
+    vertical-align: middle;
+    text-align: center;
+    width: 99%;
+}
+
+
+
+/******************************************************************************/
+/* Форма быстрого ответа. Первые две буквы каждого стиля - "fa". От           */
+/* "Fast Answer".                                                             */
+/******************************************************************************/
+
+td.faleft {                                                    /* Левая часть */
+    padding: 10px;
+    background-color: #EBF5DF;
+    text-align: center;
+    width: 1%;
+}
+
+td.faleft table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table.fasmiles {                                       /* Таблица со смайлами */
+    border: solid #999999 1px;
+    background-color: #FFFFFF;
+    width: 184px;
+}
+
+div.set184width {                                                     /* Таблица со смайлами */
+    width: 184px;
+    height: 0px;
+}
+
+table.fasmiles td {
+    padding: 1px;
+    width: 46px;
+    height: 48px;
+    text-align: center;
+}
+
+td.faright {                                                  /* Правая часть */
+    padding-left: 4px;
+    padding-right: 10px;
+    padding-top: 4px;
+    padding-bottom: 10px;
+    background-color: #EEF7E4;
+    text-align: left;
+    width: 99%;
+}
+
+td.faright_nomain {                                           /* Правая часть */
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 10px;
+    background-color: #EEF7E4;
+    text-align: left;
+    width: 99%;
+}
+
+td.if_only_one_td {                                                                /* 123 */
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #EEF7E4;
+    text-align: center;
+}
+
+img.solved {                           /* Решённая проблема */
+        vertical-align: bottom;
+        margin-right: 8px;
+}
+
+td.famidbut {                              /* 6 круглых кнопок левее textarea */
+    width: 45px;
+    vertical-align: top;
+    text-align: right;
+}
+
+td.fatextarea {                                          /* Ячейка с textarea */
+    text-align: left;
+    vertical-align: top;
+}
+
+td.fatextarea textarea {                                                                           /**/
+    height: 306px;
+}
+
+img.fatopsep {                 /* Разделитель между картинками в верхнем меню */
+    width: 5px;
+    height: 1px;
+}
+
+img.fatopsepbig {      /* Большой разделитель между картинками в верхнем меню */
+    width: 15px;
+    height: 1px;
+}
+
+a.fa_cb_link {       /* Ссылка у checkbox-а, при нажатии на которую он меняет */
+                     /* состояние                                             */
+    color: black;
+    text-decoration: none;
+}
+
+a.fa_cb_link:hover {
+    color: black;
+    text-decoration: underline;
+}
+
+
+
+/******************************************************************************/
+/* Вход                                                                       */
+/******************************************************************************/
+
+td.enterleft, td.enterleft_topv {
+    padding: 8px;
+    background-color: #EBF5DF;
+    text-align: left;
+    vertical-align: middle;
+    width: 35%;
+}
+
+td.enterleft_topv {
+        vertical-align: top;
+}
+
+td.enterright, td.enterwide {
+    padding: 8px;
+    background-color: #EEF7E4;
+    text-align: left;
+    vertical-align: middle;
+}
+
+td.enterright {
+    width: 65%;
+}
+
+
+
+/******************************************************************************/
+/* Подсветка пользователей - определение цвета подчёркивания обычной ссылки   */
+/* (на которую не наведена мышь)                                              */
+/******************************************************************************/
+
+a.user_admin {                                                       /* Админ */
+    color: #000000;
+}
+
+a.user_second {                                                /* Зам. админа */
+    color: #000000;
+}
+
+a.user_moder {                                                   /* Модератор */
+    color: #000000;
+}
+
+a.user_comoder {                                               /* Комодератор */
+    color: #000000;
+}
+
+a.user_dev {                                             /* Vingrad developer */
+    color: #000000;
+}
+
+a.user_expert {                                                    /* Эксперт */
+    color: #000000;
+}
+
+a.user_exmoder {                                             /* Экс-модератор */
+    color: #000000;
+}
+
+a.user_club {                                               /* Участник Клуба */
+    color: #000000;
+}
+
+a.user_new {                                                      /* Участник */
+}
+
+
+
+/******************************************************************************/
+/* Подсветка пользователей - определение цвета подчёркивания ссылки при       */
+/* наведении мыши. В данный момент цвета совпадают с цветами символов         */
+/******************************************************************************/
+
+a.user_admin:hover {
+    color: #C00000;
+}
+
+a.user_second:hover {
+    color: #C00000;
+}
+
+a.user_moder:hover {
+    color: #428000;
+}
+
+a.user_comoder:hover {
+    color: #00807D;
+}
+
+a.user_dev:hover {
+    color: #DD8500;
+}
+
+a.user_expert:hover {
+    color: #800080;
+}
+
+a.user_exmoder:hover {
+    color: #0000C0;
+}
+
+a.user_club:hover {
+    color: #0000C0;
+}
+
+a.user_new:hover {
+
+}
+
+
+
+/******************************************************************************/
+/* Подсветка пользователей - определение цвета текста (символов)              */
+/******************************************************************************/
+
+a.user_admin span {
+    color: #C00000;
+}
+
+a.user_second span {
+    color: #C00000;
+}
+
+a.user_moder span {
+    color: #428000;
+}
+
+a.user_comoder span {
+    color: #00807D;
+}
+
+a.user_dev span {
+    color: #DD8500;
+}
+
+a.user_expert span {
+    color: #800080;
+}
+
+a.user_exmoder span {
+    color: #0000C0;
+}
+
+a.user_club span {
+    color: #0000C0;
+}
+
+a.user_new span {
+    color: #000000;
+}
+
+
+
+/******************************************************************************/
+/* Используется для табличек, окружающих список топиков.                      */
+/* Это те таблицы, которые содержат список страниц форума, кнопки "Новая      */
+/* тема" и "Новый опрос" и (только та табличка, которая сверху) форму поиска  */
+/******************************************************************************/
+
+td.leftalign_ch1 {
+    text-align: left;
+    height: 52px;
+}
+
+td.rightalign_ch1 {
+    text-align: right;
+}
+
+td.rightalign_ch2 {
+    text-align: right;
+    width: 63px;
+    height: 52px;
+}
+
+td.rightalign_ch3 {
+    text-align: right;
+    width: 204px;
+    height: 52px;
+}
+
+
+
+/******************************************************************************/
+/* Список конвертиков и быстрый переход по форуму                             */
+/******************************************************************************/
+
+td.envtable {
+    width: 54%;
+    text-align: left;
+    vertical-align: top;
+}
+
+td.envtable_1, td.envtable_2 {
+    width: 27%;
+    text-align: left;
+    vertical-align: top;
+}
+
+td.fast_tr {
+    width: 46%;
+    text-align: right;
+    vertical-align: top;
+}
+
+
+
+/******************************************************************************/
+/* Стили для правил форума и помощи                                           */       /**/
+/******************************************************************************/
+
+td.forumhelp {
+    padding: 4px;
+    padding-left: 10px;
+    vertical-align: top;
+    text-align: left;
+    font-size: 11px;
+    line-height: 140%;
+}
+
+td.forumhelp ul, td.rules ul {
+    padding: 0px;
+    margin: 0px;
+    margin-top: 10px;
+    list-style-position: outside;
+}
+
+td.forumhelp ul {
+    list-style-type: disc;
+}
+
+td.rules ul {
+    list-style-type: decimal;
+}
+
+td.forumhelp li, td.rules li {
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 10px;
+    margin-left: 3em;
+}
+
+td.rules p {
+    margin-left: 1ex;
+}
+
+td.forumhelp li a {
+    font-weight: bold;
+}
+
+td.helpitem, td.rules {
+    padding: 10px;
+    vertical-align: top;
+    text-align: left;
+    font-size: 12px;
+    line-height: 160%;
+}
+
+
+
+/******************************************************************************/
+/* Сообщение форума                                                           */
+/******************************************************************************/
+
+td.forummsg {
+    padding: 10px;
+    vertical-align: top;
+    text-align: left;
+    font-size: 12px;
+}
+
+
+
+/******************************************************************************/
+/* Профиль пользователя                                                       */
+/******************************************************************************/
+
+td.profile_left {
+    width: 73%;
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+    background-color: #EBF5DF;
+}
+
+div.profile_showphoto {
+        float: right;
+        margin-top: 0px;
+}
+
+div.profile_showphoto img {
+        border: 1px solid #CCC;
+}
+
+div.profile_user {
+    font-size: 19px;
+    margin-top: 5px;
+    margin-bottom: -15px;
+}
+
+div.profile_head {
+    font-weight: bold;
+    margin-top: 30px;
+    font-size: 13px;
+    color: #385C0C;
+}
+/*SZ BEGIN*/
+div.profile_photo {
+    font-weight: bold;
+    margin-top: 30px;
+    font-size: 13px;
+    color: #385C0C;
+}
+/*SZ END*/
+div.head_to_top {
+    margin-top: 0;
+}
+
+div.profile_text {
+    margin: 10px 0px 15px 25px;
+}
+
+.profile_info {
+    font-weight: normal;
+    margin-top: 10px;
+}
+
+.profile_info img {
+    margin: 0px 5px;
+}
+
+.profile_info span {
+    font-weight: bold;
+}
+
+td.profile_left .profile_info {
+    font-weight: bold;
+}
+
+td.profile_left .profile_info span {
+    font-weight: normal;
+}
+
+td.profile_right {
+    width: 27%;
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+    background-color: #EEF7E4;
+}
+
+.profile_avatar {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+td.profile_left_bot {
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+    background-color: #EBF5DF;
+}
+
+td.profile_right_bot {
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+    background-color: #EEF7E4;
+}
+
+
+
+/******************************************************************************/
+/* Верхнее подменю для ПМ и Панели Управления                                 */ /* Убить НАХ */
+/******************************************************************************/
+
+/*table.tmMain {
+    border-width: 1px 0px 1px 1px;
+    border-style: solid;
+    border-color: #999999;
+    background: #F5FCED;
+}
+
+table.tmMain td {
+    vertical-align: top;
+    padding: 4px 8px 5px;
+    width: 25%;
+    text-align: left;
+    line-height: 24px;
+    border-right: 1px solid #999999;
+}
+
+table.tmMain img {
+        margin: 3px 6px 3px 0px;
+}
+
+table.tmMain a {
+        text-decoration: none;
+}
+
+table.tmMain a span {
+        text-decoration: underline;
+}
+
+div.tmFolderFill {
+    margin-top: 4px;
+    line-height: 12px;
+}
+
+div.tmFolderFill img {
+    margin: 0;
+}
+
+div.tmFill {
+    margin: 4px 0px 1px;
+    line-height: 1px;
+    font-size: 1px;
+    background: #D8F2B7 url(2/bar_bg.gif) repeat-x;
+    border-right: 1px solid #A7CD77;
+}
+
+tr.tmSelected td {
+    background: #E8F7D7;;
+}
+*/
+
+/* Базовая таблица (левое меню + контент) для для ПМ и Панели Управления */
+
+table.cpBase {
+
+}
+
+td.cpBaseLeft {
+        width: 150px;
+        vertical-align: top;
+        border-color: #999999;
+        border-style: solid;
+        border-width: 0px 1px 1px;
+        background-color: #F5FCED;
+}
+
+div.setUserCPwidth {
+    width: 188px;
+    height: 0px;
+}
+
+td.cpBaseRight {
+        width: 100%;
+        padding-left: 4px;
+        vertical-align: top;
+}
+
+/* Левое меню для ПМ и Панели Управления */
+
+table.cpMenuMain td {
+        border-top: 1px solid #999999;
+}
+
+td.cpMenuHead {
+        height: 25px;
+    background-color: #E8E8E8;
+    padding-left: 4px;
+    padding-right: 4px;
+        text-align: left;
+        font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+td.cpMenuItems {
+        padding: 4px 4px 6px 4px;
+        text-align: left;
+        background-color: #F5FCED;
+}
+
+div.cpMenuItem {
+        margin: 5px 2px;
+}
+
+div.cpMenuItemImg {
+        margin: 2px 0px;
+}
+
+table.cpMenuMain img {
+        margin: 0px 6px 0px 0px;
+}
+
+table.cpMenuMain a {
+        text-decoration: none;
+}
+
+table.cpMenuMain a span {
+        text-decoration: underline;
+}
+
+div.cpMenuFolderFill {
+        padding: 6px 4px 6px 4px;
+        text-align: left;
+}
+
+div.cpMenuFolderFill img {
+    margin: 0;
+}
+
+div.cpMenuFill {
+    margin: 4px 0px 3px;
+    line-height: 1px;
+    font-size: 1px;
+    background: #D8F2B7 url(./style_images/2/bar_bg.gif) repeat-x;
+    border-right: 1px solid #A7CD77;
+}
+
+/* Панель Управления - ПМ */
+
+tr.cpPMSelected td {
+    background: #E8F7D7;
+}
+
+/* Панель Управления - Настройка отображения форумов */
+
+table.cpForumList, table.cpForumList table {
+        table-layout: fixed;
+}
+
+table.cpForumList tr.row3 td {
+        height: 34px;
+        padding: 0px 4px;
+}
+
+table.cpForumList td.row1 {
+    padding-right: 0;
+}
+
+table.cpForumList td.row1 a:hover {
+    color: #454545;
+}
+
+td.row1c {
+        text-align: center;
+}
+
+/* Настройка аватаров */
+
+td.avatarList {
+        padding: 0;
+        background-color: #EEF7E4;
+    text-align: left;
+}
+
+div.avatarList {
+        padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: left;
+}
+
+div.avatarList div {
+        float: left;
+        margin: 5px;
+        width: 100px;
+        height: 120px;
+        text-align: center;
+        font-weight: bold;
+}
+
+td.avatarList div td {
+        width: 100px;
+        height: 100px;
+        text-align: center;
+        vertical-align: middle;
+}
+
+table.avatarListSubmit {
+        border-top: 1px solid #999999;
+}
+
+/******************************************************************************/
+/* Стиль кнопок Mail.Ru и Rambler's Top 100                                   */
+/******************************************************************************/
+
+img.bannerbutton {
+    width: 88px;
+    height: 31px;
+}
+
+img.onepxbutton {
+    width: 1px;
+    height: 1px;
+}
+
+
+
+/******************************************************************************/
+/* Реклама EuroHoster.Net                                                     */
+/******************************************************************************/
+
+div#bottomadv {
+    color: #666666;
+}
+
+
+
+/******************************************************************************/
+/* Информация о геренерации страницы                                          */
+/******************************************************************************/
+
+div#techinfo {
+    color: #555555;
+}
+
+
+
+/******************************************************************************/
+/* Нижняя таблица с копирайтами                                               */
+/******************************************************************************/
+
+table#copyrights {
+    height: 42px;
+    background-color: #C8C8C8;
+    background-image: url(./style_images/2/gradient3.gif);
+    background-repeat: repeat-x;
+    padding: 4px;
+    font-weight: bold;
+    font-size: 10px;
+    text-align: center;
+    table-layout: fixed;
+}
+
+table#copyrights a {
+    color: #333333;
+}
+
+td.set88width {
+    width: 88px;
+}
+
+td.set88width img {
+    width: 88px;
+    height: 31px;
+}
+
+
+
+/******************************************************************************/
+/* Стили для выпадающего меню                                                 */
+/******************************************************************************/
+
+.jsMenu {
+    position: absolute;
+    display: block;
+    visibility: hidden;
+    margin: 0px;
+    padding: 0px;
+    background-color: #F9FFF2;
+    top: 0px;
+    left: 10px;
+}
+
+.jsMenu ul {
+    margin: 0px;
+    padding: 2px 0px 2px 0px;
+    border: 1px solid #555555;
+    background-color: #F9FFF2;
+    list-style: none;
+}
+
+.jsMenu li {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    font-family: Verdana, Sans-Serif;
+    font-size: 10px;
+    line-height: 12px;
+    color: #000000;
+    background-color: #F9FFF2;
+    width: 100%;
+}
+
+.jsMenu li.heading {
+    background-color: #E0E5DA;
+    text-align: center;
+}
+
+.jsMenu li.separator {
+    height: 16px;
+}
+
+.jsMenu li.mousehelp {
+    line-height: 0px;
+    height:1px;
+    font-size: 1px;
+}
+
+.jsMenu li a {
+    padding-top: 1px;
+    padding-bottom: 2px;
+    display: block;
+    border-left: 0px solid #000000;
+    border-right: 0px solid #000000;
+    border-top: 1px solid #F9FFF2;
+    border-bottom: 1px solid #F9FFF2;
+    text-decoration: none;
+    text-align: left;
+    color: #000000;
+}
+
+.jsMenu a:hover {
+    background-color: #E9FFD1;
+    border-top: 1px solid #555555;
+    border-bottom: 1px solid #555555;
+}
+
+/******************************************************************************/
+/* Статьи, ФАК...
+/******************************************************************************/
+div.container_articles {
+	text-align: center:
+}
+
+table.table_articles {                                   /* Основной стиль таблицы */
+	color: #6E6E6E;    
+}
+
+table.table_articles a {
+	color: #6E6E6E;   
+}
+table.table_articles a:hover {
+	color: #6E6E6E;   
+}
+
+
+tr.header_articles {
+
+		background-color: #B1D921;				
+		height: 30px;
+}
+td.header_articles {
+		background-color: #B1D921;				
+		font-weight: bold;
+		text-align: center;		
+}
+
+
+
+tr.topic_info_articles {
+		height: 100px;
+}
+
+td.topic_info_articles {
+		text-align: center;
+		background-color: #FFFFFF;
+
+}
+
+table.block_articles {
+	width: 800px;
+	border-width: 1px;
+	border-style: solid;
+  border-color: #999999;
+  padding: 3px;
+}
+
+
+
+
+/************************************* :-) ************************************/
+
+
