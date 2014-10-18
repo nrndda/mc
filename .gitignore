@@ -5,3 +5,6 @@
 *.sym
 *.eep
 *.elf
+*.lst
+*.hex
+.dep/*
