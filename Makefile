@@ -21,7 +21,7 @@
 MCU = atmega8515
 
 # Main Oscillator Frequency
-F_CPU = 16000000
+F_CPU = 16000000UL
 #F_CPU = 4000000
 # Output format. (can be srec, ihex, binary)
 FORMAT = ihex

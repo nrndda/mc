@@ -2,14 +2,32 @@
 #include <util/delay.h>
 #include <stdlib.h>
 
+#ifndef LCD_RS_PORT
 #define	LCD_RS_PORT 0
+#endif
+
+#ifndef LCD_RW_PORT
 #define	LCD_RW_PORT 1
+#endif
+
+#ifndef LCD_E_PORT
 #define	LCD_E_PORT  2
+#endif
+
 // LCD Data ports: PORTA[3:6]
+#ifndef LCD_DATA_PORT
 #define	LCD_DATA_PORT PORTA
+#endif
+
+#ifndef LCD_DATA_DDR
+#define LCD_DATA_DDR DDRA
+#endif
+
+#ifndef LCD_DATA_PORT_SHIFT
 #define	LCD_DATA_PORT_SHIFT 3
+#endif
+
 #define	LCD_DATA_TEMPLATE (0x0f << LCD_DATA_PORT_SHIFT)
-#define	LCD_DATA_DDR DDRA
 //Display's string size
 #define	LCD_X_SIZE 12
 //Display's number of strings
@@ -24,6 +42,7 @@
 
 //Запас по времени на задержки 20%
 #define LCD_TIME_MARGIN 1.2
+#define SHIFT_DELAY 100
 
 void strobe(void);
 unsigned char lcd_write(unsigned char, unsigned char);
@@ -85,9 +104,12 @@ unsigned char lcd_write(unsigned char data, unsigned char command_or_data) //з�
 
 	LCD_MINOR_4_DATA_BITS_WRITE(data >> 4);
 	strobe();
-	_delay_ms(1 * LCD_TIME_MARGIN * TIME_SCALE);
+	_delay_ms(0.45 * LCD_TIME_MARGIN * TIME_SCALE); // Don't need delay between strobs but strobe cycle must be about 1ms alltogether
 	LCD_MINOR_4_DATA_BITS_WRITE(data);
 	strobe();
+
+/*FOR READ: One dummy read is necessary right after the address setting.
+  For details, refer to the explanation of output register in “Function of Each Block”.*/
 
 	unsigned char addr_temp = 0;
 /*	lcd_port_state('i');
@@ -127,20 +149,73 @@ void lcd_goto(unsigned char address)
 	lcd_write((0x80+address),0);
 }
 
+void lcd_shift(char mode, char direction)
+{ // Shift display(mode='d') or cursor(mode='c') to the right(direction='r') or to the left(direction='l').
+  // If parameters don't match ones above, then it shifts cursor to the right.
+  lcd_write((0x10 + ((mode == 'd') << 3) + ((direction == 'r') << 2)),0);
+}
+
 void lcd_write_string(unsigned char start_position, unsigned char view_str_length, char * string)
 {
 	lcd_goto(start_position);//lcd_write(0x80 + start_position,0);
-	unsigned char temp = strlen(string);
-	unsigned char size = (view_str_length > LCD_X_SIZE) ? LCD_X_SIZE : view_str_length;
-	for (unsigned char i=0;i<size;i++)
-	{
-		lcd_write(*(string + i),1);
-	}
-	if (temp < size)
-		for (unsigned char i = (size - temp); i>0;i--)
-		{
-			lcd_write(0x20,1); //0x20 - ' '
-		}
+	unsigned char string_length = strlen(string);
+//     unsigned char effective_length = string_length + start_position;
+// 	unsigned char size = (view_str_length > LCD_X_SIZE) ? LCD_X_SIZE : view_str_length;
+    unsigned char i;
+    if (string_length == 0)
+      return;
+    else if (string_length <= 16)   //Visible range of RAM
+      for (i=0;i<string_length;i++)
+      {
+          lcd_write(*(string + i),1);
+      }
+    else if (string_length <= 40)   //Invisible range of RAM
+      for (i=0;i<string_length;i++)
+      {
+          lcd_write(*(string + i),1);
+      }
+    else
+      for (i=0;i<40;i++)
+      {
+          lcd_write(*(string + i),1);
+      }
+// 	if (string_length < size)
+// 		for (i = (size - string_length); i>0;i--)
+// 		{
+// 			lcd_write(0x20,1); //0x20 - ' '
+// 		}
+}
+
+void lcd_running_string(char * string)
+{
+  lcd_goto(16);//Jump to first invisible memory field
+  unsigned char string_length = strlen(string);
+  unsigned char splitting = (string_length > 24); //Do we need to split string?
+  unsigned char size = splitting ? 24 : string_length; //There is only 24 bytes free.
+  unsigned char i;
+  for (i=0;i<size;i++)
+  {
+      lcd_write(*(string + i),1);
+  }
+  if (splitting == 1)
+    do {
+      lcd_shift('d','r');
+      _delay_ms(SHIFT_DELAY * TIME_SCALE);
+      lcd_goto(i%size);//Jump to last invisible memory field
+      lcd_write(*(string + i),1);
+      i++;
+    }
+    while (i < string_length);
+  for (i=0;i<size;i++)
+  {
+    lcd_shift('d','r');
+    _delay_ms(SHIFT_DELAY * TIME_SCALE);
+  }
+  for (i=0;i<(string_length%16);i++)
+  {
+    lcd_shift('d','r');
+    _delay_ms(SHIFT_DELAY * TIME_SCALE);
+  }
 }
 
 void lcd_init(void)
@@ -167,17 +242,18 @@ void lcd_init(void)
 	for (unsigned char i=0;i<3;i++)
 	{
 		strobe();
-		_delay_ms(1 * LCD_TIME_MARGIN * TIME_SCALE);
+		_delay_ms(0.4 * LCD_TIME_MARGIN * TIME_SCALE);//It was 1ms but 0.4ms will be enough
 	}
 
 	LCD_MINOR_4_DATA_BITS_WRITE(0b00000010);//0b00100000
 	strobe();
-	_delay_ms(1 * LCD_TIME_MARGIN * TIME_SCALE);
+	_delay_ms(0.4 * LCD_TIME_MARGIN * TIME_SCALE);//It was 1ms but 0.4ms will be enough
 
 // 	BIT_SET(LCD_DATA_PORT,LCD_RW_PORT);
 	lcd_port_state('z');
 
 	lcd_write(0x28,0); //0b0010_1000
-	lcd_write(0x0C,0); // Включение дисплея без курсора, ничего не мигает
-	lcd_write(0x01,0); // Очищаем экран
+// 	lcd_write(0x0C,0); // Включение дисплея без курсора, ничего не мигает
+    lcd_write(0x0F,0); // Включение дисплея без курсора, ничего не мигает
+	lcd_clear(); //lcd_write(0x01,0); // Очищаем экран
 }
