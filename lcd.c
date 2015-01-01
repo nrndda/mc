@@ -131,17 +131,20 @@ unsigned char lcd_write(unsigned char data, unsigned char command_or_data) //з�
 	_delay_ms(0.03 * TIME_SCALE);
 	if (busy) _delay_ms(0.1 * TIME_SCALE);*/
 	lcd_port_state('z');
+    _delay_ms(0.043 * LCD_TIME_MARGIN * TIME_SCALE);
 	return addr_temp;
 }
 
 void lcd_clear(void)
 { // Очищаем экран
 	lcd_write(0x01,0);
+    _delay_ms(1.52 * LCD_TIME_MARGIN * TIME_SCALE);//Slow operation
 }
 
 void lcd_return_home(void)
 { // Возвращает курсор в начало
 	lcd_write(0x02,0);
+    _delay_ms(1.52 * LCD_TIME_MARGIN * TIME_SCALE);//Slow operation
 }
 
 void lcd_goto(unsigned char address)
@@ -152,7 +155,7 @@ void lcd_goto(unsigned char address)
 void lcd_shift(char mode, char direction)
 { // Shift display(mode='d') or cursor(mode='c') to the right(direction='r') or to the left(direction='l').
   // If parameters don't match ones above, then it shifts cursor to the right.
-  lcd_write((0x10 + ((mode == 'd') << 3) + ((direction == 'r') << 2)),0);
+  lcd_write((0x10 + ((mode == 'd') << 3) + ((direction == 'l') << 2)),0);
 }
 
 void lcd_write_string(unsigned char start_position, unsigned char view_str_length, char * string)
@@ -164,7 +167,7 @@ void lcd_write_string(unsigned char start_position, unsigned char view_str_lengt
     unsigned char i;
     if (string_length == 0)
       return;
-    else if (string_length <= 16)   //Visible range of RAM
+    else if (string_length <= LCD_X_SIZE)   //Visible range of RAM
       for (i=0;i<string_length;i++)
       {
           lcd_write(*(string + i),1);
@@ -188,7 +191,7 @@ void lcd_write_string(unsigned char start_position, unsigned char view_str_lengt
 
 void lcd_running_string(char * string)
 {
-  lcd_goto(16);//Jump to first invisible memory field
+  lcd_goto(LCD_X_SIZE);//Jump to first invisible memory field
   unsigned char string_length = strlen(string);
   unsigned char splitting = (string_length > 24); //Do we need to split string?
   unsigned char size = splitting ? 24 : string_length; //There is only 24 bytes free.
@@ -199,7 +202,7 @@ void lcd_running_string(char * string)
   }
   if (splitting == 1)
     do {
-      lcd_shift('d','r');
+      lcd_shift('d','l');
       _delay_ms(SHIFT_DELAY * TIME_SCALE);
       lcd_goto(i%size);//Jump to last invisible memory field
       lcd_write(*(string + i),1);
@@ -208,14 +211,33 @@ void lcd_running_string(char * string)
     while (i < string_length);
   for (i=0;i<size;i++)
   {
-    lcd_shift('d','r');
+    lcd_shift('d','l');
     _delay_ms(SHIFT_DELAY * TIME_SCALE);
   }
-  for (i=0;i<(string_length%16);i++)
+  for (i=0;i<(string_length%LCD_X_SIZE);i++)
   {
-    lcd_shift('d','r');
+    lcd_shift('d','l');
     _delay_ms(SHIFT_DELAY * TIME_SCALE);
   }
+}
+
+void lcd_running_string_new(char * string)
+{
+  lcd_goto(LCD_X_SIZE);//Jump to first invisible memory field
+  lcd_write(0x04+0x02+0x01,0); // Shift display to the right with cursor
+  unsigned char string_length = strlen(string);
+  unsigned char i;
+  for (i=0;i<string_length;i++)
+  {
+    lcd_write(*(string + i),1);
+    _delay_ms(SHIFT_DELAY * TIME_SCALE);
+  }
+  for (i=0;i<LCD_X_SIZE;i++)
+  {
+    lcd_write(' ',1);
+    _delay_ms(SHIFT_DELAY * TIME_SCALE);
+  }
+  lcd_write(0x04+0x02+0x00,0); // Don't shift display to the right with cursor
 }
 
 void lcd_init(void)
@@ -252,8 +274,9 @@ void lcd_init(void)
 // 	BIT_SET(LCD_DATA_PORT,LCD_RW_PORT);
 	lcd_port_state('z');
 
-	lcd_write(0x28,0); //0b0010_1000
-// 	lcd_write(0x0C,0); // Включение дисплея без курсора, ничего не мигает
-    lcd_write(0x0F,0); // Включение дисплея без курсора, ничего не мигает
+	lcd_write(0x28,0); //0b0010_1000 //Set bitness and lines number
+	lcd_write(0x0C,0); // Включение дисплея без курсора, ничего не мигает
+//     lcd_write(0x0F,0); // Включение дисплея без курсора, ничего не мигает
+//     lcd_write(0x04+0x02+0x01,0); // Shift display to the right with cursor
 	lcd_clear(); //lcd_write(0x01,0); // Очищаем экран
 }
